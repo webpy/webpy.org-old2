@@ -2,7 +2,7 @@
 
 ### simple samples:
 
-* [[../src/todo-list|simple todo-list engine]]
+* [[src/todo-list|simple todo-list engine]]
 
 * [simple blog engine](http://k4ml.com/wiki/python/webpy/simpleblog)
 
