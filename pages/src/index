@@ -2,6 +2,8 @@
 
 ### simple samples:
 
+* [skeleton code](http://webpy.infogami.com/skeleton)
+
 * [[src/todo-list|simple todo-list engine]] | [new version](http://domimob.infogami.com/wiki/tidy) (uses template.py and form.py)
 
 * [simple blog engine](http://k4ml.com/wiki/python/webpy/simpleblog)
