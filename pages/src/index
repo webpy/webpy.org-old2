@@ -24,6 +24,8 @@
 
 * [[quick vhosting hack]]
 
+* [[MetaClassAutoURLS|using a metaclass to automate setting urls]]
+
 ### real web apps:
 
 * [ibrouter](http://delaunay.org/antoine/i): a photo gallery system ([src](http://trac.delaunay.org/browser/srv/www.delaunay.org/antoine/i/))
