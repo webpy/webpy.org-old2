@@ -16,7 +16,7 @@
 
 ### tips and tricks:
 
-* [simple sessions with flup](http://webpy.org/track/wiki/SessionsWithFlup)
+* [[sessions|simple sessions with flup]] [(old link)](http://webpy.org/track/wiki/SessionsWithFlup)
 
 * [simple authentication method](http://webpy.org/track/wiki/SimpleAuthenticationMethod)
 
