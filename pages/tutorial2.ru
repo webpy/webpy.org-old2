@@ -46,7 +46,7 @@
 В нашем коде для web.py мы сделаем так:
 
     class index:
-       def GET(self)
+       def GET(self):
             print "Превед, Орлы!!!"            # Таким образом постетителю страницы '/' будет показан русский вариант строки "Hello World!".
     if __name__ == "__main__": web.run(urls, globals())
 
