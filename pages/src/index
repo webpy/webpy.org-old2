@@ -22,7 +22,6 @@
 
 * [[authentication|simple authentication with flup]] [(old link)](http://webpy.org/track/wiki/SimpleAuthenticationMethod)
 
-
 * [[template tricks|tricks with template.py]]
 
 * [[quick vhosting hack]]
@@ -32,6 +31,8 @@
 * [[testing|test your web application with paste]]
 
 * [[images|Serving Images]]
+
+* [[multiple_apps|Create multiple apps using web.py]]
 
 ### real web apps:
 
