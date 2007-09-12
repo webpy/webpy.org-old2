@@ -2,6 +2,8 @@
 
 ## Hello world
 
+`print` will be replaced with `return`.
+
     import web
 
     urls = (
@@ -18,6 +20,9 @@
         app.run()
 
 ## database
+
+db configuration is will not be global. Multiple databases can be used at the same time and no `web.load()` magic required to make database work.
+
     import web
 
     db = web.database(dbn='postgres', db='todo', user='you', pw='')
