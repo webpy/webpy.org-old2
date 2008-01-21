@@ -20,8 +20,6 @@
 
 * [[sessions|simple sessions with flup]] [(old link)](http://webpy.org/track/wiki/SessionsWithFlup)
 
-* [[authentication|simple authentication with flup]] [(old link)](http://webpy.org/track/wiki/SimpleAuthenticationMethod)
-
 * [[template tricks|tricks with template.py]]
 
 * [[quick vhosting hack]]
