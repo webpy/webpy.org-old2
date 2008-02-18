@@ -1,0 +1,13 @@
+# Web.py Cookbook
+
+Cookbook style documentation for web.py 0.3. 
+
+Topics:
+
+* [[cookbook/helloworld|Hello World]]
+* [[cookbook/session|Working with Session]]
+* [[cookbook/sendmail|Sending Mail]]
+* [[cookbook/layout_template|Using Site Layout Templates]]
+
+Requests:
+
