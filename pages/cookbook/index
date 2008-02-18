@@ -2,7 +2,7 @@
 
 Cookbook style documentation for web.py 0.3. 
 
-Recipies:
+Recipes:
 
 * [[cookbook/helloworld|Hello World]]
 * [[cookbook/sessions|Working with Session]]
