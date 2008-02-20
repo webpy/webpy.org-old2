@@ -8,6 +8,8 @@ Recipes:
 * [[cookbook/sessions|Working with Session]]
 * [[cookbook/sendmail|Sending Mail]]
 * [[cookbook/layout_template|Using Site Layout Templates]]
+* [[cookbook/fileupload|File Upload]]
+
 
 Requests:
 
