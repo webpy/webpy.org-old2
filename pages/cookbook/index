@@ -5,6 +5,7 @@ Cookbook style documentation for web.py 0.3.
 Recipes:
 
 * [[cookbook/helloworld|Hello World]]
+* [[cookbook/staticfiles|Serving Static Files]]
 * [[cookbook/sessions|Working with Session]]
 * [[cookbook/sendmail|Sending Mail]]
 * [[cookbook/layout_template|Using Site Layout Templates]]
