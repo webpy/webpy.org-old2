@@ -12,7 +12,7 @@ Recipes:
 * [[cookbook/fileupload|File Upload]]
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
 * [[cookbook/ctx|web.ctx]]
-
+* [[cookbook/input|Accessing user input through web.input()]]
 Requests:
 
 * [[cookbook/web.background|How to properly use web.background]]
