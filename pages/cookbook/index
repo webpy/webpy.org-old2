@@ -10,7 +10,7 @@ Recipes:
 * [[cookbook/sendmail|Sending Mail]]
 * [[cookbook/layout_template|Using Site Layout Templates]]
 * [[cookbook/fileupload|File Upload]]
-
+* [[cookbook/redirect+seeother|Seeother and Redirect]]
 
 Requests:
 
