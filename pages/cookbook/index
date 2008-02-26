@@ -2,17 +2,28 @@
 
 Cookbook style documentation for web.py 0.3. 
 
-Recipes:
-
+##Basics:
 * [[cookbook/helloworld|Hello World]]
 * [[cookbook/staticfiles|Serving Static Files]]
-* [[cookbook/sessions|Working with Session]]
-* [[cookbook/sendmail|Sending Mail]]
-* [[cookbook/layout_template|Using Site Layout Templates]]
-* [[cookbook/fileupload|File Upload]]
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
 * [[cookbook/ctx|web.ctx]]
+
+##Sessions:
+* [[cookbook/sessions|Working with Session]]
+
+##Utils:
+* [[cookbook/sendmail|Sending Mail]]
+
+##Templates:
+* [[cookbook/layout_template|Using Site Layout Templates]]
+
+##User Input:
+* [[cookbook/fileupload|File Upload]]
 * [[cookbook/input|Accessing user input through web.input]]
+
+##Database:
+
+##Deployment
 
 
 Requests:
