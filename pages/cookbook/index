@@ -6,27 +6,39 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/helloworld|Hello World]]
 * [[cookbook/staticfiles|Serving Static Files]]
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
+
+##Advanced
 * [[cookbook/ctx|web.ctx]]
+* loadhooks/unloadhooks (requested)
+* How to properly use web.background (requested)
 
 ##Sessions:
 * [[cookbook/sessions|Working with Session]]
+* User authentication (requested)
 
 ##Utils:
 * [[cookbook/sendmail|Sending Mail]]
 
 ##Templates:
 * [[cookbook/layout_template|Using Site Layout Templates]]
+* Odd/even table rows (requested)
 
 ##User Input:
 * [[cookbook/fileupload|File Upload]]
 * [[cookbook/input|Accessing user input through web.input]]
 
 ##Database:
+* Mutliple databases (requested)
+* Select (requested)
+* Update (requested)
+* Delete (requested)
+* Insert (requested)
+* Query (requested)
 
 ##Deployment:
+* Fastcgi deployment through lighttpd (requested)
+* Fastcgi deployment through Apache (requested)
+* mod_python deployment through Apache (requested)
+* nginx deployment (requested)
 
-
-Requests:
-
-* [[cookbook/web.background|How to properly use web.background]]
 
