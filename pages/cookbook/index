@@ -49,7 +49,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/select|Select: Retrieving entries from a database]]
 * Update (requested)
 * Delete (requested)
-* [[Insert|Insert: Adding entries to a database]] (requested)
+* [[Insert|Insert: Adding entries to a database]] 
 * Query (requested)
 
 ##Deployment:
