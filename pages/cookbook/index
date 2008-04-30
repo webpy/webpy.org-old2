@@ -21,6 +21,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/staticfiles|Serving Static Files]]
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
 * using subapplications
+* [[cookbok/xmlfiles|Serving XML]]
 
 ##Advanced
 * [[cookbook/ctx|web.ctx]]
