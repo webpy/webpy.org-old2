@@ -38,7 +38,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 
 ##Templates:
 * [[cookbook/layout_template|Using Site Layout Templates]]
-* Odd/even table rows (requested)
+* [[cookbook/alternating_style|Alternating Style]]
 
 ##User Input:
 * [[cookbook/fileupload|File Upload]]
