@@ -48,7 +48,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 ##Database:
 * [[cookbook/multidbs|Mutliple databases]]
 * [[cookbook/select|Select: Retrieving entries from a database]]
-* Update (requested)
+* [[/cookbook/update|Update: Updating entries in a database]]
 * Delete (requested)
 * [[Insert|Insert: Adding entries to a database]] 
 * Query (requested)
