@@ -35,6 +35,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 
 ##Utils:
 * [[cookbook/sendmail|Sending Mail]]
+* [[cookbook/sendmail_with_gmail|Sending Mail Using Gmail]]
 
 ##Templates:
 * [[cookbook/layout_template|Using Site Layout Templates]]
