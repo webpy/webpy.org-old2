@@ -28,7 +28,7 @@ web.py 0.3 ベースのCookbookスタイルのドキュメントです。
 ##Advanced
 * [[ctx|web.ctx]]
 * loadhooks/unloadhooks (requested)
-* How to properly use web.background (requested)
+* [[background|How to properly use web.background (requested)]]
 
 ##Sessions and user state:
 * [[sessions|Session機能]]
