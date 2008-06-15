@@ -1,3 +1,5 @@
+# クックブック
+
 web.py 0.3 ベースのCookbookスタイルのドキュメントです。
 古いバージョンでは利用可能ではない説明があります。
 現在、バージョン 0.3 は開発版です。
@@ -18,7 +20,7 @@ web.py 0.3 ベースのCookbookスタイルのドキュメントです。
 
 ##Basics:
 * [[helloworld/ja|Hello World]]
-* [[staticfiles|staticファイルについて]]
+* [[staticfiles/ja|staticファイル(js、css、画像など)について]]
 * [[redirect+seeother|Seeother(HTTP/1.1 コード : 303)とRedirect]]
 * サブアプリケーションの使い方について
 * [[/cookbok/xmlfiles|Serving XML]]
