@@ -1,8 +1,7 @@
 # web.py 0.3 documentation
 
-
 * Introduction
-* [[/docs/0.3/templator|Templator: The web.py templating system]]
+* [[/docs/0.3/templetor|Templetor: The web.py templating system]]
 * Working with database
 * Working with session
 * API documentation
