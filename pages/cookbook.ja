@@ -22,7 +22,7 @@ web.py 0.3 ベースのCookbookスタイルのドキュメントです。
 * [[helloworld/ja|Hello World]]
 * [[staticfiles/ja|staticファイル(js、css、画像など)について]]
 * [[redirect+seeother/ja|Seeother(HTTP/1.1 コード : 303)とRedirect]]
-* サブアプリケーションの使い方について
+* [[cookbook/subapp/ja|サブアプリケーションの使い方について(別ファイルのインクルード)]]
 * [[xmlfiles/ja|Serving XML]]
 
 ##Advanced
