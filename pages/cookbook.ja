@@ -41,6 +41,9 @@ web.py 0.3 ベースのCookbookスタイルのドキュメントです。
 ##Templates:
 * [[layout_template/ja|Using Site Layout Templates]]
 * [[alternating_style/ja|Alternating Style]]
+* [[template_mako/ja|makoテンプレートエンジンの使用について]]
+* [[template_cheetah/ja|Cheetahテンプレートエンジンの使用について]]
+
 
 ##User Input:
 * [[fileupload/ja|ファイルアップロード]]
