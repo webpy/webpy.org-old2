@@ -31,7 +31,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 
 ##Sessions and user state:
 * [[cookbook/sessions|Working with Session]]
-* [[cookbook/sessions_with_reloader|Using session with reloader]]
+* [[cookbook/session_with_reloader|Using session with reloader]]
 * [[cookbook/cookies|Working with Cookies]]
 * User authentication (requested)
 
