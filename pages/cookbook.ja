@@ -26,44 +26,52 @@ web.py 0.3 ベースのCookbookスタイルのドキュメントです。
 * [[xmlfiles|Serving XML]]
 
 ##Advanced
-* [[ctx/ja|web.ctx]]
-* loadhooks/unloadhooks (requested)
-* [[background/ja|How to properly use web.background (requested)]]
+* [[ctx|web.ctx]]
+* [[application_processors|Application processors, loadhooks and unloadhooks]]
+* [[background|How to use web.background]]
+* [[custom_notfound|Custom NotFound message]]
 
 ##Sessions and user state:
-* [[sessions/ja|Session機能]]
-* [[cookies/ja|Cookies機能]]
+* [[sessions|Session機能]]
+* [[session_with_reloader|Using session with reloader]]
+* [[cookies|Cookies機能]]
 * ユーザ認証 (requested)
 
 ##Utils:
-* [[sendmail/ja|メール送信]]
+* [[sendmail|メール送信]]
+* [[sendmail_using_gmail|GMailへのメール送信]]
 
 ##Templates:
-* [[layout_template/ja|Using Site Layout Templates]]
-* [[alternating_style/ja|Alternating Style]]
+* [[layout_template|Using Site Layout Templates]]
+* [[alternating_style|Alternating Style]]
 * [[template_mako/ja|makoテンプレートエンジンの使用について]]
 * [[template_cheetah/ja|Cheetahテンプレートエンジンの使用について]]
 
-
 ##User Input:
-* [[fileupload/ja|ファイルアップロード]]
-* [[input/ja|web.inputからユーザ入力情報へのアクセス]]
-* 基本的なフォームの使用 (requested)
+* [[fileupload|ファイルアップロード]]
+* [[input|リクエストデータ(web.inputを利用)へのアクセス]]
+* Using basic forms (requested)
 
 ##Database:
-* [[multidbs/ja|複数データベース]]
-* [[select/ja|Select: データ照会]]
-* [[update/ja|Update: データ更新]]
-* Delete (requested)
-* [[insert/ja|Insert: データ追加]] 
-* [[query/ja|Query: 問い合わせ(SQL文の発行)]]
-* [[transactions/ja|トランザクションの使用]]
+* [[multidbs|複数データベース]]
+* [[select|Select: データ検索(SELECT文)]]
+* [[update|Update: データ更新(UPDATE文)]]
+* [[delete|Delete: データ削除(DELETE文)]]
+* [[/Insert|Insert: データ追加(INSERT文)]] 
+* [[query|問い合わせ(SQL文の発行)]]
+* [トランザクションの使用](transactions)
+
 ##Deployment:
-* [[fastcgi-lighttpd/ja|lighttpd + Fastcgiの配置]]
-* Apache + Fastcgiの配置 (requested)
+* [[fastcgi-lighttpd|Lighttpd + Fastcgiの配置]]
+* [[fastcgi-apache|Apache + Fastcgiの配置]] 
 * [[cgi-apache/ja|Apache + CGIの配置]]
-* Apache +mod_pythonの配置 (requested)
-* nginx(ロードバランサ)の配置 (requested)
+* mod_python deployment through Apache (requested)
+* [[mod_wsgi-apache |mod_wsgi deployment through Apache]]
+* [[mod_wsgi-nginx |mod_wsgi deployment through Nginx]]
+* nginx deployment (requested)
+
+
+
 
 ##Subdomains:
 * サブドメインおよびユーザー名を使用してにアクセスする方法 (requested)
