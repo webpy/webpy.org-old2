@@ -1,7 +1,11 @@
 # web.py 0.3 documentation
 
-* Introduction
-* [[/docs/0.3/templetor|Templetor: The web.py templating system]]
-* Working with database
-* Working with session
+* [[/tutorial3.en|Quick tutorial]]
+* Detailed Tutorial
+    * Introduction
+    * [[/docs/0.3/templetor|Templetor: The web.py templating system]]
+    * Working with database
+    * Working with session
 * [[/docs/0.3/api|API documentation]]
+* [[/cookbook|Cookbook]]
+* [[/src|Code samples]]
