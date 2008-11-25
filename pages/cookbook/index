@@ -48,6 +48,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 
 ##User Input:
 * [[cookbook/fileupload|File Upload]]
+* [[cookbook/limiting_upload_size|How to put a limit of size of uploaded files]]
 * [[cookbook/input|Accessing user input through web.input]]
 * Using basic forms (requested)
 
