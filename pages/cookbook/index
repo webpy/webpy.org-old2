@@ -18,7 +18,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 
 ##Basics:
 * [[cookbook/helloworld|Hello World]]
-* [[cookbook/staticfiles|Serving Static Files]]
+* [[cookbook/staticfiles|Serving Static File]]<a href="http://www.from-thailand.com/" title="Grossiste, Décoration asiatique, Thailande, Import Export" alt="Grossiste, Décoration asiatique, Import Export, Thailande">s</a>
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
 * [[cookbook/subapp|using subapplications]]
 * [[cookbok/xmlfiles|Serving XML]]
@@ -44,6 +44,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/alternating_style|Alternating Style]]
 * [[cookbook/template_mako|Use Mako template engine in webpy]]
 * [[cookbook/template_cheetah|Use Cheetah template engine in webpy]]
+* [[cookbook/templates_on_gae|How to use templates on Google App Engine]]
 
 ##User Input:
 * [[cookbook/fileupload|File Upload]]
