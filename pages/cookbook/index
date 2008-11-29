@@ -40,6 +40,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/sendmail_using_gmail|Sending Mail Using Gmail]]
 
 ##Templates:
+* [[http://webpy.org/docs/0.3/templetor |Templetor: The web.py templating system]]
 * [[cookbook/layout_template|Using Site Layout Templates]]
 * [[cookbook/alternating_style|Alternating Style]]
 * [[cookbook/template_mako|Use Mako template engine in webpy]]
