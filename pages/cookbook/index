@@ -51,6 +51,9 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/template_jinja|Use Jinja2 template engine in webpy]]
 * [[cookbook/templates_on_gae|How to use templates on Google App Engine]]
 
+##Testing:
+* [[cookbook/testing_with_paste_and_nose|Testing with Paste and Nose]]
+
 ##User Input:
 * [[cookbook/fileupload|File Upload]]
 * [[cookbook/storeupload|Store an uploaded file]]
