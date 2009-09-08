@@ -7,6 +7,7 @@
 * Detailed Tutorial _(still in progress)_
     * Introduction
     * [[/docs/0.3/templetor|Templetor: The web.py templating system]]
+    * [[/form|Working with forms]]
     * Working with database
     * Working with session
 
