@@ -1,4 +1,4 @@
-# RESTful `doctest`ing using `application.request`
+# RESTful doctesting using app.request
 
 #!/usr/bin/env python
     
