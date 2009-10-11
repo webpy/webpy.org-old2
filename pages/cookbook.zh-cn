@@ -19,10 +19,10 @@
 
 ##基本应用:
 * [[cookbook/zh-cn/helloworld|Hello World]]
-* [[cookbook/zh-cn/staticfiles|Serving Static Files 提供静态文件]]
-* [[cookbook/zh-cn/redirect+seeother|Seeother and Redirect(重定向)]]
-* [[cookbook/zh-cn/subapp|using subapplications 使用子应用]]
-* [[cookbok/zh-cn/xmlfiles|Serving XML 提供XML]]
+* [[cookbook/zh-cn/staticfiles|提供静态文件访问]]
+* [[cookbook/zh-cn/redirect+seeother|跳转与重定向]]
+* [[cookbook/zh-cn/subapp|使用子应用]]
+* [[cookbok/zh-cn/xmlfiles|提供XML访问]]
 
 ##高级应用
 * [[cookbook/zh-cn/ctx|web.ctx]]
