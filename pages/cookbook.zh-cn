@@ -1,0 +1,92 @@
+# Web.py Cookbook 简体中文版
+
+欢迎来到web.py 0.3的Cookbook。提醒您注意：某些特性在之前的版本中并不可用。当前开发版本是0.3。
+
+#格式
+
+1. 在编排内容时，请尽量使用cookbook格式...如：
+    
+    ###问题：如何访问数据库中的数据？
+     
+    ###解法：使用如下代码...
+
+1. 请注意，网址中不必含有"web"。如"/cookbook/select"，而非"/cookbook/web.select"。
+
+1. 最后，该手册适用于0.3版本，所以您在添加代码时，请确认代码能在新版本中工作。
+-------------------------------------------------
+
+##基本应用:
+* [[cookbook/zh-cn/helloworld|Hello World]]
+* [[cookbook/zh-cn/staticfiles|Serving Static Files 提供静态文件]]
+* [[cookbook/zh-cn/redirect+seeother|Seeother and Redirect(重定向)]]
+* [[cookbook/zh-cn/subapp|using subapplications 使用子应用]]
+* [[cookbok/zh-cn/xmlfiles|Serving XML 提供XML]]
+
+##高级应用
+* [[cookbook/zh-cn/ctx|web.ctx]]
+* [[cookbook/zh-cn/application_processors|Application processors, loadhooks and unloadhooks 应用处理器，添加钩子和卸载钩子]]
+* [[cookbook/zh-cn/background|How to use web.background 如何使用web.background]]
+* [[cookbook/zh-cn/custom_notfound|Custom NotFound message]]
+* [[cookbook/zh-cn/streaming_large_files|How to Stream Large Files]]
+* [[cookbook/zh-cn/logging|Control over logging for default HTTPServer]]
+* [[cookbook/zh-cn/ssl|SSL support in built-in cherrypy server]]
+
+##Sessions and user state:
+* [[cookbook/sessions|Working with Session (未译)]]
+* [[cookbook/session_with_reloader|Using session with reloader (未译)]]
+* [[cookbook/cookies|Working with Cookies (未译)]]
+* [[cookbook/userauth|User authentication (未译)]]
+* [[cookbook/userauthpgsql|User authentication with Postgresql database (未译)]]
+* [[cookbook/sessions_with_subapp|Sessions with sub-apps (未译)]]
+
+
+##Utils:
+* [[cookbook/sendmail|Sending Mail (未译)]]
+* [[cookbook/sendmail_using_gmail|Sending Mail Using Gmail (未译)]]
+* [[cookbook/webservice|Webservice using soaplib + WSDL (未译)]]
+
+##Templates:
+* [[http://webpy.org/docs/0.3/templetor |Templetor: The web.py templating system (未译)]]
+* [[cookbook/layout_template|Using Site Layout Templates (未译)]]
+* [[cookbook/alternating_style|Alternating Style (未译)]]
+* [[cookbook/i18n_support_in_template_file |i18n support in template file (未译)]]
+* [[cookbook/template_mako|Use Mako template engine in webpy (未译)]]
+* [[cookbook/template_cheetah|Use Cheetah template engine in webpy (未译)]]
+* [[cookbook/template_jinja|Use Jinja2 template engine in webpy (未译)
+* [[cookbook/templates_on_gae|How to use templates on Google App Engine (未译)]]
+
+##Testing:
+* [[cookbook/testing_with_paste_and_nose|Testing with Paste and Nose (未译)]]
+* [[cookbook/restful_doctesting_using_request|RESTful doctesting using an application's request method (未译)]]
+
+##User Input:
+* [[cookbook/fileupload|File Upload (未译)]]
+* [[cookbook/storeupload|Store an uploaded file (未译)]]
+* [[cookbook/limiting_upload_size|How to put a limit of size of uploaded files (未译)]]
+* [[cookbook/input|Accessing user input through web.input (未译)]]
+* [[cookbook/forms|How to use forms (未译)]]
+* [[cookbook/form_fields|Render individual form fields (未译)]]
+
+##Database:
+* [[cookbook/multidbs|Multiple databases (未译)]]
+* [[cookbook/select|Select: Retrieving entries from a database (未译)]]
+* [[/cookbook/update|Update: Updating entries in a database (未译)]]
+* [[/cookbook/delete|Delete: Remove entries in a database (未译)]]
+* [[Insert|Insert: Adding entries to a database (未译)]] 
+* [[/cookbook/query|Query: Advanced database queries (未译)]]
+* [How to use database transactions](/cookbook/transactions)
+* [Using sqlalchemy](/cookbook/sqlalchemy)
+* [Integrating SQLite UDF (user-defined-functions) with webpy database layer](/cookbook/sqlite-udf)
+
+
+##Deployment:
+* [[cookbook/fastcgi-lighttpd|Fastcgi deployment through lighttpd (未译)]]
+* [[cookbook/fastcgi-apache|Fastcgi deployment through Apache (未译)]] 
+* [[cookbook/cgi-apache|CGI deployment through Apache (未译)]]
+* mod_python deployment through Apache (requested)
+* [[cookbook/mod_wsgi-apache |mod_wsgi deployment through Apache (未译)]]
+* [[cookbook/mod_wsgi-nginx |mod_wsgi deployment through Nginx (未译)]]
+* [[cookbook/fastcgi-nginx|Fastcgi deployment through Nginx (未译)]]
+
+##Subdomains:
+* Subdomains and how to access the username (requested)
