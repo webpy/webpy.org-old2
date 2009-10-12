@@ -25,7 +25,7 @@
 * [[cookbok/zh-cn/xmlfiles|提供XML访问]]
 
 ##高级应用
-* [[cookbook/zh-cn/ctx|web.ctx信息]]
+* [[cookbook/zh-cn/ctx|用web.ctx获得客户端信息]]
 * [[cookbook/zh-cn/application_processors|应用处理器，添加钩子和卸载钩子]]
 * [[cookbook/zh-cn/background|如何使用web.background]]
 * [[cookbook/zh-cn/custom_notfound|自定义NotFound信息]]
