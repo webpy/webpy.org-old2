@@ -25,13 +25,13 @@
 * [[cookbok/zh-cn/xmlfiles|提供XML访问]]
 
 ##高级应用
-* [[cookbook/zh-cn/ctx|web.ctx]]
-* [[cookbook/zh-cn/application_processors|Application processors, loadhooks and unloadhooks 应用处理器，添加钩子和卸载钩子]]
-* [[cookbook/zh-cn/background|How to use web.background 如何使用web.background]]
-* [[cookbook/zh-cn/custom_notfound|Custom NotFound message]]
-* [[cookbook/zh-cn/streaming_large_files|How to Stream Large Files]]
-* [[cookbook/zh-cn/logging|Control over logging for default HTTPServer]]
-* [[cookbook/zh-cn/ssl|SSL support in built-in cherrypy server]]
+* [[cookbook/zh-cn/ctx|web.ctx信息]]
+* [[cookbook/zh-cn/application_processors|应用处理器，添加钩子和卸载钩子]]
+* [[cookbook/zh-cn/background|如何使用web.background]]
+* [[cookbook/zh-cn/custom_notfound|自定义NotFound信息]]
+* [[cookbook/zh-cn/streaming_large_files|如何流传输大文件]]
+* [[cookbook/zh-cn/logging|对自带的webserver日志进行操作]]
+* [[cookbook/zh-cn/ssl|用cherrypy提供SSL支持]]
 
 ##Sessions and user state:
 * [[cookbook/sessions|Working with Session (未译)]]
