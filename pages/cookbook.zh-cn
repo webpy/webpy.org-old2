@@ -34,18 +34,18 @@
 * [[cookbook/zh-cn/ssl|用cherrypy提供SSL支持]]
 
 ##Sessions and user state:
-* [[cookbook/sessions|Working with Session (未译)]]
-* [[cookbook/session_with_reloader|Using session with reloader (未译)]]
-* [[cookbook/cookies|Working with Cookies (未译)]]
-* [[cookbook/userauth|User authentication (未译)]]
-* [[cookbook/userauthpgsql|User authentication with Postgresql database (未译)]]
-* [[cookbook/sessions_with_subapp|Sessions with sub-apps (未译)]]
+* [[cookbook/zh-cn/sessions|如何使用Session]]
+* [[cookbook/zh-cn/session_with_reloader|如何在调试模式下使用Session]]
+* [[cookbook/zh-cn/cookies|如何操作Cookie]]
+* [[cookbook/zh-cn/userauth|用户认证]]
+* [[cookbook/zh-cn/userauthpgsql|一个在postgreSQL数据库环境下的用户认证的例子]]
+* [[cookbook/zh-cn/sessions_with_subapp|如何在子应用中操作Session]]
 
 
 ##Utils:
-* [[cookbook/sendmail|Sending Mail (未译)]]
-* [[cookbook/sendmail_using_gmail|Sending Mail Using Gmail (未译)]]
-* [[cookbook/webservice|Webservice using soaplib + WSDL (未译)]]
+* [[cookbook/zh-cn/sendmail|如何发送邮件]]
+* [[cookbook/zh-cn/sendmail_using_gmail|如何利用Gmail发送邮件]]
+* [[cookbook/zh-cn/webservice|使用soaplib实现webservice]]
 
 ##Templates:
 * [[http://webpy.org/docs/0.3/templetor |Templetor: The web.py templating system (未译)]]
