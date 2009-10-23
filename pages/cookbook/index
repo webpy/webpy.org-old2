@@ -18,7 +18,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 
 ##Basics:
 * [[cookbook/helloworld|Hello World]]
-* [[cookbook/staticfiles|Serving Static Files]]
+* [[cookbook/staticfiles|Serving Static File]][s](http://www.dofollownet.com/)
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
 * [[cookbook/subapp|using subapplications]]
 * [[cookbok/xmlfiles|Serving XML]]
@@ -31,6 +31,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/streaming_large_files|How to Stream Large Files]]
 * [[cookbook/logging|Control over logging for default HTTPServer]]
 * [[cookbook/ssl|SSL support in built-in cherrypy server]]
+* [[cookbook/runtime-language-switch|Run-time language switch]]
 
 ##Sessions and user state:
 * [[cookbook/sessions|Working with Session]]
