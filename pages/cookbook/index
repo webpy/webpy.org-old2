@@ -19,6 +19,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 ##Basics:
 * [[cookbook/helloworld|Hello World]]
 * [[cookbook/staticfiles|Serving Static File]][s](http://www.dofollownet.com/)
+* [[cookbook/url_handling|Understanding URL handling]]
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
 * [[cookbook/subapp|using subapplications]]
 * [[cookbok/xmlfiles|Serving XML]]
