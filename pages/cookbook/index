@@ -53,6 +53,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[http://webpy.org/docs/0.3/templetor |Templetor: The web.py templating system]]
 * [[cookbook/layout_template|Using Site Layout Templates]]
 * [[cookbook/alternating_style|Alternating Style]]
+* [[cookbook/template_import|Import functions into templates]]
 * [[cookbook/i18n_support_in_template_file |i18n support in template file]]
 * [[cookbook/template_mako|Use Mako template engine in webpy]]
 * [[cookbook/template_cheetah|Use Cheetah template engine in webpy]]
