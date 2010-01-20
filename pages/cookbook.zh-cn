@@ -22,9 +22,11 @@
 ##基本应用:
 * [[helloworld/zh-cn|Hello World]]
 * [[staticfiles/zh-cn|提供静态文件访问]]
+* [[url_handling/zh-cn|Understanding URL handling (未译)]]
 * [[redirect+seeother/zh-cn|跳转与重定向]]
 * [[subapp/zh-cn|使用子应用]]
 * [[xmlfiles/zh-cn|提供XML访问]]
+* [[postbasic/zh-cn|Reading raw data from post (未译)]]
 
 ##高级应用
 * [[ctx/zh-cn|用web.ctx获得客户端信息]]
@@ -34,6 +36,7 @@
 * [[streaming_large_files/zh-cn|如何流传输大文件]]
 * [[logging/zh-cn|对自带的webserver日志进行操作]]
 * [[ssl/zh-cn|用cherrypy提供SSL支持]]
+* [[runtime-language-switch/zh-cn|Run-time language switch (未译)]]
 
 ##Sessions and user state:
 * [[sessions/zh-cn|如何使用Session]]
