@@ -78,10 +78,9 @@
 * [[delete/zh-cn|Delete: Remove entries in a database (未译)]]
 * [[Insert/zh-cn|Insert: Adding entries to a database (未译)]] 
 * [[query/zh-cn|Query: Advanced database queries (未译)]]
-* [How to use database transactions](/cookbook/transactions)
-* [Using sqlalchemy](/cookbook/sqlalchemy)
-* [Integrating SQLite UDF (user-defined-functions) with webpy database layer](/cookbook/sqlite-udf)
-
+* [[transactions/zh-cn|How to use database transactions]]
+* [[sqlalchemy/zh-cn|Using sqlalchemy]]
+* [[sqlite-udf/zh-cn|Integrating SQLite UDF (user-defined-functions) with webpy database layer]]
 
 ##Deployment:
 * [[fastcgi-lighttpd/zh-cn|Fastcgi deployment through lighttpd (未译)]]
