@@ -53,6 +53,7 @@
 * [[http://webpy.org/docs/0.3/templetor/zh-cn|Templetor: The web.py templating system (未译)]]
 * [[layout_template/zh-cn|Using Site Layout Templates (未译)]]
 * [[alternating_style/zh-cn|Alternating Style (未译)]]
+* [[template_import/zh-cn|Import functions into templates (未译)]]
 * [[i18n_support_in_template_file/zh-cn|i18n support in template file (未译)]]
 * [[template_mako/zh-cn|Use Mako template engine in webpy ]]
 * [[template_cheetah/zh-cn|Use Cheetah template engine in webpy (未译)]]
