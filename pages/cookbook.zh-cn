@@ -81,6 +81,7 @@
 * [[transactions/zh-cn|How to use database transactions]]
 * [[sqlalchemy/zh-cn|Using sqlalchemy]]
 * [[sqlite-udf/zh-cn|Integrating SQLite UDF (user-defined-functions) with webpy database layer]]
+* [[where_dict/zh-cn|Using a dictionary as where clause]]
 
 ##Deployment:
 * [[fastcgi-lighttpd/zh-cn|Fastcgi deployment through lighttpd (未译)]]
