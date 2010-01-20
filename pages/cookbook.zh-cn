@@ -56,7 +56,7 @@
 * [[i18n_support_in_template_file/zh-cn|i18n support in template file (未译)]]
 * [[template_mako/zh-cn|Use Mako template engine in webpy ]]
 * [[template_cheetah/zh-cn|Use Cheetah template engine in webpy (未译)]]
-* [[template_jinja/zh-cn|Use Jinja2 template engine in webpy (未译)
+* [[template_jinja/zh-cn|Use Jinja2 template engine in webpy (未译)]]
 * [[templates_on_gae/zh-cn|How to use templates on Google App Engine (未译)]]
 
 ##Testing:
