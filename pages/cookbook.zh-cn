@@ -78,10 +78,10 @@
 * [[delete/zh-cn|Delete: Remove entries in a database (未译)]]
 * [[Insert/zh-cn|Insert: Adding entries to a database (未译)]] 
 * [[query/zh-cn|Query: Advanced database queries (未译)]]
-* [[transactions/zh-cn|How to use database transactions]]
-* [[sqlalchemy/zh-cn|Using sqlalchemy]]
-* [[sqlite-udf/zh-cn|Integrating SQLite UDF (user-defined-functions) with webpy database layer]]
-* [[where_dict/zh-cn|Using a dictionary as where clause]]
+* [[transactions/zh-cn|How to use database transactions (未译)]]
+* [[sqlalchemy/zh-cn|Using sqlalchemy (未译)]]
+* [[sqlite-udf/zh-cn|Integrating SQLite UDF (user-defined-functions) with webpy database layer (未译)]]
+* [[where_dict/zh-cn|Using a dictionary as where clause (未译)]]
 
 ##Deployment:
 * [[fastcgi-lighttpd/zh-cn|Fastcgi deployment through lighttpd (未译)]]
