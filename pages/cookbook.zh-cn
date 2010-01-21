@@ -26,7 +26,7 @@
 * [[redirect+seeother/zh-cn|跳转与重定向]]
 * [[subapp/zh-cn|使用子应用]]
 * [[xmlfiles/zh-cn|提供XML访问]]
-* [[postbasic/zh-cn|Reading raw data from post (未译)]]
+* [[postbasic/zh-cn|从post读取原始数据]]
 
 ##高级应用
 * [[ctx/zh-cn|用web.ctx获得客户端信息]]
