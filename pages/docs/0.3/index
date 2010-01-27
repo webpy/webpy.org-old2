@@ -19,8 +19,8 @@
 * [[/docs/0.3/apps|Applications]]
     * [[/docs/0.3/apps/basic|Basic app]]
     * [[/docs/0.3/apps/auto|Auto app]]
-    * Subdir app
-    * Subdomain app
+    * [[/docs/0.3/apps/subdir|Subdir app]]
+    * [[/docs/0.3/apps/subdomain|Subdomain app]]
 
 ## Upgrade to Current Version
 
