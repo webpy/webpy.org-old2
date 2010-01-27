@@ -9,25 +9,18 @@ All samples are in the public domain.  They are intentionally unstyled, and they
 * [Todo-list](/src/todo-list/0.3). The simplest database-driven app possible.
 * [Blog](/src/blog/0.3). A very simple blog, showing basic CRUD functionality.
 * [wiki](/src/wiki/0.3). A very basic wiki engine.
-* [alternate version of tutorial code using SQLite and SQLObject](/src/webpysqlobject)
-* [Templating with Genshi](/src/genshi)
 
 
 ### tips and tricks:
 
 * [[sessions|simple sessions with flup]]
-
 * [[template tricks|tricks with template.py]]
-
 * [[quick vhosting hack]]
-
 * [[MetaClassAutoURLS|using a metaclass to automate setting urls]]
-
 * [[testing|test your web application with paste]]
-
 * [[images|Serving Images]]
-
 * [[multiple_apps|Create multiple apps using web.py]]
+* [Templating with Genshi](/src/genshi)
 
 ### real web apps:
 
