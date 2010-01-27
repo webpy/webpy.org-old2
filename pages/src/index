@@ -13,7 +13,6 @@ All samples are in the public domain.  They are intentionally unstyled, and they
 
 ### Tips and Tricks:
 
-* [[sessions|simple sessions with flup]]
 * [[template tricks|tricks with template.py]]
 * [[quick vhosting hack]]
 * [[MetaClassAutoURLS|using a metaclass to automate setting urls]]
