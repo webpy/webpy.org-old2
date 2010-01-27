@@ -16,7 +16,7 @@
 * [[/src|Code samples]]
 
 ## Component Documentation
-* [[/docs/0.3/apps|Applications]]
+* [[/docs/0.3/apps|Applications]]: How to map urls to python code paths.
     * [[/docs/0.3/apps/basic|Basic app]]
     * [[/docs/0.3/apps/auto|Auto app]]
     * [[/docs/0.3/apps/subdir|Subdir app]]
