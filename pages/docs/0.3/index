@@ -11,10 +11,10 @@
 
 ## Component Documentation
 * [[/docs/0.3/apps|Applications]]. How to map urls to python code paths.
-    * [[/docs/0.3/apps/basic|Basic app]]
-    * [[/docs/0.3/apps/auto|Auto app]]
-    * [[/docs/0.3/apps/subdir|Subdir app]]
-    * [[/docs/0.3/apps/subdomain|Subdomain app]]
+    * [[/docs/0.3/apps/basic|Basic app]]. Map regexes to classes.
+    * [[/docs/0.3/apps/auto|Auto app]]. Have webpy keep track of the urls based on class name.
+    * [[/docs/0.3/apps/subdir|Subdir app]]. Host multiple apps based on the sub-directory.
+    * [[/docs/0.3/apps/subdomain|Subdomain app]]. Host multiple apps based on the subdomain.
 * [[/docs/0.3/templetor|Templates]]. Templetor, the web.py templating system
 * [[/form|Forms]]. Dealing with user input
 * Sessions
