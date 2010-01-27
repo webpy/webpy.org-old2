@@ -9,6 +9,7 @@
     * [[/form|Working with forms]]
     * Working with database
     * Working with session
+    * Testing application
 
 ## Example Code
 
@@ -21,6 +22,10 @@
     * [[/docs/0.3/apps/auto|Auto app]]
     * [[/docs/0.3/apps/subdir|Subdir app]]
     * [[/docs/0.3/apps/subdomain|Subdomain app]]
+* Templates
+* Forms
+* Sessions
+* Database
 
 ## Upgrade to Current Version
 
