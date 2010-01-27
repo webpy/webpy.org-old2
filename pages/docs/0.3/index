@@ -15,6 +15,13 @@
 * [[/cookbook|Cookbook]]
 * [[/src|Code samples]]
 
+## Component Documentation
+* [[/docs/0.3/apps|Applications]]
+    * [[/docs/0.3/apps/basic|Basic app]]
+    * Auto app
+    * Subdir app
+    * Subdomain app
+
 ## Upgrade to Current Version
 
 * [[/docs/0.3/upgrade|Upgrade to 0.3 versions of web.py]]
