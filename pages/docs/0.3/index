@@ -1,9 +1,8 @@
 # web.py 0.3 documentation
 
+## Tutorial
+
 * [[/tutorial3.en|Quick tutorial]]
-
-* [[/docs/0.3/upgrade|How to upgrade from earlier versions of web.py]]
-
 * Detailed Tutorial _(still in progress)_
     * Introduction
     * [[/docs/0.3/templetor|Templetor: The web.py templating system]]
@@ -11,8 +10,16 @@
     * Working with database
     * Working with session
 
-* [[/docs/0.3/api|API documentation]]
+## Example Code
 
 * [[/cookbook|Cookbook]]
-
 * [[/src|Code samples]]
+
+## Upgrade to Current Version
+
+* [[/docs/0.3/upgrade|How to upgrade from earlier versions of web.py]]
+
+
+## API Documentation
+
+* [[/docs/0.3/api|API documentation]]
