@@ -1,5 +1,3 @@
-# Auto webpy app
-
 # Auto Application
 
 The auto application acts like the [[/docs/0.3/apps/basic|basic application]], only it doesn't require a URL mapping to be created.  The mapping is derived from the class names (using metaclasses). In it's most basic form:
