@@ -3,13 +3,6 @@
 ## Tutorial
 
 * [[/tutorial3.en|Quick tutorial]]
-* Detailed Tutorial _(still in progress)_
-    * Introduction
-    * [[/docs/0.3/templetor|Templetor: The web.py templating system]]
-    * [[/form|Working with forms]]
-    * Working with database
-    * Working with session
-    * Testing application
 
 ## Example Code
 
@@ -22,10 +15,11 @@
     * [[/docs/0.3/apps/auto|Auto app]]
     * [[/docs/0.3/apps/subdir|Subdir app]]
     * [[/docs/0.3/apps/subdomain|Subdomain app]]
-* Templates
-* Forms
+* [[/docs/0.3/templetor|Templates]]: Templetor, the web.py templating system
+* [[/form|Forms]]: Dealing with user input
 * Sessions
 * Database
+* Testing
 
 ## Upgrade to Current Version
 
