@@ -17,6 +17,7 @@
     * [[/docs/0.3/apps/subdomain|Subdomain app]]. Host multiple apps based on the subdomain.
 * [[/docs/0.3/templetor|Templates]]. Templetor, the web.py templating system
 * [[/form|Forms]]. Dealing with user input
+* Application processors. Process requests and responses
 * Sessions
 * Database
 * Testing
