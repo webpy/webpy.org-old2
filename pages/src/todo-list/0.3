@@ -4,7 +4,6 @@
 
 Very basic todo list in 0.3 webpy. Probably the most trivial database-backed app possible.
 
-
 ## Files
 
     /schema.sql
@@ -17,9 +16,6 @@ Very basic todo list in 0.3 webpy. Probably the most trivial database-backed app
 
 ###/schema.sql
 
-
-    
-    
     CREATE TABLE todo (
         id INT AUTO_INCREMENT,
         title TEXT,
@@ -27,15 +23,13 @@ Very basic todo list in 0.3 webpy. Probably the most trivial database-backed app
     );
 
 
-
 ###/templates/base.html
-
 
     $def with (page)
     
     <html>
     <head>
-        <title>Tdoo list</title>
+        <title>Todo list</title>
     </head>
     <body>
     
@@ -43,7 +37,6 @@ Very basic todo list in 0.3 webpy. Probably the most trivial database-backed app
     
     </body>
     </html>
-
 
 
 ###/templates/index.html
@@ -64,16 +57,12 @@ Very basic todo list in 0.3 webpy. Probably the most trivial database-backed app
                     <input type="submit" value="Delete"/>
                 </form>
             </td>
-        </tr>
-    
-    </table>
-    
-    
+        </tr>    
+    </table>  
     
     <form action="" method="post">
     $:form.render()
     </form>
-
 
 
 ###/model.py
@@ -146,7 +135,7 @@ Very basic todo list in 0.3 webpy. Probably the most trivial database-backed app
             model.del_todo(id)
             raise web.seeother('/')
     
-    
+   
     
     app = web.application(urls, globals())
     
