@@ -21,7 +21,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 
 ##Basics:
 * [[cookbook/helloworld|Hello World]]
-* [[cookbook/staticfiles|Serving Static File]][s](http://www.dofollownet.com/)
+* [[cookbook/staticfiles|Serving Static Files]]
 * [[cookbook/url_handling|Understanding URL handling]]
 * [[cookbook/redirect+seeother|Seeother and Redirect]]
 * [[cookbook/subapp|using subapplications]]
@@ -55,7 +55,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/webservice|Webservice using soaplib + WSDL]]
 
 ##Templates:
-* [[http://webpy.org/docs/0.3/templetor |Templetor: The web.py templating system]]
+* [[/docs/0.3/templetor |Templetor: The web.py templating system]]
 * [[cookbook/layout_template|Using Site Layout Templates]]
 * [[cookbook/alternating_style|Alternating Style]]
 * [[cookbook/template_import|Import functions into templates]]
