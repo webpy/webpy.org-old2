@@ -1,5 +1,13 @@
 # Install guide
 
+##
+    * [[install_macosx|mac os x]]
+    * [[install/es|español]]
+    * [[install/ja|日本語]]
+    * [[install/zh-cn|简体中文]]
+    * [[/install/it|Italiano]]
+    * [[/install/fr|français]]
+
 To install web.py, download:
     
     http://webpy.org/static/web.py-0.33.tar.gz
