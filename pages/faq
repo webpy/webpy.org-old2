@@ -31,3 +31,4 @@ Example code for many common questions can be found in the [[/cookbook|cookbook 
 99. **What's this magic `ctx` I see in examples?**
 
 	[[/cookbook/ctx|ctx cookbook recipe]]
+99. **How can I shut down the webpy instead of "Ctrl-C"?
