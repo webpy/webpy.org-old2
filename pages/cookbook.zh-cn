@@ -81,7 +81,7 @@
 * [[select/zh-cn|Select: 查询数据]]
 * [[update/zh-cn|Update: 更新数据 ]]
 * [[delete/zh-cn|Delete: 删除数据]]
-* [[Insert/zh-cn|Insert: 新增数据] 
+* [[Insert/zh-cn|Insert: 新增数据]]
 * [[query/zh-cn|Query: Advanced database queries (未译)]]
 * [[transactions/zh-cn|How to use database transactions (未译)]]
 * [[sqlalchemy/zh-cn|Using sqlalchemy (未译)]]
