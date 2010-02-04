@@ -77,7 +77,7 @@
 * [[form_fields/zh-cn|Render individual form fields (未译)]]
 
 ##Database:
-* [[multidbs/zh-cn|Multiple databases (未译)]]
+* [[multidbs/zh-cn|多数据库操作]]
 * [[select/zh-cn|Select: Retrieving entries from a database (未译)]]
 * [[update/zh-cn|Update: Updating entries in a database (未译)]]
 * [[delete/zh-cn|Delete: Remove entries in a database (未译)]]
