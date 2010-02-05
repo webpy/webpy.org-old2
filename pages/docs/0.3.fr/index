@@ -1,0 +1,34 @@
+# Documentation de web.py 0.3
+
+Autre langages : [[/docs/0.3|english]] | ...
+
+## Tutorial
+
+* [[/tutorial3.fr|Tutorial rapide]]. Commençez avec votre première application.
+
+## Exemples de code
+
+* [[/cookbook|Cookbook]]. How to perform basic and common tasks. (traduction demandée)
+* [[/src|Code samples]]. Example code of how to write some basic applications. (traduction demandée)
+
+## Documentation des composants
+* [[/docs/0.3/apps|Applications]]. How to map urls to python code paths. (traduction demandée)
+    * [[/docs/0.3/apps/basic|Basic app]]. Map regexes to classes. (traduction demandée)
+    * [[/docs/0.3/apps/auto|Auto app]]. Have webpy keep track of the urls based on class name. (traduction demandée)
+    * [[/docs/0.3/apps/subdir|Subdir app]]. Host multiple apps based on the sub-directory. (traduction demandée)
+    * [[/docs/0.3/apps/subdomain|Subdomain app]]. Host multiple apps based on the subdomain. (traduction demandée)
+* [[/docs/0.3/templetor.fr|Modèles, gabarits]]. Templetor, le système de gabarits de web.py.
+* [[/docs/0.3/form.fr|Formulaires]]. Gérer les entrées des utilisateurs.
+* [[/docs/0.3/app_processors|Application processors]]. Run code before each request. (traduction demandée)
+* [[/docs/0.3/sessions|Sessions]]. Store persistent data per user across requests. (traduction demandée)
+* Database
+* Testing
+
+## Mise à jour vers la version actuelle (traduction demandée)
+
+* [[/docs/0.3/upgrade|Upgrade to 0.3 versions of web.py]]  
+
+
+## API Documentation (traduction demandée)
+
+* [[/docs/0.3/api|API documentation]]
