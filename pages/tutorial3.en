@@ -254,6 +254,8 @@ This ends the tutorial for now. Take a look at the documentation for lots more c
 <a name="whatnext"></a>
 ## What next?
 
-* [[/docs/0.3|more documentation]]
+* [[/docs/0.3|More documentation]]
+* [[/form|Forms]]
+* [[/docs/0.3/templetor|Templates]]
 * [[/cookbook|Cookbook]]
-* [[/src|code samples]]
+* [[/src|Code samples]]
