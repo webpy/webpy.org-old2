@@ -1,5 +1,7 @@
 # web.py 0.3 tutorial
 
+Autre langages : [[/tutorial3.en|english]] | [[/tutorial3.zh-cn|chinese]] | [[/tutorial2.ja|japan]]
+
 # Sommaire
 
 
