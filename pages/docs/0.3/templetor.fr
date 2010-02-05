@@ -1,5 +1,7 @@
 # Templator: le système de gabarits de web.py
 
+Autre langues : [[/docs/0.3/templetor|English]] | ...
+
 ## Sommaire
 
 * <a href="#introduction">Introduction</a>
