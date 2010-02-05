@@ -2,6 +2,9 @@
 
 Other languages : [[/docs/0.3.fr|français]] | ...
 
+## Installation
+* [[/install|Install]]. Install web.py, configure LightTPD, Apache, Nginx ...(CGI, FastCgi, ...)
+
 ## Tutorial
 
 * [[/tutorial3.en|Quick tutorial]]. Getting started with your first application.
