@@ -1,5 +1,7 @@
 # Librairie formulaires
 
+Autres langues : [[/form|English]] | ...
+
 # Sommaire
 
 * <a href="#introduction">Introduction</a>
