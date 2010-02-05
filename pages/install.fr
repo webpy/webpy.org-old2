@@ -1,6 +1,6 @@
 # Installation
 
-Other languages : [[/install/es|español]] | [[/install/ja|Japan]] | [[/install/zh-cn|chinese]] | [[/install/it|italiano]] | [[/install|english]] 
+Autre langages : [[/install/es|español]] | [[/install/ja|Japan]] | [[/install/zh-cn|chinese]] | [[/install/it|italiano]] | [[/install|english]] 
 
 ## Sommaire
 
