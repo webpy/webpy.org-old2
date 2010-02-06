@@ -1,0 +1,103 @@
+# Web.py Cookbook
+
+Autres langages : [[cookbook/ja|japan 日本語]] | [[cookbook/zh-cn|chinese 简体中文]] | [[/cookbook|english]] | ...
+
+Documentation de type Cookbook pour web.py 0.3. Veuillez noter que certaines de ces fonctions ne sont pas disponibles dans les versions précedentes. 
+La version actuelle 0.3 est la branche développement.
+
+#Mise en forme
+
+1. En termes de mise en forme, essayez d'utiliser un format de type cookbook... Comme ceci:
+    
+    ###Probleme: Vous voulez accéder aux données de la base ...
+     
+    ###Solution: Utilisez ce code ...
+
+1. Notez que les urls n'ont pas besoin de "web" dans leur structures -- juste "/cookbook/select" , et pas "/cookbook/web.select".  
+
+1. Cette documentation est finalement pour la version 0.3, donc veuillez ajouter du code qui ne fonctionne qu'avec cette version.
+
+-------------------------------------------------
+
+##Basique:
+* [[cookbook/helloworld|Hello World]]. (traduction demandée)
+* [[cookbook/staticfiles|Servir des fichiers statiques]].   (traduction demandée)
+* [[cookbook/url_handling|Comprendre la gestion des URL]].  (traduction demandée)
+* [[cookbook/redirect+seeother|Seeother et Redirect]].  (traduction demandée)
+* [[cookbook/subapp|Utiliser une sous-application]].   (traduction demandée)
+* [[cookbook/xmlfiles|Servir du XML]].   (traduction demandée)
+* [[cookbook/postbasic|Lire les données brutes d'un post]].  (traduction demandée)
+
+
+##Avancé
+* [[cookbook/ctx|web.ctx]]. (traduction demandée)
+* [[cookbook/application_processors|Application processors, loadhooks et unloadhooks]]. (traduction demandée)
+* [[cookbook/background|Comment utiliser web.background]]. (traduction demandée)
+* [[cookbook/custom_notfound|Personnaliser le message de NotFound]]. (traduction demandée)
+* [[cookbook/streaming_large_files|Comment streamer de gros fichiers]]. (traduction demandée)
+* [[cookbook/logging|Contrôle sur les enregistrements pour HTTPServer par défaut]]. (traduction demandée)
+* [[cookbook/ssl|Support SSL dans serveur intégré cherrypy]]. (traduction demandée)
+* [[cookbook/runtime-language-switch|Run-time language switch]]. (traduction demandée)
+
+##Sessions et état des utilisateurs:
+* [[cookbook/sessions|Travailler avec Session]]. (traduction demandée)
+* [[cookbook/session_with_reloader|Utiliser session avec reloader]]. (traduction demandée)
+* [[cookbook/session_in_template|Utiliser session dans un gabarit]]. (traduction demandée)
+* [[cookbook/cookies|Travailler avec les cookies]]. (traduction demandée)
+* [[cookbook/userauth|Authentification des utilisateurs]]. (traduction demandée)
+* [[cookbook/userauthpgsql|Authentification des utilisateurs avec base de données Postgresql]]. (traduction demandée)
+* [[cookbook/sessions_with_subapp|Session avec des sous-apps]]. (traduction demandée)
+
+
+##Utils:
+* [[cookbook/sendmail|Envoi de Mail]]. (traduction demandée)
+* [[cookbook/sendmail_using_gmail|Envoi de Mail en utilisant Gmail]]. (traduction demandée)
+* [[cookbook/webservice|Webservice en utilisant soaplib + WSDL]]. (traduction demandée)
+
+##Modèles de mise en forme, gabarits de mise en page:
+* [[/docs/0.3/templetor.fr |Templetor: le système de gabarits de web.py]]
+* [[cookbook/layout_template|Utiliser des gabarits sur le site]]. (traduction demandée)
+* [[cookbook/alternating_style|Alterner un style]]. (traduction demandée) 
+* [[cookbook/template_import|Importer des fonctions dans les gabarits]]. (traduction demandée)
+* [[cookbook/i18n_support_in_template_file |i18n support dans les fichiers gabarits]]. (traduction demandée)
+* [[cookbook/template_mako|Utiliser le moteur de gabarit Mako dans webpy]]. (traduction demandée)
+* [[cookbook/template_cheetah|Utiliser le moteur de gabarit Cheetah dans webpy]]. (traduction demandée)
+* [[cookbook/template_jinja|Utiliser le moteur de gabarit  Jinja2 dans webpy]]. (traduction demandée)
+* [[cookbook/templates_on_gae|Comment utiliser les gabarits sur Google App Engine]]. (traduction demandée)
+
+##Essais:
+* [[cookbook/testing_with_paste_and_nose|Tester avec Paste et Nose]]. (traduction demandée)
+* [[cookbook/restful_doctesting_using_request|RESTful doctesting using an application's request method]]. (traduction demandée)
+
+##Entrées utilisateurs:
+* [[cookbook/fileupload|Uploader un fichier]]. (traduction demandée)
+* [[cookbook/storeupload|Stocker un fichier uploadé]]. (traduction demandée)
+* [[cookbook/limiting_upload_size|Comment limiter la taille des fichiers uploadés]]. (traduction demandée)
+* [[cookbook/input|Accéder aux entrées utilisateurs par le biais de web.input]]. (traduction demandée)
+* [[cookbook/forms|Comment utiliser les formulaires]]. (traduction demandée)
+* [[cookbook/form_fields|Rendu individuel des champs de formulaires]]. (traduction demandée)
+
+##Base de données:
+* [[cookbook/multidbs|Multiples bases de données]]. (traduction demandée)
+* [[cookbook/select|Select: Récupérer les entrées d'une base de données]]. (traduction demandée)
+* [[/cookbook/update|Update: Mettre à jour les entrées d'une base de données]]. (traduction demandée)
+* [[/cookbook/delete|Delete: Supprimer les entrées d'une base de données]]. (traduction demandée)
+* [[/cookbook/insert|Insert: Ajouter des entrées à une base de donnée]].  (traduction demandée)
+* [[/cookbook/query|Query: Base de données - Requêtes avancées]]. (traduction demandée)
+* [[/cookbook/transactions|Query: How to use database transactions]]. (traduction demandée)
+* [[/cookbook/sqlalchemy|Using sqlalchemy]]. (traduction demandée)
+* [[/cookbook/sqlite-udf|Intégrer SQLite UDF (user-defined-functions) à la couche de base de données webpy]]. (traduction demandée)
+* [[/cookbook/where_dict|Utiliser un dictionnaire comme clause where]]. (traduction demandée)
+
+
+##Déploiement:
+* [[cookbook/fastcgi-lighttpd|Déploiement Fastcgi au travers lighttpd]]. (traduction demandée)
+* [[cookbook/fastcgi-apache|Déploiement Fastcgi au travers Apache]].  (traduction demandée)
+* [[cookbook/cgi-apache|Déploiement CGI au travers Apache]]. (traduction demandée)
+* Déploiement mod_python au travers Apache (requis)
+* [[cookbook/mod_wsgi-apache |Déploiement mod_wsgi au travers Apache]]. (traduction demandée)
+* [[cookbook/mod_wsgi-nginx |Déploiement mod_wsgi au travers Nginx]]. (traduction demandée)
+* [[cookbook/fastcgi-nginx|Déploiement Fastcgi au travers Nginx]]. (traduction demandée)
+
+##Sous-domaines:
+* Sous-domaines et comment accéder au nom utilisateur (requis)
