@@ -1,5 +1,7 @@
 # About web.py
 
+Other languages : [[/fr|français]] | ...
+
 **web.py** is a web framework for python that is as simple as it is powerful. web.py is in the public domain; you can use it for whatever purpose with absolutely no restrictions.
 
 ##A complete web.py application
@@ -208,6 +210,7 @@ The [bivalidator](http://xhtml-css.com/) checks your HTML and CSS validation.
     * [???](http://kinneko.googlepages.com/webpy_faq)
     * [[faq/ja|日本語]]
     * [[faq/zh-cn|简体中文]]
+    * [[faq/fr|français]]
 
 * cookbook:
       * [[cookbook/ja|日本語]]
