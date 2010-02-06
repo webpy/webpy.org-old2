@@ -1,6 +1,6 @@
 # FAQ
 
-Other languages : [[faq/es|español]] | [[faq/ru|russian ???????]] |[[faq/ja|japan 日本語]] | [[faq/zh-cn|chinese 简体中文]] | [[/faq/fr|français]]
+Other languages : [[faq/es|español]] | [[faq/ru|russian ???????]] | [[faq/ja|japan 日本語]] | [[faq/zh-cn|chinese 简体中文]] | [[/faq/fr|français]]
 
 Example code for many common questions can be found in the [[/cookbook|cookbook section]].
     
@@ -27,4 +27,3 @@ Example code for many common questions can be found in the [[/cookbook|cookbook 
 99. **What's this magic `ctx` I see in examples?**
 
 	[[/cookbook/ctx|ctx cookbook recipe]]
-99. **How can I shut down the webpy instead of "Ctrl-C"?
