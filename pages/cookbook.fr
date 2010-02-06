@@ -1,6 +1,6 @@
 # Web.py Cookbook
 
-Autres langages : [[cookbook/ja|japan 日本語]] | [[cookbook/zh-cn|chinese 简体中文]] | [[/cookbook|english]] | ...
+Autres langages : [[ja|japan 日本語]] | [[zh-cn|chinese 简体中文]] | [[../cookbook|english]] | ...
 
 Documentation de type Cookbook pour web.py 0.3. Veuillez noter que certaines de ces fonctions ne sont pas disponibles dans les versions précedentes. 
 La version actuelle 0.3 est la branche développement.
