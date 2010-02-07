@@ -1,5 +1,7 @@
 # Serving Static Files (such as js, css and images)
 
+Other languages : [[staticfiles/fr|français]] | ...
+
 Problem
 -------
 How to serve static files?
