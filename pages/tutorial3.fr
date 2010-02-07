@@ -292,5 +292,5 @@ Vous pourrez trouver pleins de détails de tout ceci ainsi que de toutes les fon
 * [[/docs/0.3.fr|Plus de documentation]] 
 * [[/docs/0.3/form.fr|Formulaires]] 
 * [[/docs/0.3/templetor.fr|Templator: le modèle de gabarit de web.py]]
-* [[/cookbook|Cookbook]]
+* [[/cookbook/fr|Cookbook]]
 * [[/src|Exemples de codes]]
