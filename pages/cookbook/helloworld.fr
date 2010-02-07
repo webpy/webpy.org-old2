@@ -1,6 +1,6 @@
 # Hello World!
 
-Other languages : [[../helloworld|english]] | ...
+Autre langages : [[../helloworld|english]] | ...
 
 ## Probleme
 
