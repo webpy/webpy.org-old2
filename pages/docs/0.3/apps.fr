@@ -1,0 +1,11 @@
+# Applications webpy
+
+Autres langages : [[../apps|english]] | ...
+
+Les Applications webpy apparient les urls et les traitements qui sont mappés vers elles. Elles se répartissent en plusieurs catégories:
+
+
+* [[/docs/0.3/apps/basic/fr|Basic app]]. Défini les urls et les classes pour les traiter.
+* [[/docs/0.3/apps/auto|Auto app]]. Urls are determined automatically based on classes. (traduction demandée)
+* [[/docs/0.3/apps/subdir|Subdir app]]. Run multiple apps on a single domain based on url. (traduction demandée)
+* [[/docs/0.3/apps/subdomain|Subdomain app]]. Run multiple apps based on subdomains. (traduction demandée)
