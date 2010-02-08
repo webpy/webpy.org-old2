@@ -1,6 +1,6 @@
 # Application processors, hooks
 
-Other languages [[../application_processors|english]] | ...
+Autre langages [[../application_processors|english]] | ...
 
 ##  Probleme
 
