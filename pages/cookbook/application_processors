@@ -1,5 +1,7 @@
 # Application processors
 
+Other languages : [[../cookbook/application_processors/fr|français]] | ...
+
 ##  Problem
 
 How to use application processors, loadhooks and unload hooks?
