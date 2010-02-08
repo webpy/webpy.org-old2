@@ -1,5 +1,7 @@
 # webpy Applications
 
+Other languages : [[/docs/0.3/apps/fr|français]] | ...
+
 webpy applications encompasss the urls and handlers that map to them. They fall into several categories:
 
 * [[/docs/0.3/apps/basic|Basic app]]. Define urls and classes to handle them.
