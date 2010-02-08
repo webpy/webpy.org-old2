@@ -1,5 +1,7 @@
 # Auto Application
 
+Other languages : [[/docs/0.3/apps/auto/fr|français]] | ...
+
 The auto application acts like the [[/docs/0.3/apps/basic|basic application]], only it doesn't require a URL mapping to be created.  The mapping is derived from the class names (using metaclasses). In it's most basic form:
 
 ## Example code 
