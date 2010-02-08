@@ -31,7 +31,7 @@ La version actuelle 0.3 est la branche développement.
 
 ##Avancé
 * [[ctx|web.ctx]]. (traduction demandée)
-* [[application_processors|Application processors, loadhooks et unloadhooks]]. (traduction demandée)
+* [[application_processors/fr|Application processors, charger et décharger des hooks]]. 
 * [[background|Comment utiliser web.background]]. (traduction demandée)
 * [[custom_notfound|Personnaliser le message de NotFound]]. (traduction demandée)
 * [[streaming_large_files|Comment streamer de gros fichiers]]. (traduction demandée)
