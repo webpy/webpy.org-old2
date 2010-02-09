@@ -24,7 +24,7 @@ La version actuelle 0.3 est la branche développement.
 * [[staticfiles/fr|Servir des fichiers statiques]].  
 * [[url_handling/fr|Comprendre la gestion des URL]].  
 * [[redirect+seeother/fr|Seeother et Redirect]].  
-* [[subapp|Utiliser une sous-application]].   (traduction demandée)
+* [[subapp/fr|Utiliser les sous-applications]].  
 * [[xmlfiles|Servir du XML]].   (traduction demandée)
 * [[postbasic|Lire les données brutes d'un post]].  (traduction demandée)
 
