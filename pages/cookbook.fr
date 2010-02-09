@@ -33,7 +33,7 @@ La version actuelle 0.3 est la branche développement.
 * [[ctx/fr|web.ctx]]. 
 * [[application_processors/fr|Application processors, charger et décharger des hooks]]. 
 * [[background|Comment utiliser web.background]]. (traduction demandée)
-* [[custom_notfound|Personnaliser le message de NotFound]]. (traduction demandée)
+* [[custom_notfound/fr|Personnaliser le message NotFound]]. 
 * [[streaming_large_files|Comment streamer de gros fichiers]]. (traduction demandée)
 * [[logging|Contrôle sur les enregistrements pour HTTPServer par défaut]]. (traduction demandée)
 * [[ssl|Support SSL dans serveur intégré cherrypy]]. (traduction demandée)
