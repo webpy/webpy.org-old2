@@ -35,7 +35,7 @@ La version actuelle 0.3 est la branche développement.
 * [[background|Comment utiliser web.background]]. (traduction demandée)
 * [[custom_notfound/fr|Personnaliser le message NotFound]]. 
 * [[streaming_large_files/fr|Comment streamer de gros fichiers]]. 
-* [[logging|Contrôle sur les enregistrements pour HTTPServer par défaut]]. (traduction demandée)
+* [[logging|Contrôler les evènements sur le serveur intégré par défaut]]. (traduction demandée)
 * [[ssl|Support SSL dans serveur intégré cherrypy]]. (traduction demandée)
 * [[runtime-language-switch|Run-time language switch]]. (traduction demandée)
 
