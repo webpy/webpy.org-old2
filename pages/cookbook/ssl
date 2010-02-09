@@ -1,5 +1,7 @@
 # SSL support in built-in cherrypy server
 
+Other languages: [[../cookbook/ssl/fr|français]] | ...
+
 ## Problem
 
 How to set SSL support in built-in cherrypy server web.py
