@@ -30,7 +30,7 @@ La version actuelle 0.3 est la branche développement.
 
 
 ##Avancé
-* [[ctx|web.ctx]]. (traduction en cours)
+* [[ctx/fr|web.ctx]]. 
 * [[application_processors/fr|Application processors, charger et décharger des hooks]]. 
 * [[background|Comment utiliser web.background]]. (traduction demandée)
 * [[custom_notfound|Personnaliser le message de NotFound]]. (traduction demandée)
