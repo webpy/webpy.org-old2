@@ -1,6 +1,6 @@
 # Personnaliser le message NotFound
 
-Autres langages [[../custom_notfound|english]] | ...
+Autre langages: [[../custom_notfound|english]] | ...
 
 ## Probleme
 
