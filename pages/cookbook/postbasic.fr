@@ -1,0 +1,13 @@
+# Lire les données brutes d un post
+
+Autres langages [[../postbasic|english]] | ...
+
+## Probleme:
+
+Parfois, le client envoie de nombreuses données par la péthode post. Dans webpy, vous pouvez les traiter de cette façon:
+
+## Solution:
+
+    class RequestHandler():
+        def POST():
+            data = web.data() # Vous pouvez obtenir les données en utilisant cette méthode
