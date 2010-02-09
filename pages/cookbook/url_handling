@@ -1,5 +1,7 @@
 # Understanding URL Handling
 
+Other languages : [[../cookbook/url_handling/fr|français]] | ...
+
 `Problem`: how to design a url handling / dispatching scheme for the entire site
 
 `Solution`:
