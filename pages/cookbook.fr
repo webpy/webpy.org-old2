@@ -25,7 +25,7 @@ La version actuelle 0.3 est la branche développement.
 * [[url_handling/fr|Comprendre la gestion des URLs]].  
 * [[redirect+seeother/fr|Seeother et Redirect]].  
 * [[subapp/fr|Utiliser les sous-applications]].  
-* [[xmlfiles|Servir du XML]].   (traduction demandée)
+* [[xmlfiles/fr|Servir du XML]].   
 * [[postbasic|Lire les données brutes d'un post]].  (traduction demandée)
 
 
