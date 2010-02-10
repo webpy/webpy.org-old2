@@ -14,6 +14,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 -------------------------------------------------
 
 # En cours
+* [[/cookbook/fastcgi-lighttpd|Déploiement Fastcgi au travers lighttpd]]. - En cours
 
 ---
 
@@ -88,7 +89,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 * [[/cookbook/where_dict|Utiliser un dictionnaire comme clause where]]. - traduction demandée
 
 ###Déploiement:
-* [[/cookbook/fastcgi-lighttpd|Déploiement Fastcgi au travers lighttpd]]. - traduction demandée
+
 * [[/cookbook/fastcgi-apache|Déploiement Fastcgi au travers Apache]].  - traduction demandée
 * [[/cookbook/cgi-apache|Déploiement CGI au travers Apache]]. - traduction demandée
 * [[/cookbook/mod_wsgi-apache |Déploiement mod_wsgi au travers Apache]].  - traduction demandée
