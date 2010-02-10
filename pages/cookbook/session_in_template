@@ -1,8 +1,12 @@
 # Using session in template
 
-`Problem`: I want to use session in template (e.g. get session.username to display)
+Other languages: [[../cookbook/session_in_template/fr|français]] | ...
 
-`Solution`:
+##Problem: 
+
+I want to use session in template (e.g. get session.username to display)
+
+##Solution:
 
 In your application code:
 
