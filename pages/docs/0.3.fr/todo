@@ -15,7 +15,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 # En cours
 
-
+* [[/cookbook/sendmail_using_gmail|Envoi de Mail en utilisant Gmail]].  - En cours
 
 # A faire
 
@@ -51,7 +51,6 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 ###Utils:
 * [[/cookbook/sendmail|Envoi de Mail]]. - traduction demandée
-* [[/cookbook/sendmail_using_gmail|Envoi de Mail en utilisant Gmail]].  - traduction demandée
 * [[/cookbook/webservice|Webservice en utilisant soaplib + WSDL]]. - traduction demandée
 
 ###Modèles de mise en forme, gabarits de mise en page:
