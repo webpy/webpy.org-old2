@@ -46,7 +46,7 @@ La version actuelle 0.3 est la branche développement.
 * [[cookies|Travailler avec les cookies]]. (traduction demandée)
 * [[userauth|Authentification des utilisateurs]]. (traduction demandée)
 * [[userauthpgsql|Authentification des utilisateurs avec base de données Postgresql]]. (traduction demandée)
-* [[sessions_with_subapp|Session avec des sous-apps]]. (traduction demandée)
+* [[sessions_with_subapp|Session avec des sous-apps]]. (en cours)
 
 
 ##Utils:
