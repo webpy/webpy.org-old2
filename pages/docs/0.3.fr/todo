@@ -15,7 +15,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 # En cours
 
-
+* [[/cookbook/sessions_with_subapp|Session avec des sous-apps]]. - en cours 
 
 # A faire
 
@@ -47,7 +47,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 * [[/cookbook/cookies|Travailler avec les cookies]]. - traduction demandée
 * [[/cookbook/userauth|Authentification des utilisateurs]]. - traduction demandée
 * [[/cookbook/userauthpgsql|Authentification des utilisateurs avec base de données Postgresql]]. - traduction demandée
-* [[/cookbook/sessions_with_subapp|Session avec des sous-apps]]. - traduction demandée 
+
 
 ###Utils:
 * [[/cookbook/sendmail|Envoi de Mail]]. - traduction demandée
