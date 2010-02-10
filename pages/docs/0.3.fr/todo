@@ -23,23 +23,29 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 ## Documentation de web.py 0.3
 
 
-  ### Exemples de code
+### Exemples de code
+
 * [[/src|Code samples]]. - traduction demandée
 
 ### Documentation des composants
+
 * [[/docs/0.3/apps/subdir|Subdir app]]. - traduction demandée
 * [[/docs/0.3/apps/subdomain|Subdomain app]]. - traduction demandée
 
 ### Mise à jour vers la version actuelle 
+
 * [[/docs/0.3/upgrade|Upgrade to 0.3 versions of web.py]] - traduction demandée
 
 ### API Documentation
+
 * [[/docs/0.3/api|API documentation]] - traduction demandée
 
 
 ## Cookbook
 
-  ###Avancé
+
+###Avancé
+
 * [[/cookbook/background|Comment utiliser web.background]]. - traduction demandée
 * [[/cookbook/runtime-language-switch|Run-time language switch]]. - traduction demandée
 
@@ -51,10 +57,12 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 
 ###Utils:
+
 * [[/cookbook/sendmail|Envoi de Mail]]. - traduction demandée
 * [[/cookbook/webservice|Webservice en utilisant soaplib + WSDL]]. - traduction demandée
 
 ###Modèles de mise en forme, gabarits de mise en page:
+
 * [[/cookbook/layout_template|Utiliser des gabarits sur le site]]. - traduction demandée
 * [[/cookbook/alternating_style|Alterner un style]]. - traduction demandée
 * [[/cookbook/template_import|Importer des fonctions dans les gabarits]]. - traduction demandée
@@ -65,10 +73,12 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 * [[/cookbook/templates_on_gae|Comment utiliser les gabarits sur Google App Engine]]. - traduction demandée
 
 ###Essais:
+
 * [[/cookbook/testing_with_paste_and_nose|Tester avec Paste et Nose]]. - traduction demandée
 * [[/cookbook/restful_doctesting_using_request|RESTful doctesting using an application's request method]]. - traduction demandée
 
 ###Entrées utilisateurs:
+
 * [[/cookbook/fileupload|Uploader un fichier]]. - traduction demandée
 * [[/cookbook/storeupload|Stocker un fichier uploadé]]. - traduction demandée
 * [[/cookbook/limiting_upload_size|Comment limiter la taille des fichiers uploadés]]. - traduction demandée
@@ -77,6 +87,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 * [[/cookbook/form_fields|Rendu individuel des champs de formulaires]]. - traduction demandée
 
 ###Base de données:
+
 * [[/cookbook/multidbs|Multiples bases de données]]. - traduction demandée
 * [[/cookbook/select|Select: Récupérer les entrées d'une base de données]]. - traduction demandée
 * [[/cookbook/update|Update: Mettre à jour les entrées d'une base de données]].  - traduction demandée
