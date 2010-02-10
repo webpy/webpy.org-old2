@@ -91,7 +91,7 @@ La version actuelle 0.3 est la branche développement.
 
 
 ##Déploiement:
-* [[fastcgi-lighttpd|Déploiement Fastcgi au travers lighttpd]]. - en cours, voir [[/docs/0.3.fr/todo|Todo]]
+* [[fastcgi-lighttpd/fr|Déploiement Fastcgi au travers lighttpd]]. 
 * [[fastcgi-apache|Déploiement Fastcgi au travers Apache]].  - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
 * [[cgi-apache|Déploiement CGI au travers Apache]]. - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
 * Déploiement mod_python au travers Apache (requis)
