@@ -1,5 +1,7 @@
 # File Upload Recipe
 
+Other languages: [[../cookbook/fileupload/fr|français]] | ...
+
 ## Problem
 
 File uploads can be a little tricky if you're not familiar with form uploads, or CGI in general.
