@@ -71,7 +71,7 @@ La version actuelle 0.3 est la branche développement.
 
 ##Entrées utilisateurs:
 * [[fileupload/fr|Uploader un fichier]]. 
-* [[storeupload|Stocker un fichier uploadé]]. - en cours, voir [[/docs/0.3.fr/todo|Todo]]
+* [[storeupload/fr|Stocker un fichier uploadé]]. 
 * [[limiting_upload_size|Comment limiter la taille des fichiers uploadés]]. - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
 * [[input/fr|Accéder aux entrées utilisateurs par le biais de web.input]]. 
 * [[forms|Comment utiliser les formulaires]]. - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
