@@ -15,7 +15,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 # En cours
 
-
+* [[/cookbook/storeupload|Stocker un fichier uploadé]]. - en cours
 
 ---
 
@@ -81,7 +81,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 ###Entrées utilisateurs:
 
 
-* [[/cookbook/storeupload|Stocker un fichier uploadé]]. - traduction demandée
+
 * [[/cookbook/limiting_upload_size|Comment limiter la taille des fichiers uploadés]]. - traduction demandée
 * [[/cookbook/forms|Comment utiliser les formulaires]]. - traduction demandée
 * [[/cookbook/form_fields|Rendu individuel des champs de formulaires]]. - traduction demandée
