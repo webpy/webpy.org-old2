@@ -1,5 +1,7 @@
 # Store an uploaded file
 
+Other languages: [[../cookbook/storeupload/fr|français]] | ...
+
 ## Problem
 
 You want to upload a file and store it in a predefined folder.
