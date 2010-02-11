@@ -15,7 +15,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 # En cours
 
-
+* [[/cookbook/limiting_upload_size|Comment limiter la taille des fichiers uploadés]]. En cours
 
 ---
 
@@ -80,9 +80,6 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 ###Entrées utilisateurs:
 
-
-
-* [[/cookbook/limiting_upload_size|Comment limiter la taille des fichiers uploadés]]. - traduction demandée
 * [[/cookbook/forms|Comment utiliser les formulaires]]. - traduction demandée
 * [[/cookbook/form_fields|Rendu individuel des champs de formulaires]]. - traduction demandée
 
