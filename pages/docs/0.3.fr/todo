@@ -16,7 +16,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 # En cours
 
 
-* [[/cookbook/userauth|Authentification des utilisateurs]]. - en cours
+* [[/cookbook/layout_template|Utiliser des gabarits sur le site]]. - en cours
 
 ---
 
@@ -64,7 +64,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 ###Modèles de mise en forme, gabarits de mise en page:
 
-* [[/cookbook/layout_template|Utiliser des gabarits sur le site]]. - traduction demandée
+
 * [[/cookbook/alternating_style|Alterner un style]]. - traduction demandée
 * [[/cookbook/template_import|Importer des fonctions dans les gabarits]]. - traduction demandée
 * [[/cookbook/i18n_support_in_template_file |i18n support dans les fichiers gabarits]]. - traduction demandée
