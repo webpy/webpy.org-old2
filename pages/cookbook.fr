@@ -56,7 +56,7 @@ La version actuelle 0.3 est la branche développement.
 
 ##Modèles de mise en forme, gabarits de mise en page:
 * [[/docs/0.3/templetor.fr |Templetor: le système de gabarits de web.py]]
-* [[layout_template|Utiliser des gabarits sur le site]]. - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
+* [[layout_template|Utiliser des gabarits sur le site]]. - en cours, voir [[/docs/0.3.fr/todo|Todo]]
 * [[alternating_style|Alterner un style]]. - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
 * [[template_import|Importer des fonctions dans les gabarits]]. - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
 * [[i18n_support_in_template_file |i18n support dans les fichiers gabarits]]. - traduction demandée, voir [[/docs/0.3.fr/todo|Todo]]
