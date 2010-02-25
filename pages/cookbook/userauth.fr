@@ -1,4 +1,4 @@
-# Authentification d'utilisateurs
+# Authentification des utilisateurs
 
 Autres langages : [[../userauth|english]] | ...
 
