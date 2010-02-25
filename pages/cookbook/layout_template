@@ -1,5 +1,7 @@
 # Site Layout Template
 
+Other languages : [[layout_template/fr|français]] | ...
+
 ### Problem
 
 How do I use a site-wide base template that displays across every page? (In other frameworks, this is called template inheritance.)
