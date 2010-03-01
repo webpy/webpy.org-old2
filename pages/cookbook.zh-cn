@@ -81,7 +81,7 @@
 * [[Insert/zh-cn|Insert: 新增数据]]
 * [[query/zh-cn|Query: Advanced database queries (未译)]]
 * [[transactions/zh-cn|How to use database transactions (未译)]]
-* [[sqlalchemy/zh-cn|Using sqlalchemy (未译)]]
+* [[sqlalchemy/zh-cn|使用 sqlalchemy]]
 * [[sqlite-udf/zh-cn|Integrating SQLite UDF (user-defined-functions) with webpy database layer (未译)]]
 * [[where_dict/zh-cn|Using a dictionary as where clause (未译)]]
 
