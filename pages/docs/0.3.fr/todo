@@ -15,12 +15,8 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 # En cours
 
-* [[/docs/0.3/api|API documentation]] - En cours...
-* [[/cookbook/select|Select: Récupérer les entrées d'une base de données]]. - En cours...
-* [[/cookbook/update|Update: Mettre à jour les entrées d'une base de données]].  - En cours...
-* [[/cookbook/delete|Delete: Supprimer les entrées d'une base de données]]. - En cours...
-* [[/cookbook/insert|Insert: Ajouter des entrées à une base de donnée]].  - En cours...
-* [[/cookbook/query|Query: Base de données - Requêtes avancées]]. - En cours...
+
+
 
 ---
 
@@ -35,6 +31,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 ### Documentation des composants
 
+
 * [[/docs/0.3/apps/subdir|Subdir app]]. - traduction demandée
 * [[/docs/0.3/apps/subdomain|Subdomain app]]. - traduction demandée
 
@@ -44,7 +41,7 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 ### API Documentation
 
-
+* [[/docs/0.3/api|API documentation]] -  traduction demandée
 
 
 ## Cookbook
@@ -52,6 +49,11 @@ Ici sera réunie la liste des travaux à réaliser et ceux en cours de réalisat
 
 ###Avancé
 
+* [[/cookbook/select|Select: Récupérer les entrées d'une base de données]]. - traduction demandée
+* [[/cookbook/update|Update: Mettre à jour les entrées d'une base de données]].  - traduction demandée
+* [[/cookbook/delete|Delete: Supprimer les entrées d'une base de données]]. - traduction demandée
+* [[/cookbook/insert|Insert: Ajouter des entrées à une base de donnée]].  - traduction demandée
+* [[/cookbook/query|Query: Base de données - Requêtes avancées]]. - traduction demandée
 * [[/cookbook/background|Comment utiliser web.background]]. - traduction demandée
 * [[/cookbook/runtime-language-switch|Run-time language switch]]. - traduction demandée
 
