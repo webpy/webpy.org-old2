@@ -68,7 +68,7 @@
 ##User Input:
 * [[fileupload/zh-cn|文件上传]]
 * [[storeupload/zh-cn|保存上传的文件]]
-* [[limiting_upload_size/zh-cn|How to put a limit of size of uploaded files (未译)]]
+* [[limiting_upload_size/zh-cn|上传文件大小限定]]
 * [[input/zh-cn|通过 web.input 接受用户输入]]
 * [[forms/zh-cn|How to use forms (未译)]]
 * [[form_fields/zh-cn|Render individual form fields (未译)]]
