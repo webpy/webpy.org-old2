@@ -52,7 +52,7 @@
 
 ##Templates 模板
 * [[http://webpy.org/docs/0.3/templetor/zh-cn|Templetor: web.py 模板系统]]
-* [[layout_template/zh-cn|Using Site Layout Templates (未译)]]
+* [[layout_template/zh-cn|使用站点布局模板]]
 * [[alternating_style/zh-cn|Alternating Style (未译)]]
 * [[template_import/zh-cn|Import functions into templates (未译)]]
 * [[i18n_support_in_template_file/zh-cn|模板文件中的i18n支持]]
