@@ -53,25 +53,25 @@
 ##Templates 模板
 * [[http://webpy.org/docs/0.3/templetor/zh-cn|Templetor: web.py 模板系统]]
 * [[layout_template/zh-cn|使用站点布局模板]]
-* [[alternating_style/zh-cn|Alternating Style (未译)]]
-* [[template_import/zh-cn|Import functions into templates (未译)]]
+* [[alternating_style/zh-cn|交替式风格 (未译)]]
+* [[template_import/zh-cn|导入函数到模板中 (未译)]]
 * [[i18n_support_in_template_file/zh-cn|模板文件中的i18n支持]]
-* [[template_mako/zh-cn|Use Mako template engine in webpy ]]
-* [[template_cheetah/zh-cn|Use Cheetah template engine in webpy (未译)]]
+* [[template_mako/zh-cn|在web.py中使用Mako模板引擎 ]]
+* [[template_cheetah/zh-cn|在web.py中使用Cheetah模板引擎 (未译)]]
 * [[template_jinja/zh-cn|在web.py中使用Jinja2模板引擎]]
-* [[templates_on_gae/zh-cn|How to use templates on Google App Engine (未译)]]
+* [[templates_on_gae/zh-cn|如何在谷歌应用程序引擎使用模板 (未译)]]
 
-##Testing:
+##Testing 测试:
 * [[testing_with_paste_and_nose/zh-cn|Testing with Paste and Nose (未译)]]
 * [[restful_doctesting_using_request/zh-cn|RESTful doctesting using an application's request method (未译)]]
 
-##User Input:
+##User input 用户输入:
 * [[fileupload/zh-cn|文件上传]]
 * [[storeupload/zh-cn|保存上传的文件]]
 * [[limiting_upload_size/zh-cn|上传文件大小限定]]
 * [[input/zh-cn|通过 web.input 接受用户输入]]
-* [[forms/zh-cn|How to use forms (未译)]]
-* [[form_fields/zh-cn|Render individual form fields (未译)]]
+* [[forms/zh-cn|怎样使用forms (未译)]]
+* [[form_fields/zh-cn|渲染个别表单区域 (未译)]]
 
 ##Database 数据库
 * [[multidbs/zh-cn|使用多数据库]]
@@ -80,12 +80,12 @@
 * [[delete/zh-cn|Delete: 删除数据]]
 * [[Insert/zh-cn|Insert: 新增数据]]
 * [[query/zh-cn|Query: 高级数据库查询]]
-* [[transactions/zh-cn|How to use database transactions (未译)]]
+* [[transactions/zh-cn|怎样使用数据库事务 (未译)]]
 * [[sqlalchemy/zh-cn|使用 sqlalchemy]]
-* [[sqlite-udf/zh-cn|Integrating SQLite UDF (user-defined-functions) with webpy database layer (未译)]]
+* [[sqlite-udf/zh-cn|整合 SQLite UDF (用户定义函数) 到 webpy 数据库层 (未译)]]
 * [[where_dict/zh-cn|Using a dictionary as where clause (未译)]]
 
-##Deployment:
+##Deployment 部署:
 * [[fastcgi-lighttpd/zh-cn|Fastcgi deployment through lighttpd (未译)]]
 * [[fastcgi-apache/zh-cn|Fastcgi deployment through Apache (未译)]] 
 * [[cgi-apache/zh-cn|CGI deployment through Apache (未译)]]
@@ -94,5 +94,5 @@
 * [[mod_wsgi-nginx/zh-cn|mod_wsgi deployment through Nginx (未译)]]
 * [[fastcgi-nginx/zh-cn|Fastcgi deployment through Nginx (未译)]]
 
-##Subdomains:
+##Subdomains 子域名:
 * Subdomains and how to access the username (requested)
