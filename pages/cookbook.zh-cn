@@ -79,7 +79,7 @@
 * [[update/zh-cn|Update: 更新数据 ]]
 * [[delete/zh-cn|Delete: 删除数据]]
 * [[Insert/zh-cn|Insert: 新增数据]]
-* [[query/zh-cn|Query: Advanced database queries (未译)]]
+* [[query/zh-cn|Query: 高级数据库查询]]
 * [[transactions/zh-cn|How to use database transactions (未译)]]
 * [[sqlalchemy/zh-cn|使用 sqlalchemy]]
 * [[sqlite-udf/zh-cn|Integrating SQLite UDF (user-defined-functions) with webpy database layer (未译)]]
