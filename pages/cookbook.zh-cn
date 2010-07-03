@@ -35,7 +35,7 @@
 * [[ssl/zh-cn|用cherrypy提供SSL支持]]
 * [[runtime-language-switch/zh-cn|实时语言切换]]
 
-##Sessions and user state:
+##Sessions and user state 会话和用户状态:
 * [[sessions/zh-cn|如何使用Session]]
 * [[session_with_reloader/zh-cn|如何在调试模式下使用Session]]
 * [[session_in_template/zh-cn|在template中使用session]]
@@ -45,7 +45,7 @@
 * [[sessions_with_subapp/zh-cn|如何在子应用中操作Session]]
 
 
-##Utils:
+##Utils 实用工具:
 * [[sendmail/zh-cn|如何发送邮件]]
 * [[sendmail_using_gmail/zh-cn|如何利用Gmail发送邮件]]
 * [[webservice/zh-cn|使用soaplib实现webservice]]
