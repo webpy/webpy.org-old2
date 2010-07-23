@@ -1,4 +1,4 @@
-# Using a dictionary as where clause
+# 使用字典动态构造where子句
 
 问题
 -------
