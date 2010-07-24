@@ -87,7 +87,7 @@
 
 ##Deployment 部署:
 * [[fastcgi-lighttpd/zh-cn|通过Fastcgi和lighttpd部署]]
-* [[fastcgi-apache/zh-cn|Webpy + Nginx with FastCGI搭建Web.py]] 
+* [[fastcgi-apache/zh-cn|通过Webpy和Nginx with FastCGI搭建Web.py]] 
 * [[cgi-apache/zh-cn|CGI deployment through Apache (未译)]]
 * mod_python deployment through Apache (requested)
 * [[mod_wsgi-apache/zh-cn|通过Apache和mod_wsgi部署]]
