@@ -2,7 +2,7 @@
 
 Other languages : [[/docs/0.3/apps/fr|français]] | ...
 
-webpy applications encompasss the urls and handlers that map to them. They fall into several categories:
+webpy applications encompass the urls and handlers that map to them. They fall into several categories:
 
 * [[/docs/0.3/apps/basic|Basic app]]. Define urls and classes to handle them.
 * [[/docs/0.3/apps/auto|Auto app]]. Urls are determined automatically based on classes.
