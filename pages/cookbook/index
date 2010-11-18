@@ -44,7 +44,7 @@ Cookbook style documentation for web.py 0.3. Note that some of these features ar
 * [[cookbook/session_in_template|Using session in template]]
 * [[cookbook/cookies|Working with Cookies]]
 * [[cookbook/userauth|User authentication]]
-* [[cookbook/userauthbasic| User authentication with http basic auth (RFC2617)
+* [[cookbook/userauthbasic|User authentication with http basic auth (RFC2617)]]
 * [[cookbook/userauthpgsql|User authentication with Postgresql database]]
 * [[cookbook/sessions_with_subapp|Sessions with sub-apps]]
 * [[cookbook/unpack_postgres_session|Unpack session stored in postgresql]]
