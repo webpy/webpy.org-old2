@@ -1,0 +1,271 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>クックブック (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; クックブック
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>クックブック</h1>
+<p>web.py 0.3 ベースのCookbookスタイルのドキュメントです。
+   古いバージョンでは利用可能ではない説明があります。
+   現在、バージョン 0.3 は開発版です。
+</p>
+
+<h1>形式</h1>
+<ol>
+ <li><p>形式に関しては、Cookbookのような形式を使用するようにしてください。以下のような形式です。
+</p>
+
+<h3>問題点: データベースにアクセスしたいのですが。</h3>
+
+<h3>解決手段: このコードを使ってください。</h3>
+
+ </li>
+
+ <li><p>URLには&quot;web&quot;をつけないようにしてください。もし&quot;/cookbook/select&quot;ならば、&quot;/cookbook/web.select&quot;のようにしないでください。
+</p>
+
+ </li>
+
+ <li><p>最後に、このドキュメンテーションはバージョン 0.3向けですので、あなたの知っている新バージョン用のコードを加えてください。
+</p>
+
+ </li>
+</ol>
+<hr />
+
+
+<h2>Basics:</h2>
+<ul>
+ <li>
+     <a href="/helloworld/ja" class="internal">Hello World</a>
+ </li>
+
+ <li>
+     <a href="/staticfiles/ja" class="internal">staticファイル(js、css、画像など)について</a>
+ </li>
+
+ <li>
+     <a href="/redirect+seeother" class="internal">Seeother(HTTP/1.1 コード : 303)とRedirect</a>
+ </li>
+
+ <li>
+     <a href="/subapp/ja" class="internal">サブアプリケーションの使い方について(別ファイルのインクルード)</a>
+ </li>
+
+ <li>
+     <a href="/xmlfiles" class="internal">Serving XML</a>
+ </li>
+</ul>
+
+<h2>Advanced</h2>
+<ul>
+ <li>
+     <a href="/ctx" class="internal">web.ctx</a>
+ </li>
+
+ <li>
+     <a href="/application_processors" class="internal">Application processors, loadhooks and unloadhooks</a>
+ </li>
+
+ <li>
+     <a href="/background" class="internal">How to use web.background</a>
+ </li>
+
+ <li>
+     <a href="/custom_notfound" class="internal">Custom NotFound message</a>
+ </li>
+</ul>
+
+<h2>Sessions and user state:</h2>
+<ul>
+ <li>
+     <a href="/sessions" class="internal">Session機能</a>
+ </li>
+
+ <li>
+     <a href="/session_with_reloader" class="internal">Using session with reloader</a>
+ </li>
+
+ <li>
+     <a href="/cookies" class="internal">Cookies機能</a>
+ </li>
+
+ <li>
+     ユーザ認証 (requested)
+ </li>
+</ul>
+
+<h2>Utils:</h2>
+<ul>
+ <li>
+     <a href="/sendmail" class="internal">メール送信</a>
+ </li>
+
+ <li>
+     <a href="/sendmail_using_gmail" class="internal">GMailへのメール送信</a>
+ </li>
+</ul>
+
+<h2>Templates:</h2>
+<ul>
+ <li>
+     <a href="/layout_template" class="internal">Using Site Layout Templates</a>
+ </li>
+
+ <li>
+     <a href="/alternating_style" class="internal">Alternating Style</a>
+ </li>
+
+ <li>
+     <a href="/template_mako/ja" class="internal">makoテンプレートエンジンの使用について</a>
+ </li>
+
+ <li>
+     <a href="/template_cheetah/ja" class="internal">Cheetahテンプレートエンジンの使用について</a>
+ </li>
+</ul>
+
+<h2>User Input:</h2>
+<ul>
+ <li>
+     <a href="/fileupload" class="internal">ファイルアップロード</a>
+ </li>
+
+ <li>
+     <a href="/input" class="internal">リクエストデータ(web.inputを利用)へのアクセス</a>
+ </li>
+
+ <li>
+     Using basic forms (requested)
+ </li>
+</ul>
+
+<h2>Database:</h2>
+<ul>
+ <li>
+     <a href="/multidbs" class="internal">複数データベース</a>
+ </li>
+
+ <li>
+     <a href="/select" class="internal">Select: データ検索(SELECT文)</a>
+ </li>
+
+ <li>
+     <a href="/update" class="internal">Update: データ更新(UPDATE文)</a>
+ </li>
+
+ <li>
+     <a href="/delete" class="internal">Delete: データ削除(DELETE文)</a>
+ </li>
+
+ <li>
+     <a href="/Insert" class="internal">Insert: データ追加(INSERT文)</a> 
+ </li>
+
+ <li>
+     <a href="/query" class="internal">問い合わせ(SQL文の発行)</a>
+ </li>
+
+ <li>
+     <a href="transactions">トランザクションの使用</a>
+ </li>
+</ul>
+
+<h2>Deployment:</h2>
+<ul>
+ <li>
+     <a href="/fastcgi-lighttpd" class="internal">Lighttpd + Fastcgiの配置</a>
+ </li>
+
+ <li>
+     <a href="/fastcgi-apache" class="internal">Apache + Fastcgiの配置</a> 
+ </li>
+
+ <li>
+     <a href="/cgi-apache/ja" class="internal">Apache + CGIの配置</a>
+ </li>
+
+ <li>
+     mod_python deployment through Apache (requested)
+ </li>
+
+ <li>
+     <a href="/mod_wsgi-apache " class="internal">mod_wsgi deployment through Apache</a>
+ </li>
+
+ <li>
+     <a href="/mod_wsgi-nginx " class="internal">mod_wsgi deployment through Nginx</a>
+ </li>
+
+ <li>
+     nginx deployment (requested)
+ </li>
+</ul>
+
+<h2>Subdomains:</h2>
+<ul>
+ <li>
+     サブドメインおよびユーザー名を使用してにアクセスする方法 (requested)
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

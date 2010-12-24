@@ -1,0 +1,378 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Web.py Cookbook (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Web.py Cookbook
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Web.py Cookbook</h1>
+<p>Other languages :<a href="/cookbook/zh-cn" class="internal">chinese 简体中文</a> | <a href="/cookbook/ja" class="internal">japan 日本語</a> |  <a href="/cookbook/fr" class="internal">français</a> | ...
+</p>
+<p>Cookbook style documentation for web.py 0.3. Note that some of these features aren't available in previous versions.  Currently version 0.3 is the development branch.
+</p>
+
+<h1>Formatting</h1>
+<ol>
+ <li><p>In terms of formatting, please try to use a cookbook-like format...that is:
+</p>
+
+<h3>Problem: You want to access data from database.</h3>
+
+<h3>Solution: Use this code...</h3>
+
+ </li>
+
+ <li><p>Note that the urls don't need &quot;web&quot; in them -- just &quot;/cookbook/select&quot; , not &quot;/cookbook/web.select&quot;.  <br />
+</p>
+
+ </li>
+
+ <li><p>Finally, this documentation is for version 0.3, so please only add code that you know works with the new version.
+</p>
+
+ </li>
+</ol>
+<hr />
+
+
+<h2>Basics:</h2>
+<ul>
+ <li>
+     <a href="/cookbook/helloworld" class="internal">Hello World</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/staticfiles" class="internal">Serving Static Files</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/url_handling" class="internal">Understanding URL handling</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/redirect+seeother" class="internal">Seeother and Redirect</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/subapp" class="internal">using subapplications</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/xmlfiles" class="internal">Serving XML</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/postbasic" class="internal">Reading raw data from post</a>
+ </li>
+</ul>
+
+<h2>Advanced</h2>
+<ul>
+ <li>
+     <a href="/cookbook/ctx" class="internal">Contextual and Environment variables - web.ctx</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/application_processors" class="internal">Application processors, loadhooks and unloadhooks</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/background" class="internal">How to use web.background</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/custom_notfound" class="internal">Custom NotFound message</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/streaming_large_files" class="internal">How to Stream Large Files</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/logging" class="internal">Control over logging for default HTTPServer</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/ssl" class="internal">SSL support in built-in cherrypy server</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/runtime-language-switch" class="internal">Run-time language switch</a>
+ </li>
+</ul>
+
+<h2>Sessions and user state:</h2>
+<ul>
+ <li>
+     <a href="/cookbook/sessions" class="internal">Working with Session</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/session_with_reloader" class="internal">Using session with reloader</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/session_in_template" class="internal">Using session in template</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/cookies" class="internal">Working with Cookies</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/userauth" class="internal">User authentication</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/userauthbasic" class="internal">User authentication with http basic auth (RFC2617)</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/userauthpgsql" class="internal">User authentication with Postgresql database</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/sessions_with_subapp" class="internal">Sessions with sub-apps</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/unpack_postgres_session" class="internal">Unpack session stored in postgresql</a>
+ </li>
+</ul>
+
+<h2>Utils:</h2>
+<ul>
+ <li>
+     <a href="/cookbook/sendmail" class="internal">Sending Mail</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/sendmail_using_gmail" class="internal">Sending Mail Using Gmail</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/webservice" class="internal">Webservice using soaplib + WSDL</a>
+ </li>
+</ul>
+
+<h2>Templates:</h2>
+<ul>
+ <li>
+     <a href="/docs/0.3/templetor " class="internal">Templetor: The web.py templating system</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/layout_template" class="internal">Using Site Layout Templates</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/alternating_style" class="internal">Alternating Style</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/template_import" class="internal">Import functions into templates</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/i18n_support_in_template_file " class="internal">i18n support in template file</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/template_mako" class="internal">Use Mako template engine in webpy</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/template_cheetah" class="internal">Use Cheetah template engine in webpy</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/template_jinja" class="internal">Use Jinja2 template engine in webpy</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/templates_on_gae" class="internal">How to use templates on Google App Engine</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/concatenate_two_rendered_templates" class="internal">Concatenate two rendered templates</a>
+ </li>
+</ul>
+
+<h2>Testing:</h2>
+<ul>
+ <li>
+     <a href="/cookbook/testing_with_paste_and_nose" class="internal">Testing with Paste and Nose</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/restful_doctesting_using_request" class="internal">RESTful doctesting using an application's request method</a>
+ </li>
+</ul>
+
+<h2>User Input:</h2>
+<ul>
+ <li>
+     <a href="/cookbook/fileupload" class="internal">File Upload</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/storeupload" class="internal">Store an uploaded file</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/limiting_upload_size" class="internal">How to put a limit of size of uploaded files</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/input" class="internal">Accessing user input through web.input</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/forms" class="internal">How to use forms</a> 
+ </li>
+
+ <li>
+     <a href="/cookbook/form_fields" class="internal">Render individual form fields</a>
+ </li>
+</ul>
+
+<h2>Database:</h2>
+<ul>
+ <li>
+     <a href="/cookbook/multidbs" class="internal">Multiple databases</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/select" class="internal">Select: Retrieving entries from a database</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/update" class="internal">Update: Updating entries in a database</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/delete" class="internal">Delete: Remove entries in a database</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/insert" class="internal">Insert: Adding entries to a database</a> 
+ </li>
+
+ <li>
+     <a href="/cookbook/query" class="internal">Query: Advanced database queries</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/transactions">How to use database transactions</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/sqlalchemy">Using sqlalchemy</a> 
+ </li>
+
+ <li>
+     <a href="/cookbook/sqlite-udf">Integrating SQLite UDF (user-defined-functions) with webpy database layer</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/where_dict" class="internal">Using a dictionary as where clause</a>
+ </li>
+</ul>
+
+<h2>Deployment:</h2>
+<ul>
+ <li>
+     <a href="/cookbook/fastcgi-lighttpd" class="internal">Fastcgi deployment through lighttpd</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/fastcgi-apache" class="internal">Fastcgi deployment through Apache</a> 
+ </li>
+
+ <li>
+     <a href="/cookbook/cgi-apache" class="internal">CGI deployment through Apache</a>
+ </li>
+
+ <li>
+     mod_python deployment through Apache (requested)
+ </li>
+
+ <li>
+     <a href="/cookbook/mod_wsgi-apache " class="internal">mod_wsgi deployment through Apache</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/mod_wsgi-nginx " class="internal">mod_wsgi deployment through Nginx</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/fastcgi-nginx" class="internal">Fastcgi deployment through Nginx</a>
+ </li>
+</ul>
+
+<h2>Subdomains:</h2>
+<ul>
+ <li>
+     Subdomains and how to access the username (requested)
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

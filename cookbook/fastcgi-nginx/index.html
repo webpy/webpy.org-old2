@@ -1,0 +1,212 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Webpy + Nginx with FastCGI (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Webpy + Nginx with FastCGI
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Webpy + Nginx with FastCGI</h1>
+<p>This cookbook entry explains how to run web.py on Nginx with Fastcgi.
+</p>
+
+<h3>Requirements</h3>
+<ul>
+ <li>
+     Nginx 0.8.* or 0.7.* (with fastcgi and rewrite module).
+ </li>
+
+ <li>
+     Webpy 0.32
+ </li>
+
+ <li>
+     Spawn-fcgi 1.6.2
+ </li>
+
+ <li>
+     Flup
+ </li>
+</ul>
+<p>Older versions may work, but aren't tested.
+</p>
+
+<h3>Resources</h3>
+<ul>
+ <li>
+     <a href="http://wiki.nginx.org/NginxInstall">Nginx wiki</a>
+ </li>
+
+ <li>
+     <a href="http://redmine.lighttpd.net/projects/spawn-fcgi/news">Spawn-fcgi</a>
+ </li>
+
+ <li>
+     <a href="http://trac.saddi.com/flup">Flup</a>
+ </li>
+</ul>
+
+<h3>Notes</h3>
+<ul>
+ <li>
+     You may replace <code>index.py</code> with your own file name.
+ </li>
+
+ <li>
+     <code>/path/to/www</code> Is the path to the directory where your webpy application is located.
+ </li>
+
+ <li>
+     <code>/path/to/www/index.py</code> is the full path to your python file.
+ </li>
+
+ <li>
+     Do not run anything until you are at <em>Run</em>.
+ </li>
+</ul>
+
+<h2>Nginx configuration</h2>
+<pre><code>location / {
+        fastcgi_param REQUEST_METHOD $request_method;
+        fastcgi_param QUERY_STRING $query_string;
+        fastcgi_param CONTENT_TYPE $content_type;
+        fastcgi_param CONTENT_LENGTH $content_length;
+        fastcgi_param GATEWAY_INTERFACE CGI/1.1;
+        fastcgi_param SERVER_SOFTWARE nginx/$nginx_version;
+        fastcgi_param REMOTE_ADDR $remote_addr;
+        fastcgi_param REMOTE_PORT $remote_port;
+        fastcgi_param SERVER_ADDR $server_addr;
+        fastcgi_param SERVER_PORT $server_port;
+        fastcgi_param SERVER_NAME $server_name;
+        fastcgi_param SERVER_PROTOCOL $server_protocol;
+        fastcgi_param SCRIPT_FILENAME $fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_script_name;
+        fastcgi_pass 127.0.0.1:9002;
+}
+</code></pre><p>To serve static files add this:
+</p>
+<pre><code>    location /static/ {
+        root /path/to/www;
+        if (-f $request_filename) {
+           rewrite ^/static/(.*)$  /static/$1 break;
+        }
+    }
+</code></pre><p><strong>Note:</strong> the address and port may be different.
+</p>
+
+<h2>Spawn-fcgi</h2>
+<p>You can start a process with:
+</p>
+<pre><code>spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002
+</code></pre>
+<h3>Start and shutdown script</h3>
+<p>Start:
+</p>
+<pre><code>#!/bin/sh
+spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002
+</code></pre><p>Shutdown:
+</p>
+<pre><code>#!/bin/sh
+kill `pgrep -f &quot;python /path/to/www/index.py&quot;`
+</code></pre><p><strong>Note:</strong> You're free to choose which address, port, directory and filename to use, but be sure to adjust the Nginx configuration.
+</p>
+
+<h2>Hello world!</h2>
+<p>Save the following code in your www directory and call the file index.py (or whatever you like).
+   The following line is required: <code>web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)</code>.
+</p>
+<pre><code>#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import web
+
+urls = (&quot;/.*&quot;, &quot;hello&quot;)
+app = web.application(urls, globals())
+
+class hello:
+    def GET(self):
+        return 'Hello, world!'
+
+if __name__ == &quot;__main__&quot;:
+    web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+    app.run()
+</code></pre><p>Note: make your file executable by doing <code>chmod +x index.py</code>. You'll get errors if it isn't executable.
+</p>
+
+<h2>Run</h2>
+<ol>
+ <li>
+     Start a process with <code>spawn-fcgi</code>.
+ </li>
+
+ <li>
+     Start Nginx.
+ </li>
+</ol>
+<p>To check if it runs do <code>ps aux | grep index.py</code> or simply visit the page in your browser.
+</p>
+<p>To reload your configuration:
+</p>
+<pre><code>/path/to/nginx/sbin/nginx -s reload
+</code></pre><p>And to stop:
+</p>
+<pre><code>/path/to/nginx/sbin/nginx -s stop
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

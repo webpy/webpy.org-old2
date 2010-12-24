@@ -1,0 +1,257 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Librairie Formulaires (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Librairie Formulaires
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Librairie Formulaires</h1>
+
+<h1>Sommaire</h1>
+<ul>
+ <li>
+     <a href="#introduction">Introduction</a>
+ </li>
+
+ <li>
+     <a href="#carac">Caracteristiques des entrées formulaires</a>
+ </li>
+
+ <li>
+     <a href="#listes">Listes déroulantes</a>
+ </li>
+
+ <li>
+     <a href="#parti">Particularités des formulaires</a>
+ </li>
+
+ <li>
+     <a href="#exemple">Exemple</a>
+ </li>
+</ul>
+<p><a name="introduction"></a>
+</p>
+
+<h2>Introduction</h2>
+<p>Le module de formulaire de web.py permet de générer des formulaires HTML, de récuperer les entrées des utilisateurs, et les valider avant de les traiter ou les ajouter à une base de donnée.
+</p>
+<p>Le module de formulaire définit 2 classes primaires: la classe Form et la classe Input. 
+</p>
+<p>Les formulaires sont instanciés avec une ou plusieurs entrées, et des validateurs optionnels. Les entrées sont instanciées avec une variable nom, ainsi que des arguments optionnels et des validateurs. 
+</p>
+<p>La classe Input est sous-classée dans les entrées html suivantes (type HTML dans les parenthèses):
+</p>
+<ul>
+ <li>
+     Textbox     - Champ de saisie de texte d'une ligne (input type=&quot;text&quot;)
+ </li>
+
+ <li>
+     Password   - Champ de saisie de texte d'une ligne qui cache ce qui est entré (input type=&quot;password&quot;)
+ </li>
+
+ <li>
+     Textarea   - Champ de saisie de texte multiligne (textarea)
+ </li>
+
+ <li>
+     Dropdown - Selection d'un seul élément dans une liste déroulante (select and options)
+ </li>
+
+ <li>
+     Radio         - Boutons radio pour un seul choix (input type=&quot;radio&quot;)
+ </li>
+
+ <li>
+     Checkbox  - Cases à cocher à plusieurs choix (input type=&quot;checkbox&quot;)
+ </li>
+
+ <li>
+     Button        - Soumettre le formulaire (button)
+ </li>
+</ul>
+<p>Un simple formulaire de connexion pourrait ressembler à ceci:
+</p>
+<pre><code>login = form.Form(
+    form.Textbox('username'),
+    form.Password('password'),
+    form.Button('Login'),
+)
+</code></pre><p>Ceci définit un simple formulaire. Une fois défini, vous devrez l'appeler à nouveau pour obtenir une instance, et alors vous pourrez appeler la méthode de rendu sur elle, de cette façon:
+</p>
+<pre><code>f = login()
+print f.render()
+</code></pre><p>Ce qui affichera le code HTML suivant:
+</p>
+<pre><code>&lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;&lt;label for=&quot;username&quot;&gt;username&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;input type=&quot;text&quot; id=&quot;username&quot; name=&quot;username&quot;/&gt;&lt;div class=&quot;post&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;&lt;label for=&quot;password&quot;&gt;password&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;input type=&quot;password&quot; id=&quot;password&quot; name=&quot;password&quot;/&gt;&lt;div class=&quot;post&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;&lt;label for=&quot;Login&quot;&gt;&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;button id=&quot;Login&quot; name=&quot;Login&quot;&gt;Login&lt;/button&gt;&lt;div class=&quot;post&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+</code></pre><p>Ce qui donnera:
+</p>
+<table>
+    <tr><th><label for="username">username</label></th><td><input type="text" id="username" name="username"/><div class="post" style="display: none;"></div></td></tr>
+    <tr><th><label for="password">password</label></th><td><input type="password" id="password" name="password"/><div class="post" style="display: none;"></div></td></tr>
+    <tr><th><label for="Login"></label></th><td><button id="Login" name="Login">Login</button><div class="post" style="display: none;"></div></td></tr>
+</table>
+
+<p><a name="carac"></a>
+</p>
+
+<h2>Caracteristiques des entrées formulaires</h2>
+<p>Les entrées formulaires offrent quelques attributs additionnels. Par exemple :
+</p>
+<pre><code>form.textbox(&quot;firstname&quot;,
+    form.notnull, # Place les validateurs en premier, suivi par des attributs facultatifs
+    class_=&quot;textEntry&quot;, # Donne un nom de classe à la zone de texte - à noter le caractère de soulignement (underscore)
+    pre=&quot;pre&quot;, # Directement devant la zone de texte
+    post=&quot;post&quot;, # Directement après la zone de texte
+    description=&quot;please enter your name&quot;, # Décrit le champ, par défaut le nom du formulaire
+    value=&quot;bob&quot;, # Valeur par défaut
+    id=&quot;nameid&quot;, # Spécifier l'ID
+)
+</code></pre><p>En plus des attributs ci-dessus, tous les attributs HTML peuvent être entré de la même manière. Par exemple:
+</p>
+<pre><code>myform2 = form.Form(
+    form.textbox('phonenumber',
+        size=&quot;12&quot;,
+        maxlength=&quot;12&quot;        )
+)
+</code></pre><p><a name="listes"></a>
+</p>
+
+<h2>Listes déroulantes  (Dropdown)</h2>
+<p>Les entrées des listes déroulantes permettent une description et une valeur uniques de chaque élément dans la liste déroulante. Pour ce faire, créez la liste déroulante avec les tuples comme ceci:
+</p>
+<pre><code>form.Dropdown('mydrop', [('value1', 'description1'), ('value2', 'description2')])
+</code></pre><p><a name="introduction"></a>
+</p>
+
+<h2>Particularités des formulaires</h2>
+<p>En plus des champs de saisie individuels, form.py permet une complète validation de formulaire qui autorise la comparaison des champs. Les validations sont passées sous forme de liste dans une variable 'validators'. Par exemple :
+</p>
+<pre><code>signup = form.Form(
+    form.Textbox('username'),
+    form.Password('password'),
+    form.Password('password_again'),
+    validators = [form.Validator(&quot;Passwords didn't match.&quot;, lambda i: i.password == i.password_again)]
+)
+</code></pre><p>Une fois les données du formulaire postées, elles peuvent facilement être mises dans une base de données (si la structure de base de données a des noms compatibles avec votre formulaire webpy). Par exemple:
+</p>
+<pre><code>def POST(self):
+    f = myform()
+    if f.validates():
+        web.insert('data_table', **f.d)
+    # NE FAITES PAS: web.insert('data_table', **web.input()) Car des données malicieuses peuvent être envoyées
+    else:
+        render.foo(f)
+</code></pre><p><a name="exemple"></a>
+</p>
+
+<h2>Exemple</h2>
+<pre><code>import web
+from web import form
+
+render = web.template.render('templates/')
+
+urls = ('/', 'index')
+app = web.application(urls, globals())
+
+myform = form.Form( 
+    form.Textbox(&quot;boe&quot;), 
+    form.Textbox(&quot;bax&quot;, 
+        form.notnull,
+        form.regexp('\d+', 'Must be a digit'),
+        form.Validator('Must be more than 5', lambda x:int(x)&gt;5)),
+    form.Textarea('moe'),
+    form.Checkbox('curly'), 
+    form.Dropdown('french', ['mustard', 'fries', 'wine'])) 
+
+class index: 
+    def GET(self): 
+        form = myform()
+        # make sure you create a copy of the form by calling it (line above)
+        # Otherwise changes will appear globally
+        return render.formtest(form)
+
+    def POST(self): 
+        form = myform() 
+        if not form.validates(): 
+            return render.formtest(form)
+        else:
+            # form.d.boe and form['boe'].value are equivalent ways of
+            # extracting the validated arguments from the form.
+            return &quot;Grrreat success! boe: %s, bax: %s&quot; % (form.d.boe, form['bax'].value)
+
+if __name__==&quot;__main__&quot;:
+    web.internalerror = web.debugerror
+    app.run()
+</code></pre><p>Ansi que l'exemple formtest.html (à placer dans le sous-repertoire <em>templates</em>): 
+</p>
+<pre><code>$def with (form)
+
+&lt;form name=&quot;main&quot; method=&quot;post&quot;&gt; 
+$if not form.valid: &lt;p class=&quot;error&quot;&gt;Try again, AmeriCAN:&lt;/p&gt;
+$:form.render()
+&lt;input type=&quot;submit&quot; /&gt;    &lt;/form&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

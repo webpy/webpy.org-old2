@@ -1,0 +1,251 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>tutorial2.ru (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; tutorial2.ru
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>tutorial2.ru</h1>
+
+<h2>Установка</h2>
+<p>Для нормальной работы программ с web.py необходимы сам web.py, flup и библиотеки баз данных.
+   Скачайте в один и тот же каталог следующие файлы:
+</p>
+<ul>
+ <li>
+     web.py (лучше из svn, командой <strong>svn co http://webpy.org/svn/trunk/web</strong>)
+ </li>
+
+ <li>
+     flup - <strong>wget http://www.saddi.com/software/flup/dist/flup-r2016.tar.gz</strong>
+ </li>
+</ul>
+<p>после этого разожмите последний архив, скопируйте содержимое папки flup в каталог, где вы работаете, и удалите ненужный хлам. Например так:
+</p>
+<pre><code>$ tar xf flup-r2016.tar.gz
+$ mv flup{-r2016/flup,}
+$ rm -r flup-r2016*
+</code></pre><p>Таким образом мы подготовили среду для разработки.
+</p>
+
+<h2>Поддержка URL</h2>
+<p>Самая важная часть любого файла это структура его URL. Эти адреса - не только буквы, которые ваши посетители видят и отправляют по почте друзьям, это ментальная модель работы вебсайта.
+   На популярных сайтах, таких как <a href="http://del.icio.us/">del.icio.us</a>, URL это вообще часть пользовательского интерфейса. web.py легко позволяет сделать клевые URLы.
+</p>
+<p>Откройте в текстовом редакторе новый файл, назвав его ну... скажем... <strong>poluekt.py</strong>.
+   Шучу. Удобнее будет <strong>code.py</strong>. Впишите в него главную строку:
+</p>
+<pre><code>import web
+</code></pre><p>так импортируются функции фреймворка <strong>web.py</strong>.
+</p>
+<pre><code>urls = (
+   '/', 'index'    )
+</code></pre><p>Это ваш лист соответствия urlов и функций. Первая  часть - регулярное выражение с помощью которого определяется путь. Например <em></em>'/'<strong>, или </strong>'/help/faq'<strong>, или даже </strong>/item/(d+)<em></em>. Строка <strong>d+</strong> обозначает &quot;некоторая ненулевая последовательность цифр&quot;, подробнее смотрите об этом в <a href="http://www.amk.ca/python/howto/regex/">Python Regex HowTo</a> или воспользуйтесь <a href="http://osteele.com/tools/rework/">удобной генерилкой regex</a>. Скобки вокруг <em></em>d+<strong> нужны для того, чтобы удобно исользовать эти цифры в дальнейшем. Вторая часть - имя класса, которому будет передан запрос. Например, </strong>'index'<strong>, </strong>'welcomes.hello'<strong> (то есть класс </strong>hello<strong> из модуля </strong>welcomes<strong>) или </strong>'get_1'<strong>. </strong>1<strong> заменяется на первое совпадание выделенного регулярного выражения. Все остальные элементы выделенного регулярного выражения (помните </strong>(d+)<em></em>? ) передаются в класс-обработчик.
+</p>
+<p>Собственно в нашем случае сказано что URL &quot;/&quot; (т.е. первая страница) будет обрабатываться классом <strong>'index'</strong>
+</p>
+<p>Теперь нам надо написать сам класс. В то время как большая часть людей не обращая ни на что внимание бродит по сайтам, внутри веба используется архитектурный стиль, известный как REST. Детали не так уж и важны, но основная идея в том, что посетители сайтов просят сервер применить определенные действия (например &quot;GET&quot; и &quot;POST&quot;) на ссылки (такие как &quot;/&quot; или &quot;/wtf?f=1&quot;).
+</p>
+<p>&quot;GET&quot; это то, к чему мы все привыкли, он используется чтобы получить содержимое страницы. Когда вы открываете сайт &quot;yandex.ru&quot; в своем браузере, на самом деле вы как бы просите Яндекс взять (&quot;GET&quot; от английского &quot;to get&quot; - брать) страницу '/', командой &quot;GET /&quot;. &quot;POST&quot;, вторая популярная функция, от английского to post - записать, внести в списки. Логично предположить что с помощью этой команды вы просите <em>что-либо</em>сделать_, например зачарджить кредитную карту и подтвердить заказ. В этом и есть фича, потому что &quot;GET&quot; может свободно использоваться везде, например индексироваться яндексом, что не слишком хорошо для страниц с заказами. Представьте себе что робот яндекса пришел на ваш сайт и заказал все товары!
+</p>
+
+<h2>Разработка</h2>
+<p>В нашем коде для web.py мы сделаем так:
+</p>
+<pre><code>class index:
+   def GET(self):
+        print &quot;Превед, Орлы!!!&quot;            # Таким образом постетителю страницы '/' будет показан русский вариант строки &quot;Hello World!&quot;.
+if __name__ == &quot;__main__&quot;: web.run(urls, globals())
+</code></pre><p>Этот страшный набор букв говорит, что нужно запустить наше веб-приложение при исполнении файла.
+   Первый аргумент вызова <strong>web.run</strong>, urls, это тот самый список-соответствие url'ов и функций, описаный выше.
+</p>
+<p>У web.py также есть средства для отладки, например добавьте перед последней строкой:
+       web.webapi.internalerror = web.debugerror
+</p>
+<p>Теперь при ошибке вы будете читать нормальный, человеко-читаемый бэктрейс. Если в последней строке вписать последним аргументом <strong>web.reloader</strong> будет еще лучше.
+   Это очень удобная опция, заставляющая web.py перезагружать исполняемый файл каждый раз, когда в нем что-то изменено. Постарайтесь не забыть убрать и этот параметр перед публичным запуском вашей страницы. Кстати, если вместо <strong>web.reloader</strong> вписать <strong>web.profiler</strong> можно будет узнавать сколько времени занимает та или иная функция при выдаче страницы. Говоря человеческим языком, это <em>профайлер</em>, то есть средство, помогающее оптимизировать скорость работы скрипта.
+</p>
+<p>Настало время запускать наше приложение. Просто выполните команду
+</p>
+<pre><code>$ python code.py
+</code></pre><p>и приложение запустит маленький веб-сервер, который будет отвечать на адрес <strong>http://localhost:8080/</strong>.
+   Вы можете изменить порт по умолчанию на другой, указав номер порта в качестве параметра, например так:
+</p>
+<pre><code>$ python code.py 6060
+</code></pre><p>Вы также можете запускать этот скрипт как <strong>CGI</strong> или <strong>FastCGI</strong> скрипт -- он автоматически распознает подобные вещи.
+   На самом деле web.py использует <strong>WSGI</strong>, так что ваше приложение может работать с любым интерфейсом к web для
+   python, в том числе <strong>scgi</strong> и <strong>mod_python</strong>.
+</p>
+<p>Теперь, если вы откроете свой браузер на ссылке <a href="http://localhost:8080/">http://localhost:8080/</a>, ваше приложение поздаровается с вами.
+</p>
+
+<h2>Шаблоны</h2>
+<p>Написание HTML внутри кода на Python это отвратительно. Куда веселее писать на Python внутри HTML. К счастью web.py позволяет нам это делать, с легкостью.
+</p>
+<p>Cоздадим каталог для наших темплейтов (назовем его... ммм.... &quot;templates&quot;). Внутри этого каталога создадим файлик с расширением .html (скажем <strong>index.html</strong>). Теперь внутри это файла напиешем нормальный HTML:
+</p>
+<pre><code>&lt;em&gt;Превед&lt;/em&gt;, орлы!
+</code></pre><p>Или используем специальный синтаксис темплейтов web.py, например так:
+</p>
+<pre><code>$def with (name)    
+$if name:
+    &lt;em&gt;Превед&lt;/em&gt; тебе, дорогой $name.
+    Твой Медвед.
+$else:
+    &lt;em&gt;Превед&lt;/em&gt;, орлы!
+</code></pre><p>Как видите теплейты очень похожи на обычный python за исключением оператора <code>def with</code> в начале (он говорит о параметрах, которые используются в темплейте) и символа <code>$</code> расположеного в начале каждой строки с кодом. Заметьте также что web.py автоматически ескейпит все переменные, использованные в примере, таким образом, что  если по каким-либо причинам переменная <code>name</code> будет содержать HTML, то при выводе они будут заэскейплены и показаны пользователю как текст. Чтобы выключить эскейпинг используйте синтаксис <code>$:name</code> вместо <code>$name</code>.
+</p>
+<p>Вернемся к коду. Под первой строкой, сразу после импортов впишите:
+</p>
+<pre><code>render = web.template.render('templates/')
+</code></pre><p>Это обьяснит библиотеке, где же именно искать темплейты. Теперь поменяйте <code>index.GET</code> на:
+</p>
+<pre><code>name = 'balbes'    print render.index(name)
+</code></pre><p>Зайдите на ваш сайт и присмотритесь к надписи <strong>Превед</strong> тебе, дорогой balbes.
+</p>
+<p>(<strong>Заметка для девелоперов:</strong> добавьте <code>, cache=True</code> в конце вызова <code>render</code> чтобы web.py кешировал ваши темплейты.)
+</p>
+
+<h2>Забавные URLы</h2>
+<p>Теперь измените ваш список URLов на такой:
+</p>
+<pre><code>'/(.*)', 'index'
+</code></pre><p>и поправьте определение <code>index.GET</code> на:
+</p>
+<pre><code>def GET(self, name):
+</code></pre><p>Удалите строку, устанавливающую name. Теперь если зайти просто на <code>/</code> то увидите &quot;Превед, орлы&quot;. А вот если зайти на <code>/balbes</code> - будет куда интереснее.
+   Таким образом выделенное выражение <strong>(.*)</strong> передалось в функцию в качестве первого параметра - <strong>name</strong>.
+</p>
+
+<h2>Базы Данных</h2>
+<p>Ниже строки с <strong>web.run</strong> впишите:
+</p>
+<pre><code>web.config.db_parameters = dict(dbn='mysql', user='me', pw='pass', db='dbname')
+</code></pre><p>конечно же вам нужно изменить эти параметры, чтобы иметь доступ к базе данных.
+   Создайте простую табличку, например такую:
+</p>
+<pre><code>CREATE TABLE todo (
+    id unique AUTO_INCREMENT primary key,
+    title text,
+    created timestam default now()
+);
+</code></pre><p>и вставьте в нее строчку с примером:
+</p>
+<pre><code>INSERT INTO todo (title) VALUES ('Заучить web.py');
+</code></pre><p>В <strong>index.py</strong> давайте опять переделаем <code>index.GET</code>:
+</p>
+<pre><code>def GET(self):
+    todos = web.select('todo')
+    print render.index(todos)
+</code></pre><p>И снова вернем список листов, так чтобы 'GET /' обращался на index.
+   Черт, теперь выкиньте все из <strong>index.html</strong> и пишите сначала:
+       $def with (todos)
+       <ul>    $for todo in todos:
+           <li id="t$todo.id">$todo.title</li>    
+       </ul>
+   Посетив вашу уже немаленькую веб-страничку, вы увидите один элемент:  'Заучить web.py'.
+   Допишите в конец этого же файла:
+</p>
+<pre><code>&lt;form method=&quot;post&quot; action=&quot;add&quot;&gt;        &lt;p&gt;            &lt;input type=&quot;text&quot; name=&quot;title&quot; /&gt;                &lt;input type=&quot;submit&quot; value=&quot;Add&quot; /&gt;        &lt;/p&gt;    &lt;/form&gt;
+</code></pre><p>Измените ваш список ссылок <strong>urls</strong> вот так:
+</p>
+<pre><code>'/', 'index',
+'/add', 'add'
+</code></pre><p>Обратите внимание на запятые. Помните, что в Python две строки написанные без запятых просто обьединяются.
+   Добавим еще один класс -  <strong>add</strong>:
+</p>
+<pre><code>class add:
+    def POST(self):
+        i = web.input()
+        n = web.insert('todo', title=i.title)
+    web.seeother('./#t'+str(n))
+</code></pre><p><strong>web.insert</strong> возвращает идентификатор свежевставленного элемента, а команда <strong>web.seeother</strong> пересылает пользователя на этот новый элемент. 
+</p>
+<p>Еще одна штука - вот в строчке <strong>i = web.input</strong> мы получили в переменной i все параметры, переданные из формы пользователем. Красиво и просто, правда?
+</p>
+<p>В темпе вальса: <strong>web.transact()</strong> начинает транзакцию, <strong>web.commit()</strong> коммитит её, <strong>web.rollback()</strong>, что логично, откатывает её. <strong>web.update</strong> работает точно также как <strong>web.insert</strong> за исключением того, что вместо возврата нового элемента она обновляет уже сохраненный элемент по его id (или по строке, которая подставляется в WHERE запроса)
+</p>
+<p>В общем это всё к чему - теперь вы можете добавлять новые элементы в список.
+</p>
+
+<h2>Объект-хранилище</h2>
+<p>И <strong>web.input</strong>, и <strong>web.query</strong>, а также большинство других функций <strong>web.py</strong> возвращают в качестве результата объект-хранилище. Этот объект похож на стандартный dictionary языка python, однако позволяет обращаться к элементам не только через d['figna'], но и d.figna, что на 3 символа короче :)
+</p>
+
+<h2>Куки</h2>
+<p>А также спамы и трояны...
+</p>
+<p>Куки работают также, как и <strong>web.input</strong>. <strong>web.cookies()</strong> возвращает объект-хранилище с набором кук, пришедших от браузера. Вы можете изменять их функцией <strong>web.setcookie(name, value, expires=&quot;&quot;)</strong>, где name - имя куки, value - значение, а expires, соответственно, срок истечения действия куки.
+</p>
+<p>И <strong>web.input</strong>, и <strong>web.cookies</strong> в качестве параметра принимают названия и пары ключ-значение. 
+   Например, вызвав <strong>web.input('color', times=1)</strong> вы поймаете ошибку, если в форме не окажется элемента <strong>color</strong>, или если в элементе <strong>times</strong> не будет единица.
+</p>
+<p>Типовой паттерн использования:
+</p>
+<pre><code>try:
+    i = web.input('foo', bar=2)
+except KeyError:
+    return web.badrequest()
+</code></pre><p>*Пока всё, ребята. В следующий раз я раскажу вам про модуль forms.
+   Комментарии? Вопросы? Мнения? Предложения? мой адрес - <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#98;&#111;&#98;&#117;&#107;&#64;&#106;&#117;&#115;&#116;&#111;&#115;&#46;&#111;&#114;&#103;">&#98;&#111;&#98;&#117;&#107;&#64;&#106;&#117;&#115;&#116;&#111;&#115;&#46;&#111;&#114;&#103;</a>*
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,344 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Templetor: web.py 模板系统 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Templetor: web.py 模板系统
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Templetor: web.py 模板系统</h1>
+<p><a name="introduction"></a>
+</p>
+
+<h1>Introduction</h1>
+<style>
+pre {
+    background-color:#F0F0F0;
+    border:1px solid #CCCBBA;
+       padding: 10px 10px 10px 20px;
+}
+code {
+    background: inherit;
+    color: inherit;
+}
+.warning {
+    border: 1px solid #FFAAAA;
+    padding: 10px;
+    background-color: #FFF0F0;
+}
+</style>
+
+<p>web.py 的模板语言叫做 <code>Templetor</code>，它能负责将 python 的强大功能传递给模板系统。
+   在模板中没有重新设计语法，它是类 python 的。 
+   如果你会 python，你可以顺手拈来。
+</p>
+<p>这是一个模板示例:
+</p>
+<pre><code>$def with (name)
+Hello $name!
+</code></pre><p>第一行表示模板定义了一个变量 <code>name</code>。
+   第二行中的 <code>$name</code> 将会用 <code>name</code> 的值来替换。
+</p>
+<div class="warning">
+如果是从 web.py 0.2 升级请看这里 <a href="#upgrading">升级</a> 部分。
+</div>
+
+<p><a name="using"></a>
+</p>
+
+<h1>使用模板系统</h1>
+<p>通用渲染模板的方法：
+</p>
+<pre><code>render = web.template.render('templates')
+return render.hello('world')
+</code></pre><p>   <br />
+   <code>render</code> 方法从模板根目录查找模板文件，<code>render.hello(..)</code>表示渲染 hello.html 模板。实际上，系统会在根目录去查找叫 <code>hello</code>的所有文件，直到找到匹配的。(事实上他只支持 .html 和 .xml 两种)
+</p>
+<p>除了上面的使用方式，你也可以直接用文件的方式来处理模板 <code>frender</code>：
+</p>
+<pre><code>hello = web.template.frender('templates/hello.html')
+render hello('world')
+</code></pre><p>直接使用字符串方式：
+</p>
+<pre><code>template = &quot;$def with (name)\nHello $name&quot;
+hello = web.template.Template(template)
+return hello('world')
+</code></pre><p><a name="syntax"></a>
+</p>
+
+<h1>语法</h1>
+
+<h2>表达式用法</h2>
+<p>特殊字符 <code>$</code> 被用于特殊的 python 表达式。表达式能够被用于一些确定的组合当中 <code>()</code> 和 <code>{}</code>:
+</p>
+<pre><code>Look, a $string. 
+Hark, an ${arbitrary + expression}. 
+Gawk, a $dictionary[key].function('argument'). 
+Cool, a $(limit)ing.
+</code></pre>
+<h2>赋值</h2>
+<p>有时你可能需要定义一个新变量或给一些变量重新赋值，如下：
+</p>
+<pre><code>$ bug = get_bug(id)
+&lt;h1&gt;$bug.title&lt;/h1&gt;
+&lt;div&gt;
+    $bug.description
+&lt;div&gt;
+</code></pre><p>注意 <code>$</code>在赋值变量名称之前要有一个空格，这有区别于常规的赋值用法。
+</p>
+
+<h2>过滤</h2>
+<p>模板默认会使用 <code>web.websafe</code> 过滤 html 内容(encodeing 处理)。
+</p>
+<pre><code>&gt;&gt;&gt; render.hello(&quot;1 &lt; 2&quot;)
+&quot;Hello 1 &amp;lt; 2&quot;
+</code></pre><p>不需要过滤可以在 <code>$</code> 之后 使用 <code>:</code>。示例：
+</p>
+<pre><code>该 Html 内容不会被义
+$:form.render()
+</code></pre>
+<h2>新起一行用法</h2>
+<p>在行末添加 <code>\</code> 代表显示层该内容不会被真实处理成一行。
+</p>
+<pre><code>If you put a backslash \ 
+at the end of a line \ 
+(like these) \ 
+then there will be no newline.
+</code></pre>
+<h2>转义 <code>$</code></h2>
+<p>使用 <code>$$</code> 可以在输出的时候显示字符 <code>$</code>.
+</p>
+<pre><code>Can you lend me $$50?
+</code></pre>
+<h2>注释</h2>
+<p><code>$#</code> 是注释指示符。任何以 <code>$#</code> 开始的某行内容都被当做注释。
+</p>
+<pre><code>$# this is a comment
+Hello $name.title()! $# display the name in title case
+</code></pre>
+<h2>控制结构</h2>
+<p>模板系统支持 <code>for</code>, <code>while</code>, <code>if</code>, <code>elif</code> 和 <code>else</code>。像 python 一样，这里是需要缩进的。
+</p>
+<pre><code>$for i in range(10): 
+    I like $i
+
+$for i in range(10): I like $i
+
+$while a:
+    hello $a.pop()
+
+$if times &gt; max: 
+    Stop! In the name of love. 
+$else: 
+    Keep on, you can do it.
+</code></pre><p><code>for</code> 循环内的成员变量只在循环内发生可用：
+</p>
+<pre><code>loop.index: the iteration of the loop (1-indexed)
+loop.index0: the iteration of the loop (0-indexed)
+loop.first: True if first iteration
+loop.last: True if last iteration
+loop.odd: True if an odd iteration
+loop.even: True if an even iteration
+loop.parity: &quot;odd&quot; or &quot;even&quot; depending on which is true
+loop.parent: the loop above this in nested loops
+</code></pre><p>有时候，他们使用起来很方便：
+</p>
+<pre><code>&lt;table&gt;
+$for c in [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]:
+    &lt;tr class=&quot;$loop.parity&quot;&gt;
+        &lt;td&gt;$loop.index&lt;/td&gt;
+        &lt;td&gt;$c&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<h2>其他</h2>
+
+<h3>使用 <code>def</code></h3>
+<p>可以使用 <code>$def</code> 定义一个新的模板函数，支持使用参数。
+</p>
+<pre><code>$def say_hello(name='world'):
+    Hello $name!
+
+$say_hello('web.py')
+$say_hello()
+</code></pre><p>其他示例：
+</p>
+<pre><code>$def tr(values):
+    &lt;tr&gt;
+    $for v in values:
+        &lt;td&gt;$v&lt;/td&gt;
+    &lt;/tr&gt;
+
+$def table(rows):
+    &lt;table&gt;
+    $for row in rows:
+        $:row
+    &lt;/table&gt;
+
+$ data = [['a', 'b', 'c'], [1, 2, 3], [2, 4, 6], [3, 6, 9] ]
+$:table([tr(d) for d in data])
+</code></pre>
+<h3>代码</h3>
+<p>可以在 <code>code</code> 块书写任何 python 代码：
+       $code:
+           x = &quot;you can write any python code here&quot;
+           y = x.title()
+           z = len(x + y)
+</p>
+<pre><code>    def limit(s, width=10):
+        &quot;&quot;&quot;limits a string to the given width&quot;&quot;&quot;
+        if len(s) &gt;= width:
+            return s[:width] + &quot;...&quot;
+        else:
+            return s
+
+And we are back to template.
+The variables defined in the code block can be used here.
+For example, $limit(x)
+</code></pre>
+<h3>使用 <code>var</code></h3>
+<p><code>var</code> 块可以用来定义模板结果的额外属性：
+</p>
+<pre><code>$def with (title, body)
+
+$var title: $title
+$var content_type: text/html
+
+&lt;div id=&quot;body&quot;&gt;
+$body
+&lt;/div&gt;
+</code></pre><p>以上模板内容的输出结果如下：
+</p>
+<pre><code>&gt;&gt;&gt; out = render.page('hello', 'hello world')
+&gt;&gt;&gt; out.title
+u'hello'
+&gt;&gt;&gt; out.content_type
+u'text/html'
+&gt;&gt;&gt; str(out)
+'\n\n&lt;div&gt;\nhello world\n&lt;/div&gt;\n'
+</code></pre><p><a name="builtins"></a>
+</p>
+
+<h1>内置 和 全局</h1>
+<p>像 python 的任何函数一样，模板系统同样可以使用内置以及局部参数。很多内置的公共方法像 <code>range</code>，<code>min</code>，<code>max</code>等，以及布尔值 <code>True</code> 和 <code>False</code>，在模板中都是可用的。部分内置和全局对象也可以使用在模板中。
+</p>
+<p>全局对象可以使用参数方式传给模板，使用 <code>web.template.render</code>：
+</p>
+<pre><code>import web
+import markdown
+
+globals = {'markdown': markdown.markdown}
+render = web.template.render('templates', globals=globals)
+</code></pre><p>内置方法是否可以在模板中也是可以被控制的：
+</p>
+<pre><code># 禁用所有内置方法
+render = web.template.render('templates', builtins={})
+</code></pre><p><a name="security"></a>
+</p>
+
+<h1>安全</h1>
+<p>模板的设计想法之一是允许非高级用户来写模板，如果要使模板更安全，可在模板中禁用以下方法：
+</p>
+<ul>
+ <li>
+     不安全部分像 <code>import</code>，<code>exec</code> 等；
+ </li>
+
+ <li>
+     允许属性开始部分使用 <code>_</code>；
+ </li>
+
+ <li>
+     不安全的内置方法 <code>open</code>, <code>getattr</code>, <code>setattr</code> 等。
+ </li>
+</ul>
+<p>如果模板中使用以上提及的会引发异常 <code>SecurityException</code>。
+</p>
+<p><a name="upgrading"></a>
+</p>
+
+<h1>从 web.py 0.2 升级</h1>
+<p>新版本大部分兼容早期版本，但仍有部分使用方法会无法运行，看看以下原因：
+</p>
+<ul>
+ <li><p>Template output is always storage like <code>TemplateResult</code> object, however converting it to <code>unicode</code> or <code>str</code> gives the result as unicode/string.
+</p>
+
+ </li>
+
+ <li><p>重定义全局变量将无法正常运行，如果 x 是全局变量下面的写法是无法运行的。
+</p>
+<pre><code>$ x = x + 1
+</code></pre>
+ </li>
+</ul>
+<p>以下写法仍被支持，但不被推荐。
+</p>
+<ul>
+ <li>
+     如果你原来用 <code>\$</code> 反转美元字符串， 推荐用 <code>$$</code> 替换；
+ </li>
+
+ <li>
+     如果你有时会修改 <code>web.template.Template.globals</code>，建议通过向 <code>web.template.render</code> 传变量方式来替换。
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

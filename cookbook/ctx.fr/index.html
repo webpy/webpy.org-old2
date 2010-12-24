@@ -1,0 +1,165 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>web.ctx (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; web.ctx
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>web.ctx</h1>
+<p>Autre langages: <a href="/../ctx" class="internal">english</a> | ...
+</p>
+
+<h2>Probleme</h2>
+<p>Vous souhaitez utiliser des variables contextuelles dans votre code comme la page référante ou le navigateur du client.
+</p>
+
+<h2>Solution</h2>
+<p>C'est possible en utilisant 'web.ctx'. D'abord un peu d'architecture: 'web.ctx' est basée sur la classe 'threadeddict', alias 'ThreadedDict'. Cette classe crée un objet de type dictionnaire qui possède des attributs spécifiques au processus id de thread. C'est élégant dans la mesure ou cela nous permet d'utiliser un objet de type dictionnaire, tandis que beaucoup d'utilisateurs accèdent au système simultanément, et l'objet ne contiendra que les données de la requête HTTP donnée. (aucune données n'est partagée donc l'objet est <a href="http://fr.wikipedia.org/wiki/Threadsafe">&quot;thread-safe&quot;</a> -- <em>On dit qu’un programme ou qu'une portion de code est thread-safe s’il fonctionne correctement durant une exécution simultanée par plusieurs threads (processus légers)</em>.)
+</p>
+<p>'web.ctx' contient des variables pour chaque requête qui comprennent des informations spécifiques pour chaque demande, comme les variables environnement du client. En supposant que vous vouliez déterminer quelle était la page référante d'un utilisateur accédant à une page: 
+</p>
+
+<h2>Exemple</h2>
+<pre><code>class example:
+    def GET(self):
+        referer = web.ctx.env.get('HTTP_REFERER', 'http://google.com')
+        raise web.seeother(referer)
+</code></pre><p>Ce code utilise 'web.ctx.env' pour accéder à l'environnement variables 'HTTP_REFERER'. Si il n'y en a pas, ce sera par défaut google.com. Enfin, il redirige l'utilisateur vers la page d'où il vient.
+</p>
+<p>'web.ctx' est aussi très pratique car il peut-être rêglé par un <a href="../application_processors/fr">'loadhook'</a>. Les données session, par exemple, sont fixées chaque fois qu'une demande est traitée et les données sont stockées dans 'web.ctx'. Depuis que 'web.ctx' est <a href="http://fr.wikipedia.org/wiki/Threadsafe">&quot;thread-safe&quot;</a>, vous pouvez utiliser les données session comme si elles étaient un objet régulier python.
+</p>
+
+<h2>Données que l'on trouve dans 'ctx'</h2>
+
+<h3>Request</h3>
+<ul>
+ <li><p><code>environ</code> alias 'env' &ndash; un dictionnaire contenant les variables environnement standard de <a href="http://www.python.org/dev/peps/pep-0333/#environ-variables">WSGI</a>
+</p>
+
+ </li>
+
+ <li><p><code>home</code> &ndash; le chemin de base pour l'application, y compris tout élément «consommée» par les applications extérieures <em>http://example.org/admin</em>
+</p>
+
+ </li>
+
+ <li><p><code>homedomain</code> &ndash; ? (semble être le protocole + l'hôte) <em>http://example.org</em>
+</p>
+
+ </li>
+
+ <li><p><code>homepath</code> &ndash; La partie du chemin requise par l'utilisateur, déduite de l'application courante. C'est à dire homepath + path = le chemin actuellement requis en HTTP par l'utilisateur. Exemple: <em>/admin</em>
+</p>
+
+ </li>
+
+ <li><p><code>host</code> &ndash; le nom d'hôte (domaine) et (si ce n'est pas celui par défaut) le port requis par l'utilisateur. Exemple: <em>example.org</em>, <em>example.org:8080</em>
+</p>
+
+ </li>
+
+ <li><p><code>ip</code> &ndash; L'adresse ip de l'utilisateur. exemple: <em>xxx.xxx.xxx.xxx</em>
+</p>
+
+ </li>
+
+ <li><p><code>method</code> &ndash; la méthode HTTP utilisée. exemple: <em>GET</em>
+</p>
+
+ </li>
+
+ <li><p><code>path</code> &ndash; Le chemin demandé par l'utilisateur, relatif à l'aaplication en cours. Si vous utilisez des sous-applications, chaque partie de l'url filtrée par l'application externe sera déduite. Par exemple: vous avez une application principale dans code.py, et une sous application appelée 'admin.py'. Dans 'code.py', vous pointez '/admin' vers 'admin.app'. Dans 'admin.py', vous pointez '/stories' sur une classe nommée 'stories'. Au sein de 'stories', 'web.ctx.path' sera '/stories' et pas '/admin/stories'. Exemple: <em>/articles/845</em>
+</p>
+
+ </li>
+
+ <li><p><code>protocol</code> &ndash; Le protocole utilisé. Exemple:  <em>https</em>
+</p>
+
+ </li>
+
+ <li><p><code>query</code> &ndash; Une chaîne vide s'il n'y a pas d'argument de requête autre que '?' suivit par la chaine de requête. Exemple <em>?fourlegs=good&amp;twolegs=bad</em>
+</p>
+
+ </li>
+
+ <li><p><code>fullpath</code> alias 'path + query' &ndash; Le chemin demandé inclut les arguments de requête mais n'inclut <em>pas</em> 'homepath'. Exemple : <em>/articles/845?fourlegs=good&amp;twolegs=bad</em>
+</p>
+
+ </li>
+</ul>
+
+<h3>Response</h3>
+<ul>
+ <li>
+     <code>status</code> &ndash; Le code statut HTTP (par defaut '200 OK') <em>401 Unauthorized</em>
+ </li>
+
+ <li>
+     <code>headers</code> &ndash; Une liste de deux tuples contenant les en-têtes HTTP (headers)
+ </li>
+
+ <li>
+     <code>output</code> &ndash; Une chaîne contenant l'entité de réponse
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

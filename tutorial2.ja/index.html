@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>web.py 0.2 チュートリアル (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; web.py 0.2 チュートリアル
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>web.py 0.2 チュートリアル</h1>
+
+<h2>はじめに</h2>
+<p>Python を使ってウェブサイトを作りたい。web.py は、これを簡単に実現するコードを提供するものだ。
+</p>
+<p>チュートリアルにあることをすべて実行するには、Python、web.py、flup、psycopg2、PostgreSQL（または同等のデータベースと Python 用のドライバ）が必要だ。詳しくは <a href="/">webpy.org</a> を参照のこと。
+</p>
+<p>すでに web.py をインストールしてある場合は、<a href="/upgrade_to_point2">upgrade</a> のページに移行の仕方について書いてあるので読んでほしい。
+</p>
+<p>それでははじめよう。
+</p>
+
+<h2>URL のハンドリング</h2>
+<p>どんなウェブサイトであっても、もっとも重要な部分となるのが URL の構造だ。URL は、訪問者がメールで知人にあなたのサイトのことを教えるときに使われるというばかりではない。君のサイトがどんなふうに動くのかというメンタルなモデルを表現するものでもあるのだ。<a href="http://del.icio.us/">del.icio.us</a> などのポピュラーなサイトでは、URL はユーザーインターフェースの一部にさえなっている。web.py ならグレートな URL を簡単に構築できる。
+</p>
+<p>web.py アプリケーションをはじめるにあたって、新しくテキストファイルを開いて（'code.py' と呼ぶことにする）次のようにタイプする。
+</p>
+<pre><code>import web
+</code></pre><p>これは web.py のモジュールをインポートしている。
+</p>
+<p>それでは web.py にわれらがサイトの URL 構造を伝えることにする。まずはシンプルなところから。
+</p>
+<pre><code>urls = (
+    '/', 'index',
+    '', 'index',
+)
+</code></pre><p>最初の部分は URL にマッチする<a href="http://osteele.com/tools/rework/">正規表現</a>で、<code>/</code>、<code>/help/faq</code>、<code>/item/(\d+)</code> などとすることができる。（<code>\d+</code> は数字の並びにマッチする。括弧でくくって、マッチした部分をあとで使えるように保存させている。）２番目のはリクエストが送られるクラスの名前で、<code>index</code>、<code>view</code>、<code>welcomes.hello</code> （これは <code>welcomes</code> モジュールの <code>hello</code> クラスを指している）、あるいは <code>get_\1</code> などとする。<code>\1</code> は、保存した正規表現の１番目のマッチ部分に置き換えられる。保存した残りのマッチ部分は関数を通して渡される。
+</p>
+<p>上の例は、<code>/</code> という URL（つまりサイトのフロントページだ）は <code>index</code> というクラスで処理されると言っていることになる。
+</p>
+<p>さて次に <code>index</code> クラスを書く。ほとんどの人は気にすることもなくブラウジングをしているけれども、ブラウザはワールド・ワイド・ウェブと交信するにあたって HTTP という言葉を用いている。細かいことは重要ではないが、基本的な概念としては、訪問者はウェブサーバに対して、（GET とか POST といった）ある function 〔機能／関数〕を URL （<code>/</code> とか <code>/foo?f=1</code>）について実行するよう問い合わせている。
+</p>
+<p>GET はもうおなじみの代物だが、これはウェブページのテキストを要求するのに使われる。ブラウザに <code>harvard.edu</code> と打ち込むと、これは文字通りハーバードのウェブサーバに対して <code>GET /</code> と問い合わせることになる。つぎに有名なのが POST で、これは何かを登録するといったように、ある種のフォームを送信する時に使われる。（クレジットカードに課金して注文を行うといったような）リクエストを送信してなんらかの処理が行われる場合であればいつでも POST を使うことができる。ここがポイントなのだが、というのも、GET の URL は検索エンジンに巡回されてインデックス化されうるからで、これはいかにもほとんどのページについて望むところではあるが、一方で検索エンジンから注文を受けるようなことにはなってほしくないだろう（Google が自分のサイトの全商品を片っ端から買おうとしているところを想像してみればいい！）。
+</p>
+<p>われらが web.py のコードではこのふたつは明確に区別される。
+</p>
+<pre><code>class index:
+    def GET(self):
+        print &quot;Hello, world!&quot;
+</code></pre><p>これで、web.py は <code>/</code> に対する GET リクエストに対していつでもこの <code>GET</code> 関数を呼び出すようになる。
+</p>
+<p>さて、あとは仕上げに web.py がウェブページのサービスを始めるように最後の一行を書き足すだけだ。
+</p>
+<pre><code>if __name__ == &quot;__main__&quot;: web.run(urls, globals())
+</code></pre><p>これは web.py に、はじめに書いた URL をサービスさせてクラス名をこのファイルのグローバルな名前空間で探し出せと伝えていることになる。
+</p>
+<p>ここまでいろいろと述べてきたが、これまででコードは 5行ちょっとしか書いてないことに注目してほしい。ひとそろいのウェブアプリケーションを作るのに必要なのはこれですべてなのだ。コマンドラインから次のように打ち込んでみよう。
+</p>
+<pre><code>$ python code.py
+Launching server: http://0.0.0.0:8080/
+</code></pre><p>これで、君の web.py アプリケーションが君のコンピュータ上ででほんもののウェブサーバとして動く。この URL を訪問してみれば、&quot;Hello, world!&quot; と表示されるはずだ（&quot;code.py&quot; の部分に続けて IP アドレスとポート番号を指定して、web.py がどこでサーバを起動するかを指定できる。fastcgi や scgi サーバとして起動させることも可能だ）。
+</p>
+
+<h2>開発</h2>
+<p>web.py にはデバッグに役立つツールもいくつか用意されている。最終行の <code>'if __name__'</code> の前に、次の一行を足してみる。
+</p>
+<pre><code>web.webapi.internalerror = web.debugerror
+</code></pre><p>これでより役に立つエラーメッセージを見られるようになるだろう。また、最後の一行に <code>web.reloader</code> を付け足して次のようにする。
+</p>
+<pre><code>if __name__ == &quot;__main__&quot;: web.run(urls, globals(), web.reloader)
+</code></pre><p>これは web.py に、<code>web.reloader</code> “ミドルウェア” を使うように伝えている（ミドルウェアというのはウェブサーバになんらかの機能を追加するためのラッパー関数だ）。これはファイルを編集したら即座にそれらを再読み込みして、変更箇所をすぐにブラウザ上で確認できるようにする。（もっとも、これを使っていても、大掛かりな変更を施した場合にはサーバを再起動させる必要があるけれども）。サイトを公開する時にはこの機能は外しておきたいと思うだろうが、開発段階ではとても役に立つ。<code>web.profiler</code> というのもあり、これは各ページの末尾に、各関数でどれだけ時間がかかったかについての情報を出力する。これを見ればコードのどこを改善すれば処理が速くなるかがわかるはずだ。
+</p>
+
+<h2>テンプレート処理</h2>
+<p>Python のコード中に HTML のコードを書くのはやっかいなものだ。HTML のコード中に Python のコードを書ければずっと楽だろう。幸運なことに、web.py なら簡単にそれを実現できる。
+</p>
+<p>ノート: web.py は現在のところ <a href="http://www.cheetahtemplate.org/">Cheetah</a> テンプレートもサポートしている。詳しくは旧版のチュートリアルを参照のこと。
+</p>
+<p>それではテンプレート用のディレクトリを作成しよう（<code>'templates'</code> とする）。この中に、名前が html で終わる新しいファイルを作成する（<code>'index.html'</code> としよう）。このファイルには普通の HTML を書けばよい。
+</p>
+<pre><code>&lt;em&gt;Hello&lt;/em&gt;, world!
+</code></pre><p>web.py のテンプレート用言語を使って、HTML にコードを埋め込むこともできる。
+</p>
+<pre><code>$def with (name)
+
+$if name:
+    I just wanted to say &lt;em&gt;hello&lt;/em&gt; to $name.
+$else:
+    &lt;em&gt;Hello&lt;/em&gt;, world!
+</code></pre><p>ノート: 現時点では、インデントは 4つのスペースで行う必要がある。
+</p>
+<p>見てわかるとおり、テンプレートは先頭の <code>def with</code> ステートメント（これはテンプレートが呼ばれる時に渡される引数を宣言している）と各行の先頭に <code>$</code> 記号が置かれていることを除けば、Python のコードによく似ている。今のところ、template.py では <code>$def</code> ステートメントがファイルの１行目になければならないことになっている。また、web.py はここで使われるすべての変数を自動的にエスケープ処理することにも注意しよう。これはつまり、もしなんらかの理由により name に HTML のコードを含む値がセットされた場合でも、それらは適切にエスケープ処理されて、プレーンなテキストとして表示されるということだ。この機能を無効にしたければ、<code>$name</code> のかわりに <code>$:name</code> と書く。 
+</p>
+<p>さて <code>code.py</code> に戻ろう。１行目の下に次のように書き加える。
+</p>
+<pre><code>render = web.template.render('templates/')
+</code></pre><p>これは web.py に先ほど作った <code>templates</code> ディレクトリからテンプレートを探すよう伝えている。続いて <code>index.GET</code> を次のように変更する。
+</p>
+<pre><code>name = 'Bob'
+print render.index(name)
+</code></pre><p>（<code>'index'</code> はテンプレートの名前で、<code>'name'</code> はそれに渡される引数を表している。）
+</p>
+<p>このサイトを訪問してみれば、Bob に挨拶しているページが表示されるはずだ。
+</p>
+<p>開発豆知識: <code>render</code> を呼び出す時に <code>cache=False</code> と引数を加えると、web.py はページを表示するごとにテンプレートを再読み込みするようになる。
+</p>
+<p>続いて URL 一覧の部分を次のようにしてみよう。
+</p>
+<pre><code>'/(.*)', 'index'
+</code></pre><p>そして <code>index.GET</code> の定義を次のようにする。
+</p>
+<pre><code>def GET(self, name):
+</code></pre><p>そして <code>name = 'Bob'</code> と決め打ちしていた行を削除する。こうすると、<code>/</code> を訪問すれば 'Hello, world!' を表示し、<code>/Joe</code> にアクセスすれば Joe に挨拶するようになる。
+</p>
+<p>web.py のテンプレート処理についてもっと知りたければ、<a href="/templetor">template</a> のページを参照のこと。
+</p>
+
+<h2>データベース処理</h2>
+<p>ノート: データベースを使う前に、適切なデータベース用のライブラリがインストールされていることを確認すること。MySQL データベースには <a href="http://sourceforge.net/project/showfiles.php?group_id=22307">MySQLdb</a>、PostgreSQL には <a href="http://initd.org/pub/software/psycopg/">psycopg2</a> が必要だ。 
+</p>
+<p>ソースコードの <code>web.run</code> がある行の前に、次のように書き加える。
+</p>
+<pre><code>web.config.db_parameters = dict(dbn='postgres', user='username', pw='password', db='dbname')
+</code></pre><p>（これらの値、とくに <code>username</code>、<code>password</code>、<code>dbname</code> の値は各自の環境に合わせて書き換えること。MySQL を使っているのであれば <code>dbn</code> の値も <code>'mysql'</code> にする。）
+</p>
+<p>データベースに単純なテーブルを作成する。
+</p>
+<pre><code>CREATE TABLE todo {
+  id serial primary key,
+  title text,
+  created timestamp default now(),
+  done boolean default 'f'
+};
+</code></pre><p>そして最初のレコードを追加する。
+</p>
+<pre><code>INSERT INTO todo (title) VALUES ('Learn web.py');
+</code></pre><p><code>code.py</code> に戻り、<code>index.GET</code> を次のように変更する。
+</p>
+<pre><code>def GET(self):
+    todos = web.select('todo')
+    print render.index(todos)
+</code></pre><p>そして URL ハンドラを <code>/</code> のみに戻す。
+</p>
+<p><code>index.html</code> は以下のようにする。
+</p>
+<pre><code>$def with (todos)
+&lt;ul&gt;
+$for todo in todos:
+    &lt;li id=&quot;t$todo.id&quot;&gt;$todo.title&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre><p>再びサイトにアクセスしてみると、&quot;Learn web.py&quot; という todo アイテムが表示されているはずだ。おめでとう！　データベースからデータを取得するウェブアプリケーションの一丁あがりだ。今度はデータベースへの書き込みもできるようにしてみよう。
+</p>
+<p>{index.html` に、次のように書き加える。
+</p>
+<pre><code>&lt;form method=&quot;post&quot; action=&quot;add&quot;&gt;
+&lt;p&gt;&lt;input type=&quot;text&quot; name=&quot;title&quot; /&gt; &lt;input type=&quot;submit&quot; value=&quot;Add&quot; /&gt;&lt;/p&gt;
+&lt;/form&gt;
+</code></pre><p>そして URL 一覧を次のようにする。
+</p>
+<pre><code>'/', 'index',
+'/add', 'add'
+</code></pre><p>（カンマの打ち忘れに注意すること。これを入れ忘れると、Python は 文字列を連結してしまうので、URL のリストではなく <code>'/index/addadd'</code> だと見なされてしまう！）
+</p>
+<p>続いて新しいクラスを追加。
+</p>
+<pre><code>class add:
+    def POST(self):
+        i = web.input()
+        n = web.insert('todo', title=i.title)
+        web.seeothrer('/')
+</code></pre><p>（<code>POST</code> を使う理由はわかってるよね？）
+</p>
+<p>ユーザーがフォームを通して送信した値には、<code>web.input</code> のようにしてアクセスできる。<code>web.insert</code> はデータベースの todo テーブルに値を挿入して、新しくできたレコードの ID を返す。<code>seeother</code> は指定した URL にユーザーをリダイレクトする。
+</p>
+<p>駆け足で紹介: <code>web.transact()</code> でトランザクションを開始する。<code>web.commit()</code> でそれをコミットし、<code>web.rollback()</code> でロールバック。<code>web.update</code> は <code>web.insert</code> に似ているが、新しい ID を返すのではなく、テーブル名に続けて ID を引数に取ってそのレコードを更新する。 <a href="http://cvresumewritingservices.org/professional-resume.php">Professional resumes</a>
+</p>
+<p><code>web.input</code> や <code>web.query</code>、またその他いくつかの web.py 関数は「ストレージオブジェクト」というものを返す。これは辞書オブジェクトに似ているが、<code>d['foo']</code> だけでなく <code>d.foo</code> のようにアクセスできるところが違っている。これのおかげで、コードがずいぶんすっきりしたものになるはずだ。
+</p>
+<p><a href="/docs">ドキュメント</a>には、これまでに挙げてきたものに限らず、web.py のすべての関数についてその詳細が書かれている。
+</p>
+<p>チュートリアルは以上だ。web.py でできるクールなことについてもっと知りたければドキュメントを見てほしい。
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

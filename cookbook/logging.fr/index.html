@@ -1,0 +1,102 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Contrôler les évènements sur le serveur intégré par défaut (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Contrôler les évènements sur le serveur intégré par défaut
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Contrôler les évènements sur le serveur intégré par défaut</h1>
+<p>Autre langages: <a href="/../logging" class="internal">english</a> | ...
+</p>
+
+<h2>Problème:</h2>
+<p>Vous souhaitez contrôler le <a href="http://www.jmdoudoux.fr/java/dej/chap026.htm#logging-1" class="internal">logging</a>, les évenements,  avec le serveur intégré.
+</p>
+
+<h2>Solution:</h2>
+<p>Avec le serveur intégré, vous pouvez contrôler les évènements en utilisant <a href="http://pypi.python.org/pypi/wsgilog/">wsgilog</a> et en le passant à votre application comme un logiciel médiateur (<a href="http://fr.wikipedia.org/wiki/Middleware" class="internal">middleware</a>)
+</p>
+<p>Vous devez sous-classer wsgilog.WsgiLog pour passer des arguments mot-clé à la base par <a href="http://github.com/harryf/urldammit/blob/234bcaae6deb65240e64ee3199213712ed62883a/dammit/log.py">exemple</a>
+</p>
+<pre><code>import sys, logging
+from wsgilog import WsgiLog, LogIO
+import config
+
+class Log(WsgiLog):
+    def __init__(self, application):
+        WsgiLog.__init__(
+            self,
+            application,
+            logformat = '%(message)s',
+            tofile = True,
+            file = config.log_file,
+            interval = config.log_interval,
+            backups = config.log_backups
+            )
+        sys.stdout = LogIO(self.logger, logging.INFO)
+        sys.stderr = LogIO(self.logger, logging.ERROR)
+</code></pre><p>Ensuite, lorsque vous exécutez votre application, vous passez une référence à la classe. Par exemple (si ce qui précède est une partie du module 'mylog')
+</p>
+<pre><code>from mylog import Log
+application = web.application(urls, globals())
+application.run(Log)
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

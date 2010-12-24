@@ -1,0 +1,295 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>web.py templating system (codename: templetor) (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; web.py templating system (codename: templetor)
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>web.py templating system (codename: templetor)</h1>
+<p>There are almost as many Python templating systems as there are web 
+   frameworks (and, indeed, it seems like many templating systems are 
+   adopting web framework-like features), so it is with some trepidation 
+   that I work on a new one. Sadly, again I find that my requirements are 
+   met by nothing else: 
+</p>
+<ol>
+ <li>
+     The templating system has to <em>look</em> decent. No <code>&lt;%#foo#%&gt;</code> crud. 
+ </li>
+
+ <li>
+     Reuse Python terms and semantics as much as possible. 
+ </li>
+
+ <li>
+     Expressive enough to do real computation. 
+ </li>
+
+ <li>
+     Usable for any text language, not just HTML and XML. 
+ </li>
+</ol>
+<p>And requirements for the implementation as well: 
+</p>
+<ol>
+ <li>
+     Sandboxable so that you can let untrusted users write templates. 
+ </li>
+
+ <li>
+     Simple and fast implementation. 
+ </li>
+</ol>
+<p>So here's my entry. 
+</p>
+
+<h2>Variable substitution</h2>
+<pre><code>Look, a $string. 
+Hark, an ${arbitrary + expression}. 
+Gawk, a $dictionary[key].function('argument'). 
+Cool, a $(limit)ing. 
+
+Stop, \$money isn't evaluated.
+</code></pre><p>We use basically the same semantics as (rejected) <a href="http://www.python.org/peps/pep-0215.html">PEP 
+215</a>. Variables can go 
+   anywhere in a document. 
+</p>
+
+<h2>Newline suppression</h2>
+<pre><code>If you put a backslash \ 
+at the end of a line \ 
+(like these) \ 
+then there will be no newline.
+</code></pre><p>renders as all one line. 
+</p>
+
+<h2>Expressions</h2>
+<pre><code>Here are some expressions: 
+
+$for var in iterator: I like $var! 
+
+$if times &gt; max: 
+    Stop! In the name of love. 
+$else: 
+    Keep on, you can do it. 
+
+That's all, folks.
+</code></pre><p>All your old Python friends are here: <code>if</code>, <code>while</code>, <code>for</code>, <code>else</code>, <code>break</code>, <code>continue</code>, and <code>pass</code> also act as you'd 
+   expect. (Obviously, you can't have variables named any of these.) The 
+   Python code starts at the <code>$</code> and ends at the <code>:</code>. The <code>$</code> has to be 
+   at the beginning of the line, but that's not such a burden because of 
+   newline suppression (above). 
+</p>
+<p>Also, we're very careful about spacing -- all the lines will render 
+   with no spaces at the beginning. (Open question: what if you want 
+   spaces at the beginning?)  Also, a trailing space might break your
+   code.
+</p>
+<p>There are a couple changes from Python: <code>for</code> and <code>while</code> now take an 
+   <code>else</code> clause that gets called if the loop is never evaluated. 
+</p>
+<p>(Possible feature to add: Django-style for loop variables.) 
+</p>
+
+<h2>Comments</h2>
+<pre><code>$# Here's where we hoodwink the folks at home: 
+
+Please enter in your deets: 
+
+CC: [       ]  $#this is the important one 
+SSN: $#Social Security Number#$ [       ]
+</code></pre><p>Comments start with <code>$#</code> and go to <code>#$</code> or the end of the line, 
+   whichever is first. 
+</p>
+
+<h2>Code</h2>
+<p><strong>NOTE: This feature has not been implemented in the current web.py implementation of templetor.</strong>
+</p>
+<pre><code>Sometimes you just need to break out the Python. 
+
+$ mapping = { 
+$   'cool': ['nice', 'sweet', 'hot'], 
+$   'suck': ['bad', 'evil', 'awful'] 
+$ } 
+
+Isn't that $mapping[thought]? 
+That's$ del mapping $ fine with me. 
+
+$ complicatedfunc() 
+
+$ for x in bugs: 
+    $ if bug.level == 'severe': 
+        Ooh, this one is bad. 
+        $ continue 
+    And there's $x...
+</code></pre><p><strong>Body of loops have to be indented with exactly 4 spaces.</strong>
+</p>
+<p>Code begins with a <code>$</code> and a space and goes until the next <code>$</code> or the 
+   end of the line, whichever comes first. Nothing ever gets output if 
+   the first character after the <code>$</code> is a space (so <code>complicatedfunc</code> 
+   above doesn't write anything to the screen like it might without the 
+   space). 
+</p>
+
+<h2>Python integration</h2>
+<p>A template begins with a line like this:
+</p>
+<pre><code>$def with (name, title, company='BigCo')
+</code></pre><p>which declares that the template takes those arguments. (The <code>with</code> 
+   keyword is special, like <code>def</code> or <code>if</code>.) 
+</p>
+<p><strong>Don't forget to put spaces in the definition</strong>
+</p>
+<p>The following <em>will not work</em>:
+</p>
+<pre><code>$def with (name,title,company='BigCo')
+</code></pre><p>Inside Python, the template looks like a function that takes these 
+   arguments. It returns a storage object with the special property that 
+   evaluating it as a string returns the value of the body of the 
+   template. The elements in the storage object are the results of the 
+   <code>def</code>s and the <code>set</code>s. 
+</p>
+<p>Perhaps an example will make this clearer. Here's a template, &quot;entry&quot;: 
+</p>
+<pre><code>$def with (post)
+
+$var title: $post.title 
+
+&lt;p&gt;$markdown(post.body)&lt;/p&gt; 
+
+&lt;p class=&quot;byline&quot;&gt;by $post.author&lt;/p&gt;
+</code></pre><p>Here's another; &quot;base&quot;: 
+</p>
+<pre><code>$def with (self)
+&lt;html&gt;&lt;head&gt; 
+  &lt;title&gt;$self.title&lt;/title&gt; 
+&lt;/head&gt;&lt;body&gt; 
+&lt;h1&gt;$self.title&lt;/h1&gt; 
+
+$:self 
+&lt;/body&gt;&lt;/html&gt;
+</code></pre><p>Now let's say we compile both from within Python, the first as <code>entry</code>, 
+   the second as <code>base</code>. Here's how we might use them: 
+</p>
+<pre><code>print base( entry( post ) )
+</code></pre><p><code>entry</code> takes the argument post and returns an object whose string 
+   value is a bit of HTML showing the post with its title in the property 
+   <code>title</code>. <code>base</code> takes this object and places the title in the 
+   appropriate place and displays the page itself in the body of the 
+   page. The Python code prints out the result. 
+</p>
+<p>_Where did <code>markdown</code> come from? It wasn't passed as an argument._ You 
+   can pass a list of functions and variables to the template compiler to 
+   be made globally available to templates.
+   <em>Why $:self?</em> See below
+</p>
+<p>Here's an example:
+</p>
+<pre><code>import template
+render = template.render('templates/')
+template.Template.globals['len'] = len
+
+print render.base(render.message('Hello, world!'))
+</code></pre><p>The first line imports templetor. The second says that our templates are in the directory <code>templates/</code>. The third give all our templates access to the <code>len</code> function. The fourth grabs the template <code>message.html</code>, passes it the argument <code>'Hello, world!'</code>, passes the result of rendering it to <a href="http://www.buyitcert.com/mcitp.html">mcitp</a> the template <code>base.html</code> and prints the result. (If your templates don't end in <code>.html</code> or <code>.xml</code>, templetor will still find them, but it won't do its automatic HTML-encoding.)
+</p>
+
+<h2>Turning Off Filter</h2>
+<p>By default <code>template.render</code> will use <code>web.websafe</code> filter to do HTML-encoding. To turn it off, put a : after the $ as in:
+</p>
+<pre><code>$:form.render()
+</code></pre><p>Output from form.render() will be displayed as is.
+</p>
+<pre><code>$:fooBar    $# fooBar = &lt;span&gt;lorem ipsum&lt;/span&gt;
+</code></pre><p>Output from variable in template will be displayed as is.
+</p>
+
+<h2>Including / nesting templates</h2>
+<p>If you want to nest one template within another, you nest the <code>render()</code> calls, and then include the variable (unfiltered) in the page.
+   In your handler:
+</p>
+<pre><code>print render.foo(render.bar())
+</code></pre><p>or (to make things a little more clear):
+</p>
+<pre><code>barhtml = render.bar()
+print render.foo(barhtml)
+</code></pre><p>Then in the template <code>foo.html</code>:
+</p>
+<pre><code>$def with (bar)
+html goes here
+$:bar
+more html
+</code></pre><p>This replaces the <code>$:bar</code> with the output of the <code>render.bar()</code> call (which is why it must be <code>$:</code>/unfiltered, so <a href="http://www.buyitcert.com/ccnp.html">ccnp</a> that you get un-encoded HTML (unless you want something else of course)).  You can pass variables in, in the same way:
+</p>
+<pre><code>print render.foo(render.bar(baz), qux)
+</code></pre><p>In the template bar (<code>bar.html</code>):
+</p>
+<pre><code>$def with (baz)
+bar stuff goes here + baz
+</code></pre><p>In template foo (<code>foo.html</code>):
+</p>
+<pre><code>$def with (bar, qux)
+html goes here
+$:bar
+Value of qux is $qux
+</code></pre>
+<h2>Links</h2>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

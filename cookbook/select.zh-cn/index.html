@@ -1,0 +1,158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>db.select 查询 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; db.select 查询
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>db.select 查询</h1>
+
+<h2>问题:</h2>
+<p>怎样执行数据库查询？
+</p>
+
+<h2>解决方案:</h2>
+<p>如果是0.3版本, 连接部分大致如下:
+</p>
+<pre><code>db = web.database(dbn='postgres', db='mydata', user='dbuser', pw='')
+</code></pre><p>当获取数据库连接后, 可以这样执行查询数据库:
+</p>
+<pre><code># Select all entries from table 'mytable'
+entries = db.select('mytable')
+</code></pre><p>select方法有下面几个参数:
+</p>
+<ul>
+ <li>
+     vars
+ </li>
+
+ <li>
+     what
+ </li>
+
+ <li>
+     where
+ </li>
+
+ <li>
+     order
+ </li>
+
+ <li>
+     group
+ </li>
+
+ <li>
+     limit
+ </li>
+
+ <li>
+     offset
+ </li>
+
+ <li>
+     _test
+ </li>
+</ul>
+
+<h3>vars</h3>
+<p>vars变量用来填充查询条件.  如:
+</p>
+<pre><code>myvar = dict(name=&quot;Bob&quot;)
+results = db.select('mytable', myvar, where=&quot;name = $name&quot;)
+</code></pre>
+<h3>what</h3>
+<p>what是标明需要查询的列名, 默认是*, 但是你可以标明需要查询哪些列.
+</p>
+<pre><code>results = db.select('mytable', what=&quot;id,name&quot;)
+</code></pre>
+<h3>where</h3>
+<p>where查询条件, 如:
+</p>
+<pre><code>results = db.select('mytable', where=&quot;id&gt;100&quot;)
+</code></pre>
+<h3>order</h3>
+<p>排序方式:
+</p>
+<pre><code>results = db.select('mytable', order=&quot;post_date DESC&quot;)
+</code></pre>
+<h3>group</h3>
+<p>按group组排列.
+</p>
+<pre><code>results = db.select('mytable', group=&quot;color&quot;)
+</code></pre>
+<h3>limit</h3>
+<p>从多行中返回limit查询. 
+</p>
+<pre><code>results = db.select('mytable', limit=10)
+</code></pre>
+<h3>offset</h3>
+<p>偏移量, 从第几行开始.   <br />
+</p>
+<pre><code>results = db.select('mytable', offset=10)
+</code></pre>
+<h3>_test</h3>
+<p>查看运行时执行的SQL语句:
+</p>
+<pre><code>results = db.select('mytable', offset=10, _test=True) 
+&lt;sql: 'SELECT * FROM mytable OFFSET 10'&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

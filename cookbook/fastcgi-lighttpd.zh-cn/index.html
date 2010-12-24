@@ -1,0 +1,195 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>通过Fastcgi和lighttpd部署 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; 通过Fastcgi和lighttpd部署
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>通过Fastcgi和lighttpd部署</h1>
+<p>如果你对这个主题有任何问题，可以点击下面的链接访问相应的话题:
+</p>
+<p>http://www.mail-archive.com/webpy@googlegroups.com/msg02800.html
+</p>
+<p>下面的代码基于lighttpd 1.4.18，更高版本也可以工作
+</p>
+
+<h2>Note:  <br /></h2>
+<ul>
+ <li>
+     你可以重命名 <code>code.py</code>为任何你自己愿意的名字，该例子还是以code.py为例。
+ </li>
+
+ <li>
+     <code>/path-to/webpy-app</code> 为包含你的 <code>code.py</code>代码的路径。
+ </li>
+
+ <li>
+     <code>/path-to/webpy-app/code.py</code> 应该是你的<strong>python file</strong>的完整路径。
+ </li>
+</ul>
+<p>如果你还不确定你的lighttpd版本的话，你可以在命令行中使用<code>lighttpd -v</vode>查看相应的版本信息。
+</p>
+<p>Note: 较早版本的lighttpd可能会按照不同的方式组织.conf文件，但是它们应该遵循的是相同的原则。
+</p>
+
+<h3>ligghttpd 在 Debian GNU/Linux 下的配置文件</h3>
+<pre>
+Files and Directories in /etc/lighttpd:
+---------------------------------------
+
+lighttpd.conf:
+         main configuration file
+
+conf-available/
+        This directory contains a series of .conf files. These files contain
+        configuration directives necessary to load and run webserver modules.
+        If you want to create your own files they names should be
+        build as nn-name.conf where "nn" is two digit number (number
+        is used to find order for loading files)
+
+conf-enabled/
+        To actually enable a module for lighttpd, it is necessary to create a
+        symlink in this directory to the .conf file in conf-available/.
+
+Enabling and disabling modules could be done by provided
+/usr/sbin/lighty-enable-mod and /usr/sbin/lighty-disable-mod scripts.
+</pre>
+
+<p><strong>
+   对于web py， 你需要允许 mod_fastcgi 模块和 mod_rewrite模块, 运行: <code>/usr/sbin/lighty-enable-mod</code> 启用 <code>fastcgi</code> （Mac OS X可能不需要）  <br />
+   (mod_rewrite 模块可能需要启用 <code>10-fastcgi.conf</code>文件).
+</p>
+
+<h2>下面是文件的基本结构（Mac OS X不同）:</h2>
+<ul>
+ <li>
+     <code>/etc/lighttpd/lighttpd.conf</code>
+ </li>
+
+ <li>
+     <code>/etc/lighttpd/conf-available/10-fastcgi.conf</code>
+ </li>
+
+ <li>
+     <code>code.py</code>
+ </li>
+</ul>
+<p>对于Mac OS X或任何以Mac Ports邓方式安装的lighttpd，可以直接在路径下编写.conf文件并用lighttpd -f xxx.conf启动lighttpd，而无需去修改或考虑任何文件结构。
+</p>
+<p><code>/etc/lighttpd/lighttpd.conf</code>
+</p>
+<pre>
+server.modules              = (
+            "mod_access",
+            "mod_alias",
+            "mod_accesslog",
+            "mod_compress",
+)
+server.document-root       = "/path-to/webpy-app"
+</pre>
+
+<p>对我来说，我使用 postgresql，因此需要授予对的数据库权限，可以添加行如下（如果不使用则不需要）。
+</p>
+<pre>
+server.username = "postgres"
+</pre>
+
+<p><code>/etc/lighttpd/conf-available/10-fastcgi.conf</code>
+</p>
+<pre>
+server.modules   += ( "mod_fastcgi" )
+server.modules   += ( "mod_rewrite" )
+
+fastcgi.server = ( "/code.py" =>
+ (( "socket" => "/tmp/fastcgi.socket",
+    "bin-path" => "/path-to/webpy-app/code.py",
+    "max-procs" => 1,
+   "bin-environment" => (
+     "REAL_SCRIPT_NAME" => ""
+   ),
+   "check-local" => "disable"
+ ))
+ )
+
+如果本地的lighttpd跑不起来的话，需要设置check-local属性为disable。
+
+url.rewrite-once = (
+   "^/favicon.ico$" => "/static/favicon.ico",
+   "^/static/(.*)$" => "/static/$1",
+   "^/(.*)$" => "/code.py/$1",
+ )
+</pre>
+
+<p><code>/code.py</code>  <br />
+   在代码头部添加以下代码，让系统环境使用系统环境中当前的python
+</p>
+<pre>
+#!/usr/bin/env python
+</pre>
+
+<p>最后不要忘记了要对需要执行的py代码设置执行权限，否则你可能会遇到“permission denied”错误。
+</p>
+<pre>
+$ chmod 755 /path-to/webpy-app/code.py
+</pre>
+
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

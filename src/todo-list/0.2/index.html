@@ -1,0 +1,275 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Basic Todo List in 0.2 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Basic Todo List in 0.2
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Basic Todo List in 0.2</h1>
+<p>Uses <em>web.py</em> microframework: <code>web.py</code>, <code>template.py</code>, <code>form.py</code>.
+</p>
+<p>Requires <code>PostgreSQL</code>, <code>lighttpd</code>, <code>psycopg2</code> and <code>flup</code>.
+</p>
+<p>Note: This code is beta. This means: 2xplore at your own risk ;)
+</p>
+
+<h1>Files:</h1>
+<pre><code>tidy/
+  __init__.py
+  app/
+    __init__.py
+    controller.py
+  conf/
+    httpd.conf
+  db/
+    model.sql
+  static/
+    favicon.ico
+    icon.jpg
+    style.css
+  views/
+    base.html
+    login.html
+    todos.html
+</code></pre>
+<h2>Main:</h2>
+<p><strong>init</strong>.py
+</p>
+<pre><code>#! /usr/bin/env python
+'tidy: a tiny todo list web engine.'
+__version__ = '0.01beta' 
+__author__  = 'domimob'
+__license__ = 'public domain'
+#
+# Modules import.
+import web, app.controller
+#
+# App definition, via URL to class mapping.
+tidy = (
+    '/', 'app.controller.Index',
+    '/session', 'app.controller.Session',
+    '/todo/add', 'app.controller.ToDo',
+    '/todo/del/(\d+)', 'app.controller.ToDo',
+    '/style.css', 'app.controller.Style' ,)
+#
+# Database connection definition.
+web.db_parameters = dict (
+    dbn='postgres',
+    user='domimob',
+    pw='passwd', 
+    db='tidydb' )
+#
+# App execution.
+if __name__ == '__main__': web.run(tidy)
+</code></pre>
+<h2>Model:</h2>
+<p>db/model.sql
+</p>
+<pre><code>-- PostgreSQL database model.
+--
+create table todos (id serial primary key, title text);
+</code></pre>
+<h2>Controller:</h2>
+<p>app/<strong>init</strong>.py
+</p>
+<pre><code># Application modules import.
+#
+import controller
+</code></pre><p>app/controller.py
+</p>
+<pre><code>'todo-list web engine controller.'
+__version__ = '0.01beta' 
+__author__  = 'domimob' 
+#
+# Modules import.
+import web, template, form
+#
+# Views directory definition.
+view = template.render('views/')
+# 
+# Forms definition.
+loginForm = form.Form(form.Password('password'))
+addForm = form.Form(form.Textbox('new', form.notnull))
+#
+# RESTful class definition.
+class Index:
+    'Index page object definition.'
+    def GET(self):
+        'Render the index page.'
+        session = web.cookies()
+        if not session:
+            form = loginForm()
+            print view.base(view.login(form))
+        else:
+            list = web.select('todos')
+            form = addForm()
+            print view.base(view.todos(list, form), session)
+#
+class Session:
+    'Session object definition.'
+    def GET(self):
+        'Manage the user logout.'
+        web.setcookie('user', '', 'Mon, 01-Jan-2000 00:00:00 GMT') 
+        web.redirect('/')
+    def POST(self):
+        'Manage the user login.'
+        login = web.input()
+        if login.password == web.db_parameters['pw']:
+            web.setcookie('user', web.db_parameters['user'])
+        web.redirect('/')
+#
+class ToDo:
+    'ToDo object definition.'
+    def GET(self, id):
+        'Delete a todo item, identified by parameter id.'
+        web.delete('todos', int(id))
+        web.redirect('/')
+    def POST(self):
+        'Add a todo item.'
+        form = addForm()
+        if form.validates():
+            todo = web.input()
+            web.insert('todos', title=todo.new)
+        web.redirect('/')
+#
+class Style:
+    'Style object definition.'
+    def GET(self):
+        'Render the stylesheet.'
+        web.header(&quot;Content-Type&quot;,&quot;text/css; charset=utf-8&quot;)
+        print open('static/style.css').read()
+</code></pre>
+<h2>Views:</h2>
+<p>views/base.html
+</p>
+<pre><code>$def with (view, session=None)
+$# Base view definition.
+$#
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;tidy&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://domimob.infogami.com/wiki/style.css&quot;/&gt;
+&lt;/head&gt; 
+&lt;body&gt; 
+    &lt;table class=&quot;base&quot;&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;img src=&quot;static/icon.jpg&quot;/&gt;&lt;/td&gt;&lt;/tr&gt;
+        $if session:
+            &lt;tr&gt;&lt;td&gt;&lt;h3&gt;$session.user's todo list&lt;/h3&gt;&lt;/tr&gt;&lt;/td&gt;
+        $else:
+            &lt;tr&gt;&lt;td&gt;&lt;h3&gt;a tiny todo list web engine&lt;/h3&gt;&lt;/tr&gt;&lt;/td&gt;
+        &lt;tr&gt;&lt;td&gt;$:view&lt;/tr&gt;&lt;/td&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>views/todos.html
+</p>
+<pre><code>$def with (list, form)
+$# Todos view definition.
+$# 
+$for todo in list:
+    &lt;a class =&quot;todo&quot; href=&quot;todo/del/$todo.id&quot; title=&quot;click to delete&quot;&gt;$todo.title&lt;/a&gt;&lt;br/&gt;
+&lt;form method=&quot;post&quot; action=&quot;todo/add&quot;&gt;
+    &lt;br/&gt;$:form.render()
+&lt;/form&gt;
+&lt;a href=&quot;/session&quot;&gt;.logout&lt;/a&gt;
+</code></pre><p>views/login.html
+</p>
+<pre><code>$def with (form)
+$# Login view definition.
+$#
+&lt;form method=&quot;post&quot; action=&quot;session&quot;&gt;
+    &lt;br/&gt;$:form.render()
+&lt;/form&gt;
+</code></pre>
+<h2>Static Files:</h2>
+<p>static/style.css
+</p>
+<pre><code>body { text-align: left; font-family: arial; color: #C0C0C0 } 
+table.base { width: 50%; text-align: left; margin: auto } 
+a { text-decoration: none; color: gray } 
+a:hover { text-decoration: overline }
+a.todo { text-decoration: none; font-weight: bolder; color: black } 
+a.todo:hover { text-decoration: line-through }
+</code></pre>
+<h2>Web Server:</h2>
+<p>conf/httpd.conf
+</p>
+<pre><code># LigHTTPd web server configuration.
+#
+# Server configuration.
+server.document-root = &quot;/Users/domimob/lab/tidy/&quot;
+server.modules = (&quot;mod_fastcgi&quot;, &quot;mod_rewrite&quot;)
+server.port = 8080
+#
+# FastCGI configuration.
+fastcgi.server = ( 
+    &quot;__init__.py&quot; =&gt; ((
+        &quot;bin-path&quot; =&gt; server.document-root + &quot;/__init__.py&quot;,
+        &quot;socket&quot; =&gt; &quot;/tmp/fastcgi.socket&quot;,
+        &quot;max-procs&quot; =&gt; 1 )))
+#
+# mod_rewrite configuration.
+url.rewrite-once = (
+    &quot;^/favicon.ico$&quot; =&gt; &quot;/static/favicon.ico&quot;, 
+    &quot;^/static/(.*)$&quot; =&gt; &quot;/static/$1&quot;, 
+    &quot;^/(.*)$&quot; =&gt; &quot;__init__.py/$1&quot; ,)
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

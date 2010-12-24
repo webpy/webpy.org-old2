@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>web.py 0.2 tutorial (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; web.py 0.2 tutorial
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>web.py 0.2 tutorial</h1>
+
+<h2>Starting</h2>
+<p>Du kennst also Python und willst eine Webseite erstellen. web.py gibt dir die Möglichkeit, das leicht zu bewerkstelligen.
+</p>
+<p>Wenn du das ganze Tutorial durcharbeiten willst, wirst du python, web.py, flup, psycopg2 und postgres brauchen. Weitere Details dazu auf <a href="http://webpy.org/">webpy.org</a>.
+</p>
+<p>Wenn du bereits ein web.py Projekt hast, schau am besten auf die <a href="http://webpy.infogami.com/upgrade_to_point2">upgrade</a> Seite (in Englisch) für Informationen zur Migration. 
+</p>
+<p>Legen wir mal los...
+</p>
+
+<h2>URL Handling</h2>
+<p>Der wichtigste Bestandteil einer Website ist die URL Struktur. Die URLs sind nicht nur das, was deine Besucher sehen und an ihre Freunde mailen, sie dienen auch als mentales Model, das zeigt, wie die Webseite funktioniert. Bei bekannten Webseiten wie etwa <a href="http://del.icio.us">del.icio.us</a> sind die URLs sogar ein Teil des Benutzerinterfaces. web.py macht es leicht, gute URLs zu erstellen.
+</p>
+<p>Um mit deinem web.py-Programm anzufangen, öffne eine neue Textdatei (nenn sie <code>code.py</code>) und tippe:
+</p>
+<pre><code>import web
+</code></pre><p>Dadurch wird das web.py-Modul importiert.
+</p>
+<p>Nun müssen wir web.py unsere URL Struktur bekanntmachen, wir beginnen mit etwas Einfachem:
+</p>
+<pre><code>urls = (
+  '/', 'index'    )
+</code></pre><p>Der erste Teil ist ein <a href="http://osteele.com/tools/rework/">regulärer Ausdruck</a> dem die URL entsprechen muss, beispielsweise <code>/</code>, <code>/help/faq</code>, <code>/item/(\d+)</code>, etc. (Das <code>\d+</code> entspricht einer Ziffernfolge. Die runden Klammern bewirken, dass das &quot;gefundene&quot; für später aufgehoben wird. )
+</p>
+<p>Der zweite Teil ist der Name der Klasse an welche die Anfrage geschickt wird, beispielsweise <code>index</code>, <code>view</code>, <code>welcomes.hello</code> (gibt die Anfrage an die Klasse <code>hello</code> des Moduls <code>welcomes</code>), oder <code>get_\1</code>. <code>\1</code> wird durch den ersten Treffer (geklammerten Teil) des regulären Ausdrucks ersetzt, alle verbleibenden Funde werden an die Funktion weitergeleitet.
+</p>
+<p>Diese Zeile sagt das wir die URL <code>/</code> (die Startseite) mit der Klasse namens <code>index</code> bearbeiten wollen.
+</p>
+<p>Nun müssen wir die <code>index</code>-Klasse schreiben. Die meisten Leute bemerken es beim Surfen nicht, aber der Browser verwendet eine Sprache, die als HTTP bekannt ist, zur Kommunikation mit dem WWW. Die Details dazu sind nicht wichtig, aber die eigentliche Idee ist, dass die Besucher den Webserver auffordern, bestimmte Funktionen (wie eta <code>GET</code> oder <code>POST</code>) an URLs (wie <code>/</code> oder <code>/foo?f=1</code>) auszuführen.
+</p>
+<p><code>GET</code> ist die bekannteste Funktion. Sie wird verwendet, um den Text oder Inhalt einer Webseite anzufordern. Wenn du in deinem Browser <code>harvard.edu</code> eintippst, dann forderst du im wahrsten Sinne des Wortes den Harvard Webserver auf &quot;to <code>GET /</code>&quot;. Am zweit bekanntesten ist <code>POST</code>. POST wird oft verwendet, wenn man ein Formular abschickt, wie zum Beispiel eine Anfrage etwas zu kaufen. Du benutzt <code>POST</code> immer dann, wenn das Abschicken der Anfrage etwas bewirkt (wenn du die Kreditkarte belastest oder eine Bestellung aufgibst). Das ist sehr wichtig, denn <code>GET</code> URLs können herum gereicht werden und von Suchmaschinen indexiert werden. Das ist zwar etwas, was du für einen Großteil deiner Seite willst, aber bestimmt <em>nicht</em> für Dinge wie Bestellungen aufgeben. (Stell dir vor, Google würde versuchen alles auf deiner Seite zu kaufen).
+</p>
+<p>In unserem web.py-Quellcode können wir diese zwei Funktionen unterscheiden:
+</p>
+<pre><code>class index:
+    def GET(self):
+        print &quot;Hello, world!&quot;
+</code></pre><p>Die <code>GET</code>-Funktion wird nun aufgerufen, wenn jemand eine <code>GET</code> Anfrage an <code>/</code> schickt.
+</p>
+<p>Gut, nun müssen wir nur noch eine Zeile hinzufügen, um web.py zu sagen, dass es Webseiten zur Verfügung stellen soll.
+</p>
+<pre><code>if __name__ == &quot;__main__&quot;: web.run(urls, globals())
+</code></pre><p>Das sagt web.py, dass es die URLs, die wir oben definiert haben bereitstellen soll, indem es die Klassen aufruft, die wir in der Datei global definiert haben.
+</p>
+<p>Nun, obwohl du bereits viel gelesen hast, haben wir eigentlich nur etwa fünf Zeilen geschrieben. Das ist eigentlich auch alles, was du für eine komplette web.py-Applikation brauchst.
+</p>
+<p>Wenn du nun in deine Kommandozeile gehst und folgendes tippst:
+</p>
+<pre><code>$ python code.py
+Launching server: http://0.0.0.0:8080/
+</code></pre><p>Dann wird deine web.py-Applikation einen Webserver auf deinem Computer laufen lassen. Besuche nun die URL und du solltest ein &quot;Hello, world!&quot; sehen. (Du kannst eine IP Addresse/Port nach dem &quot;code.py&quot; hinzufügen um zu kontrollieren, wo genau web.py den Server startet. Du kannst ihm ebenso sagen ob er ein <code>fastcgi</code> oder <code>scgi</code> server starten soll.)
+</p>
+<p><strong>Hinweis:</strong> Du kannst den Port beim Aufruf von 'code.py' angeben, wenn du den Standardwert 8080 nicht benutzen willst oder kannst:
+</p>
+<pre><code>$ python code.py 1234
+</code></pre>
+<h2>Developing</h2>
+<p>Web.py hat ebenso ein paar Tools, die uns beim Debugging helfen. Füge in der letzten Zeile vor <code>if __name__</code> folgendes hinzu:
+</p>
+<pre><code>web.webapi.internalerror = web.debugerror
+</code></pre><p>Das wird dir hilfreiche Fehlermeldungen liefern. Außerdem musst du in der letzten Zeile <code>web.reloader</code> hinzufügen, damit es wie folgt aussieht: 
+</p>
+<pre><code>if __name__ == &quot;__main__&quot;: web.run(urls, globals(), web.reloader)
+</code></pre><p>Das sagt web.py, dass es web.reloader verwenden soll. web.reloader ist eine &quot;middleware&quot; (eine Funktion, die bestimmte Funktionalitäten zu dem Webserver hinzufügt). Diese lädt die Dateien jedesmal neu, nachdem du diese verändert hast. Dadurch sieht du die Änderungen sofort im Browser, ohne den Server neu zu starten. (Bei größeren Änderungen kann es trotzdem sein, dass du den Server neustarten musst). Wahrscheinlich wirst du das wieder herausnehmen wollen wenn du deine Seite Online stellst, aber zum Entwickeln ist es großartig. Außerdem gibt es noch den <code>web.profiler</code>, der zeigt dir am Ende jeder Webseite Informationen darüber, wie lange jede Funktion gebraucht hat, sodass du dein Programm schneller machen kannst. 
+</p>
+
+<h2>Templating</h2>
+<p>HTML von Python aus zu schreiben kann sehr lästig werden; es macht viel mehr spaß, Python innerhalb von HTML zu schreiben. Glücklicherweise macht web.py das ziemlich einfach.
+</p>
+<p><strong>Hinweis:</strong> Ältere Versionen von web.py haben <a href="http://www.cheetahtemplate.org/">Cheetah templates</a> verwendet. Du kannst das natürlich immer noch verwenden. Ebenso kann jede andere Software zusammen mit web.py verwendet werden. Aber Cheetah wird nicht mehr offiziell unterstützt.
+</p>
+<p>Nun, lasst uns ein neues Verzeichnis für unsere templates erstellen (wir nennen es <code>templates</code>). Darin erstellen wir eine neue Datei die auf HTML endet (wir nennen sie <code>index.html</code>). Darin kannst du nun normales HTML schreiben:
+</p>
+<pre><code>&lt;em&gt;Hello&lt;/em&gt;, world!
+</code></pre><p>Oder du kannst web.py's <em>templating</em>-Sprache verwenden und Code zu HTML hinzufügen:
+</p>
+<pre><code>$def with (name)
+
+$if name:
+    I just wanted to say &lt;em&gt;hello&lt;/em&gt; to $name.
+$else:
+    &lt;em&gt;Hello&lt;/em&gt;, world!
+</code></pre><p><strong>Achtung: Zur Zeit sind vier Leerzeichen erforderlich für die Einrückung.</strong>
+</p>
+<p>Wie du sehen kannst, sieht das Python-Dateien ähnlich, abgesehen von der <code>def with</code>-Anweisung am Anfang (das sagt dem Template womit es aufgerufen wird) und den <code>$</code>, die vor Codestücken platziert werden. Zur Zeit ist es erforderlich, dass das <code>$def</code>-Statement in der ersten Zeile der Datei steht. Sollte <code>name</code> z.B. <code>&lt;b&gt;test&lt;/b&gt;</code> enthalten so wird auch <code>&lt;b&gt;test&lt;/b&gt;</code> angezeigt, wenn man will das der HTML Code wirklich interpretiert wird, so muss man <code>$:name</code> anstatt <code>$name</code> schreiben.
+</p>
+<p>Nun, zurück zur <code>code.py</code>. Unter der ersten Zeile fügen wir hinzu:
+</p>
+<pre><code>render = web.template.render('templates/')
+</code></pre><p>Damit sucht web.py nach Templates in deinem Template-Verzeichnis. Nun ändere <code>index.GET</code> zu:
+</p>
+<pre><code>name = 'Bob'    
+print render.index(name)
+</code></pre><p>(<code>index</code> ist der Name des Templates und <code>name</code> ist das Argument welches an dieses weitergeleitet wird). 
+</p>
+<p>Besuche deine Seite. Sie sollte nun &quot;hello to Bob&quot; ausgeben.
+</p>
+<p><strong>Entwicklungstipp:</strong> Füge <code>cache=False</code> an das Ende deines <code>render</code>-Aufrufs. Damit wird web.py jedesmal das Template neu laden wenn du die Seite aufrufst.
+</p>
+<p>Nun ändere die URL-Zeile zu:
+</p>
+<pre><code>'/(.*)', 'index'
+</code></pre><p>und ändere die Definition von <code>index.GET</code> zu:
+</p>
+<pre><code>def GET(self, name):
+</code></pre><p>und lösche die Zeile mit <code>name = 'Bob'</code>. Besuche <code>/</code> und es sollte &quot;hello to the world&quot; zu sehen sein. Besuche <code>/Joe</code> und es sollte &quot;hello to Joe&quot; erscheinen.
+</p>
+<p>Wenn du mehr über web.py templates wissen willst, besuche die <a href="/templetor" class="internal">templetor page</a>.
+</p>
+
+<h2>Databasing</h2>
+<p><strong>Hinweis:</strong> Bevor du eine Datenbank benutzen kannst, vergewissere dich das du die entsprechenden Datenbank Bibliotheken installiert hast. Für MySql Datenbanken kannst du <a href="http://sourceforge.net/project/shofiles.php?group_id=22307">MySQLdb</a> verwenden und für Postgres verwende <a href="http://initd.org/pub/software/psycopg/">psycopg2</a>.
+</p>
+<p>Über der <code>web.run</code> Zeile füge folgendes hinzu:
+</p>
+<pre><code>web.config.db_parameters = dict(dbn='postgres', user='username', pw='password', db='dbname')
+</code></pre><p>(Passe die Parameter entsprechend an, vor allem <code>username</code>, <code>password</code>, und <code>dbname</code>. MySQL User sollten <code>dbn</code> zu <code>mysql</code> ändern.)
+   Die Zeile könnte für Sqlite Benutzer in etwa wie folgt aussehen:
+</p>
+<pre><code>web.config.db_parameters = dict(dbn='sqlite', db='data.db')
+</code></pre><p>Erstelle eine einfache Tabellen in deiner Datenbank:
+</p>
+<pre><code>CREATE TABLE todo (
+  id serial primary key,
+  title text,
+  created timestamp default now(),
+  done boolean default 'f'    );
+</code></pre><p>Und füge eine Zeile ein:
+</p>
+<pre><code>INSERT INTO todo (title) VALUES ('Learn web.py');
+</code></pre><p>In <code>code.py</code> ändere <code>index.GET</code> zu:
+</p>
+<pre><code>def GET(self):
+    todos = web.select('todo')
+    print render.index(todos)
+</code></pre><p>und ändere den URL-Handler wieder zurück zu <code>/</code>.
+</p>
+<p>Ändere <code>index.html</code> damit es wie folgt aussieht: 
+</p>
+<pre><code>$def with (todos)
+&lt;ul&gt;
+$for todo in todos:
+    &lt;li id=&quot;t$todo.id&quot;&gt;$todo.title&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre><p>Besuche deine Seite erneut und du wirst dein erstes Todo-Item sehen: &quot;Learn web.py&quot;. Gratuliere, du hast ein voll funktionsfähiges Programm, das aus einer Datenbank liest. Nun wollen wir es auch noch in die Datenbank schreiben lassen.
+</p>
+<p>Füge folgendes am Ende von <code>index.html</code> hinzu:
+</p>
+<pre><code>&lt;form method=&quot;post&quot; action=&quot;add&quot;&gt;
+&lt;p&gt;&lt;input type=&quot;text&quot; name=&quot;title&quot; /&gt; &lt;input type=&quot;submit&quot; value=&quot;Add&quot; /&gt;&lt;/p&gt;
+&lt;/form&gt;
+</code></pre><p>Und ändere deine URLs, damit es so aussieht:
+</p>
+<pre><code>'/', 'index',
+'/add', 'add'
+</code></pre><p>(Passe mit den Kommas auf. Wenn du sie vergisst, fügt Python die Strings zusammen und sieht <code>'/index/addadd'</code>, was nicht das ist, das du haben willst!)
+</p>
+<p>Füge in <code>code.py</code> folgende Klasse hinzu: 
+</p>
+<pre><code>class add:
+    def POST(self):
+        i = web.input()
+        n = web.insert('todo', title=i.title)
+        web.seeother('/')
+</code></pre><p>(Bemerkt? Wir benutzen hier <code>POST</code>)
+</p>
+<p><code>web.input</code> gibt dir Zugriff auf jede Variable die der User durch ein Formular abgeschickt hat. Wenn du Daten von Items mit dem selben Namen verarbeiten willst (wie in etwa bei einer Serie von Checkboxen mit name=&quot;name&quot; benutze:
+</p>
+<pre><code>post_data=web.input(name=[])
+</code></pre><p><code>web.insert</code> fügt eine Zeile zur Datenbanktabelle <code>todo</code> hinzu und gibt die ID der neuen Zeile zurück. <code>seeother</code> leitet den User weiter zu dieser URL.
+</p>
+<p>Kurz: <code>web.transact()</code> startet eine Transaktion. <code>web.commit()</code> übergibt diese. <code>web.rollback()</code> macht die Transaktion nichtig. <code>web.update</code> funktioniert in etwa so wie <code>web.insert</code> außer dass es anstatt eine ID zurückzugeben eine nach dem Tabellennamen benötigt (oder eine <code>WHERE</code> Klausel). 
+</p>
+<p><code>web.input</code>, <code>web.query</code> und einige andere Funktionen in web.py liefern &quot;Storage objects&quot; zurück, sie funktionieren genau wie Dictionaries, außer das du <code>d.foo</code> zusätzlich zu <code>d['foo']</code> verwenden kannst. Das macht vieles einfach lesbar.
+</p>
+<p>Du kannst die ganzen Details dazu und allen anderen web.py-Funktionen in der <a href="http://new.webpy.org/docs">Dokumentation</a> nachlesen.
+</p>
+<p>Das Tutorial endet hier, schau dir die Dokumentation an, um zu sehen was man noch so cooles mit web.py machen kann.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

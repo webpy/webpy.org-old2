@@ -1,0 +1,136 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Use Jinja2 template engine in webpy (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Use Jinja2 template engine in webpy
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Use Jinja2 template engine in webpy</h1>
+
+<h3>Problem</h3>
+<p>How to use Jinja2 (http://jinja.pocoo.org/2/) template engine in webpy?
+</p>
+
+<h3>Solution 1</h3>
+<p>You need to install both Jinja2 and webpy(0.3) first, and then try out the following code snippet:
+</p>
+<pre><code>import web
+from web.contrib.template import render_jinja
+
+urls = (
+        '/(.*)', 'hello'
+        )
+
+app = web.application(urls, globals())
+
+render = render_jinja(
+        'templates',   # Set template directory.
+        encoding = 'utf-8',                         # Encoding.
+    )
+
+# Add/override some global functions.
+#render._lookup.globals.update(
+#       var=newvar,
+#       var2=newvar2,
+#)
+
+class hello:
+    def GET(self, name):
+        return render.hello(name=name)
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre>
+<h3>Template file: templates/hello.html</h3>
+<pre><code>Hello, {{ name }}.
+</code></pre>
+<h3>Solution 2</h3>
+<p>With this solution, you have to specify template name, it's useful if template files are organized in different directories.
+</p>
+<pre><code>import os
+import web
+from jinja2 import Environment,FileSystemLoader
+
+urls = (&quot;/.*&quot;, &quot;hello&quot;)
+app = web.application(urls, globals())
+
+def render_template(template_name, **context):
+    extensions = context.pop('extensions', [])
+    globals = context.pop('globals', {})
+
+    jinja_env = Environment(
+            loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')),
+            extensions=extensions,
+            )
+    jinja_env.globals.update(globals)
+
+    #jinja_env.update_template_context(context)
+    return jinja_env.get_template(template_name).render(context)
+
+class hello:
+    def GET(self):
+        # You can use a relative path as template name, for example, 'ldap/hello.html'.
+        return render_template('hello.html', name='world',)
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

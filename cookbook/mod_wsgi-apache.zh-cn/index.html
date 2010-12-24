@@ -1,0 +1,151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>使用Apache + mod_wsgi部署webpy应用 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; 使用Apache + mod_wsgi部署webpy应用
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>使用Apache + mod_wsgi部署webpy应用</h1>
+<p>下面的步骤在Apache-2.2.3 (Red Hat Enterprise Linux 5.2, x86_64),mod_wsgi-2.0中测试通过。（译者注：本人在Windows2003 + Apache-2.2.15 + mod_wsgi-3.0也测试通过）
+</p>
+<p>注意：
+</p>
+<ul>
+ <li>
+     您可以使用您自己的项目名称替换'appname'。
+ </li>
+
+ <li>
+     您可以使用您自己的文件名称替换'code.py'。
+ </li>
+
+ <li>
+     /var/www/webpy-app 为包含您的code.py的文件夹目录路径。
+ </li>
+
+ <li>
+     /var/www/webpy-app/code.py 是您的python文件的完整路径。
+ </li>
+</ul>
+<p>步骤：
+</p>
+<ul>
+ <li>
+     下载和安装mod_wsgi从它的网站：
+ </li>
+</ul>
+<p><a href="http://code.google.com/p/modwsgi/" class="internal">http://code.google.com/p/modwsgi/</a>. 它将安装一个'.so'的模块到您的apache 模块文件夹，例如：
+</p>
+<pre><code>    /usr/lib64/httpd/modules/
+</code></pre><ul>
+ <li><p>在httpd.conf中配置Apache 加载 mod_wsgi模块和您的项目：
+</p>
+<pre><code>LoadModule wsgi_module modules/mod_wsgi.so
+
+WSGIScriptAlias /appname /var/www/webpy-app/code.py/
+
+Alias /appname/static /var/www/webpy-app/static/
+AddType text/html .py
+
+&lt;Directory /var/www/webpy-app/&gt;
+    Order deny,allow
+    Allow from all
+&lt;/Directory&gt;
+</code></pre>
+ </li>
+
+ <li><p>演示文件 'code.py':
+</p>
+<pre><code>import web
+
+urls = (
+    '/.*', 'hello',
+    )
+
+class hello:
+    def GET(self):
+        return &quot;Hello, world.&quot;
+
+application = web.application(urls, globals()).wsgifunc()
+</code></pre>
+ </li>
+
+ <li><p>在您的浏览器地址栏中输入' http://your_server_name/appname' 来验证它是否可用。
+</p>
+
+ </li>
+</ul>
+
+<h1>注意: mod_wsgi + sessions</h1>
+<p>如果您需要在mod_wsgi中使用sessions，您可以改变您的代码如下：
+</p>
+<pre><code>app = web.application(urls, globals())
+
+curdir = os.path.dirname(__file__)
+session = web.session.Session(app, web.session.DiskStore(curdir + '/' + 'sessions'),)
+
+application = app.wsgifunc()
+</code></pre>
+<h1>mod_wsgi 性能:</h1>
+<p>有关mod_wsgi的性能，请参考mod_wsgi的维基页：    <a href="http://code.google.com/p/modwsgi/wiki/PerformanceEstimates" class="internal">http://code.google.com/p/modwsgi/wiki/PerformanceEstimates</a>
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

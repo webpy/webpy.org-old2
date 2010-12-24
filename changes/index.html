@@ -1,0 +1,1074 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Change log (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Change log
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Change log</h1>
+<p><strong> 2010-03-20: web.py 0.34</strong>
+</p>
+<ul>
+ <li>
+     fix: boolen test works even for sqlite results (tx Emyr Thomas for the idea)
+ </li>
+
+ <li>
+     fix issue with loop.xx variables in templetor (Bug#476708)
+ </li>
+
+ <li>
+     hide unwanted tracebacks in debugerror
+ </li>
+
+ <li>
+     display correct template line numbers in debugerror
+ </li>
+
+ <li>
+     new utilities: counter, safeiter, safewrite, requeue, restack (by Aaron Swartz)
+ </li>
+
+ <li>
+     various form.py fixes and improvements
+ </li>
+
+ <li>
+     automatically escape % characters in the db query (Bug#516516)
+ </li>
+
+ <li>
+     fix non-deterministic template order (Bug#490209)
+ </li>
+
+ <li>
+     attachment support for web.sendmail (tx gregglind)
+ </li>
+
+ <li>
+     template.py optimizations and extension support
+ </li>
+</ul>
+<p><strong>2009-10-28: web.py 0.33</strong>
+</p>
+<ul>
+ <li>
+     form.Button takes optional argument <code>html</code>
+ </li>
+
+ <li>
+     remove obsolete write function in http.py (tx Justin) (Bug#315337)
+ </li>
+
+ <li>
+     refactor httpserver.runsimple code
+ </li>
+
+ <li>
+     improve form.py for customizability
+ </li>
+
+ <li>
+     new: add background updating to memoize
+ </li>
+
+ <li>
+     fix: use sendmail from web.config.sendmail_path (tx Daniel Schwartz)
+ </li>
+
+ <li>
+     fix: make web.profiler work on Windows (tx asmo) (Bug#325139)
+ </li>
+
+ <li>
+     fix changequery to make it work correctly even when the input has multi-valued fields (Bug#118229)
+ </li>
+
+ <li>
+     fix: make sure sequence exists before queying for currval(seqname) when executing postgres insert query (Bug#268705)
+ </li>
+
+ <li>
+     fix: raise web.notfound() instead of return in autodelegate (tx SeC) 
+ </li>
+
+ <li>
+     fix: raise NotSupportedError when len or bool is used on sqlite result (Bug#179644)
+ </li>
+
+ <li>
+     fix: make db paramater optional for creating postgres DB to allow taking it from environ. (Bug#153491)
+ </li>
+
+ <li>
+     fix unicode errors in db module
+ </li>
+
+ <li>
+     fix: convert unicode strings to UTF8 before printing SQL queries
+ </li>
+
+ <li>
+     fix unicode error in debugerror
+ </li>
+
+ <li>
+     fix: don't convert file upload data to unicode even when file={} is not passed to web.input
+ </li>
+
+ <li>
+     fix checkbox value/checked confusion (Bug#128233)
+ </li>
+
+ <li>
+     fix: consider empty lines as part of the indented block in templetor
+ </li>
+
+ <li>
+     fix: fix a bug in web.group
+ </li>
+</ul>
+<p><strong>2009-06-04: web.py 0.32</strong>
+</p>
+<ul>
+ <li>
+     optional from_address to web.emailerrors
+ </li>
+
+ <li>
+     upgrade wsgiserver to CherryPy/3.1.2
+ </li>
+
+ <li>
+     support for extensions in Jinja2 templates (tx Zhang Huangbin)
+ </li>
+
+ <li>
+     support web.datestr for datetime.date objects also
+ </li>
+
+ <li>
+     support for lists in db queries
+ </li>
+
+ <li>
+     new: uniq and iterview
+ </li>
+
+ <li>
+     fix: set debug=False when application is run with mod_wsgi (tx
+     Patrick Swieskowski)
+     <a href="https://bugs.launchpad.net/webpy/+bug/370904">Bug#370904</a>
+ </li>
+
+ <li>
+     fix: make web.commify work  with decimals
+     <a href="https://bugs.launchpad.net/webpy/+bug/317204">Bug#317204</a>
+ </li>
+
+ <li>
+     fix: unicode issues with sqlite database
+     <a href="https://bugs.launchpad.net/webpy/+bug/373219">Bug#373219</a>
+ </li>
+
+ <li>
+     fix: urlquote url when the server is lighttpd
+     <a href="https://bugs.launchpad.net/webpy/+bug/339858">Bug#339858</a>
+ </li>
+
+ <li>
+     fix: issue with using date.format in templates
+ </li>
+
+ <li>
+     fix: use TOP instead of LIMIT in mssql database
+     <a href="https://bugs.launchpad.net/webpy/+bug/324049">Bug#324049</a>
+ </li>
+
+ <li>
+     fix: make sessions work well with expirations
+ </li>
+
+ <li>
+     fix: accept both list and tuple as arg values in form.Dropdown
+     <a href="https://bugs.launchpad.net/webpy/+bug/314970">Bug#314970</a>
+ </li>
+
+ <li>
+     fix: match parenthesis when parsing <code>for</code> statement in templates
+ </li>
+
+ <li>
+     fix: fix python 2.3 compatibility
+ </li>
+
+ <li>
+     fix: ignore dot folders when compiling templates (tx Stuart Langridge)
+ </li>
+
+ <li>
+     fix: don't consume KeyboardInterrupt and SystemExit errors
+ </li>
+
+ <li>
+     fix: make application work well with iterators
+ </li>
+</ul>
+<p><strong> 2008-12-10: 0.31</strong>
+</p>
+<ul>
+ <li>
+     new: browser module
+ </li>
+
+ <li>
+     new: test utilities
+ </li>
+
+ <li>
+     new: ShelfStore
+ </li>
+
+ <li>
+     fix: web.cookies error when default is None
+ </li>
+
+ <li>
+     fix: paramstyle for OracleDB (tx kromakey)
+ </li>
+
+ <li>
+     fix: performance issue in SQLQuery.join
+ </li>
+
+ <li>
+     fix: use wsgi.url_scheme to find ctx.protocol
+ </li>
+</ul>
+<p><strong>2008-12-06: 0.3</strong>
+</p>
+<ul>
+ <li>
+     new: replace print with return (<i>backward-incompatible</i>)
+ </li>
+
+ <li>
+     new: application framework (<i>backward-incompatible</i>)
+ </li>
+
+ <li>
+     new: modular database system (<i>backward-incompatible</i>)
+ </li>
+
+ <li>
+     new: templetor reimplementation
+ </li>
+
+ <li>
+     new: better unicode support
+ </li>
+
+ <li>
+     new: debug mode (web.config.debug)
+ </li>
+
+ <li>
+     new: better db pooling
+ </li>
+
+ <li>
+     new: sessions
+ </li>
+
+ <li>
+     new: support for GAE
+ </li>
+
+ <li>
+     new: etag support
+ </li>
+
+ <li>
+     new: web.openid module
+ </li>
+
+ <li>
+     new: web.nthstr
+ </li>
+
+ <li>
+     fix: various form.py fixes
+ </li>
+
+ <li>
+     fix: python 2.6 compatibility
+ </li>
+
+ <li>
+     fix: file uploads are not loaded into memory
+ </li>
+
+ <li>
+     fix: SQLLiteral issue (Bug#180027)
+ </li>
+
+ <li>
+     change: web.background is moved to experimental (<i>backward-incompatible</i>) 
+ </li>
+
+ <li>
+     improved API doc generation (tx Colin Rothwell)
+ </li>
+</ul>
+<p><strong>2008-01-19: 0.23</strong>
+</p>
+<ul>
+ <li>
+     fix: for web.background gotcha (<a href="http://bugs.launchpad.net/webpy/+bug/133079">133079</a>)
+ </li>
+
+ <li>
+     fix: for postgres unicode bug (<a href="http://bugs.launchpad.net/webpy/+bug/177265">177265</a>)
+ </li>
+
+ <li>
+     fix: web.profile behavior in python 2.5 (<a href="http://bugs.launchpad.net/webpy/+bug/133080">133080</a>)
+ </li>
+
+ <li>
+     fix: only uppercase HTTP methods are allowed. (<a href="http://bugs.launchpad.net/webpy/+bug/176415">176415</a>)
+ </li>
+
+ <li>
+     fix: transaction error in with statement (<a href="http://bugs.launchpad.net/webpy/+bug/125118">125118</a>)
+ </li>
+
+ <li>
+     fix: fix in web.reparam (<a href="http://bugs.launchpad.net/webpy/+bug/162085">162085</a>)
+ </li>
+
+ <li>
+     fix: various unicode issues (<a href="http://bugs.launchpad.net/webpy/+bug/137042">137042</a>, <a href="http://bugs.launchpad.net/webpy/+bug/180510">180510</a>, <a href="http://bugs.launchpad.net/webpy/+bug/180549">180549</a>, <a href="http://bugs.launchpad.net/webpy/+bug/180653">180653</a>)
+ </li>
+
+ <li>
+     new: support for https
+ </li>
+
+ <li>
+     new: support for secure cookies
+ </li>
+
+ <li>
+     new: sendmail
+ </li>
+
+ <li>
+     new: htmlunquote
+ </li>
+</ul>
+<p><strong>2007-08-23: 0.22</strong>
+</p>
+<ul>
+ <li>
+     compatibility with new DBUtils API (<a href="https://bugs.launchpad.net/webpy/+bug/122112">122112</a>)
+ </li>
+
+ <li>
+     fix reloading (<a href="https://bugs.launchpad.net/webpy/+bug/118683">118683</a>)
+ </li>
+
+ <li>
+     fix compatibility between <code>changequery</code> and <code>redirect</code> (<a href="https://bugs.launchpad.net/webpy/+bug/118234">118234</a>)
+ </li>
+
+ <li>
+     fix relative URI in <code>web.redirect</code> (<a href="https://bugs.launchpad.net/webpy/+bug/118236">118236</a>)
+ </li>
+
+ <li>
+     fix <code>ctx._write</code> support in built-in HTTP server (<a href="https://bugs.launchpad.net/webpy/+bug/121908">121908</a>)
+ </li>
+
+ <li>
+     fix <code>numify</code> strips things after '.'s (<a href="https://bugs.launchpad.net/webpy/+bug/118644">118644</a>)
+ </li>
+
+ <li>
+     fix various unicode isssues (<a href="https://bugs.launchpad.net/webpy/+bug/114703">114703</a>, <a href="https://bugs.launchpad.net/webpy/+bug/120644">120644</a>, <a href="https://bugs.launchpad.net/webpy/+bug/124280">124280</a>)
+ </li>
+</ul>
+<p><strong>2007-05-28: 0.21</strong>
+</p>
+<ul>
+ <li>
+     <strong>security fix:</strong> prevent bad characters in headers
+ </li>
+
+ <li>
+     support for cheetah template reloading                    <br />
+ </li>
+
+ <li>
+     support for form validation                               <br />
+ </li>
+
+ <li>
+     new <code>form.File</code>                                           <br />
+ </li>
+
+ <li>
+     new <code>web.url</code>                                             <br />
+ </li>
+
+ <li>
+     fix rendering issues with hidden and button inputs        <br />
+ </li>
+
+ <li>
+     fix 2.3 incompatability with <code>numify</code>                     <br />
+ </li>
+
+ <li>
+     fix multiple headers with same name                       <br />
+ </li>
+
+ <li>
+     fix web.redirect issues when homepath is not /            <br />
+ </li>
+
+ <li>
+     new CherryPy wsgi server                                  <br />
+ </li>
+
+ <li>
+     new nested transactions                                   <br />
+ </li>
+
+ <li>
+     new sqlliteral                                            <br />
+ </li>
+</ul>
+<p><strong>2006-05-09: 0.138</strong>
+</p>
+<ul>
+ <li>
+     New function: <code>intget</code>
+ </li>
+
+ <li>
+     New function: <code>datestr</code>
+ </li>
+
+ <li>
+     New function: <code>validaddr</code>
+ </li>
+
+ <li>
+     New function: <code>sqlwhere</code>
+ </li>
+
+ <li>
+     New function: <code>background</code>, <code>backgrounder</code>
+ </li>
+
+ <li>
+     New function: <code>changequery</code>
+ </li>
+
+ <li>
+     New function: <code>flush</code>
+ </li>
+
+ <li>
+     New function: <code>load</code>, <code>unload</code>
+ </li>
+
+ <li>
+     New variable: <code>loadhooks</code>, <code>unloadhooks</code>
+ </li>
+
+ <li>
+     Better docs; generating <a href="documentation">docs</a> from web.py now
+ </li>
+
+ <li>
+     global variable <code>REAL_SCRIPT_NAME</code> can now be used to work around lighttpd madness
+ </li>
+
+ <li>
+     fastcgi/scgi servers now can listen on sockets
+ </li>
+
+ <li>
+     <code>output</code> now encodes Unicode
+ </li>
+
+ <li>
+     <code>input</code> now takes optional <code>_method</code> argument
+ </li>
+
+ <li>
+     <strong>Potentially-incompatible change:</strong> <code>input</code> now returns <code>badrequest</code> automatically when <code>requireds</code> aren't found
+ </li>
+
+ <li>
+     <code>storify</code> now takes lists and dictionaries as requests (see docs)
+ </li>
+
+ <li>
+     <code>redirect</code> now blanks any existing output
+ </li>
+
+ <li>
+     Quote SQL better when <code>db_printing</code> is on
+ </li>
+
+ <li>
+     Fix delay in <code>nomethod</code>
+ </li>
+
+ <li>
+     Fix <code>urlquote</code> to encode better.
+ </li>
+
+ <li>
+     Fix 2.3 incompatibility with <code>iters</code> (tx ??)
+ </li>
+
+ <li>
+     Fix duplicate headers
+ </li>
+
+ <li>
+     Improve <code>storify</code> docs
+ </li>
+
+ <li>
+     Fix <code>IterBetter</code> to raise IndexError, not KeyError
+ </li>
+</ul>
+<p><strong>2006-03-27: 0.137</strong>
+</p>
+<ul>
+ <li>
+     Add function <code>dictfindall</code> (tx Steve Huffman)
+ </li>
+
+ <li>
+     Add support to <code>autodelegate</code> for arguments
+ </li>
+
+ <li>
+     Add functions <code>httpdate</code> and <code>parsehttpdate</code>
+ </li>
+
+ <li>
+     Add function <code>modified</code>
+ </li>
+
+ <li>
+     Add support for FastCGI server mode
+ </li>
+
+ <li>
+     Clarify <code>dictadd</code> documentation (tx Steve Huffman)
+ </li>
+
+ <li>
+     Changed license to public domain
+ </li>
+
+ <li>
+     Clean up to use <code>ctx</code> and <code>env</code> instead of <code>context</code> and <code>environ</code>
+ </li>
+
+ <li>
+     Improved support for PUT, DELETE, etc. (tx list)
+ </li>
+
+ <li>
+     Fix <code>ctx.fullpath</code> (tx Jesir Vargas)
+ </li>
+
+ <li>
+     Fix sqlite support (tx Dubhead)
+ </li>
+
+ <li>
+     Fix documentation bug in <code>lstrips</code> (tx Gregory Petrosyan)
+ </li>
+
+ <li>
+     Fix support for IPs and ports (1/2 tx Jesir Vargas)
+ </li>
+
+ <li>
+     Fix <code>ctx.fullpath</code> (tx Jesir Vargas)
+ </li>
+
+ <li>
+     Fix sqlite support (tx Dubhead)
+ </li>
+
+ <li>
+     Fix documentation bug in <code>lstrips</code> (tx Gregory Petrosyan)
+ </li>
+
+ <li>
+     Fix <code>iters</code> bug with sets
+ </li>
+
+ <li>
+     Fix some breakage introduced by Vargas's patch
+ </li>
+
+ <li>
+     Fix <code>sqlors</code> bug
+ </li>
+
+ <li>
+     Fix various small style things (tx Jesir Vargas)
+ </li>
+
+ <li>
+     Fix bug with <code>input</code> ignoring GET input
+ </li>
+</ul>
+<p><strong>2006-02-22: 0.136 (svn)</strong>
+</p>
+<ul>
+ <li>
+     Major code cleanup (tx to Jesir Vargas for the patch).
+ </li>
+
+ <li>
+     2006-02-15: 0.135
+ </li>
+
+ <li>
+     Really fix that mysql regression (tx Sean Leach).
+ </li>
+
+ <li>
+     2006-02-15: 0.134
+ </li>
+
+ <li>
+     The <code>StopIteration</code> exception is now caught. This can be used by functions that do things like check to see if a user is logged in. If the user isn't, they can output a message with a login box and raise StopIteration, preventing the caller from executing.
+ </li>
+
+ <li>
+     Fix some documentation bugs.
+ </li>
+
+ <li>
+     Fix mysql regression (tx mrstone).
+ </li>
+</ul>
+<p><strong>2006-02-12: 0.133</strong>
+</p>
+<ul>
+ <li>
+     Docstrings! (tx numerous, esp. Jonathan Mark (for the patch) and Guido van Rossum (for the prod))
+ </li>
+
+ <li>
+     Add <code>set</code> to web.iters.
+ </li>
+
+ <li>
+     Make the <code>len</code> returned by <code>query</code> an int (tx ??).
+ </li>
+
+ <li>
+     <strong>Backwards-incompatible change:</strong> <code>base</code> now called <code>prefixurl</code>.
+ </li>
+
+ <li>
+     <strong>Backwards-incompatible change:</strong> <code>autoassign</code> now takes <code>self</code> and <code>locals()</code> as arguments.
+ </li>
+</ul>
+<p><strong>2006-02-07: 0.132</strong>
+</p>
+<ul>
+ <li>
+     New variable <code>iters</code> is now a listing of possible list-like types (currently list, tuple, and, if it exists, Set).
+ </li>
+
+ <li>
+     New function <code>dictreverse</code> turns <code>{1:2}</code> into <code>{2:1}</code>.
+ </li>
+
+ <li>
+     <code>Storage</code> now a dictionary subclass.
+ </li>
+
+ <li>
+     <code>tryall</code> now takes an optional prefix of functions to run.
+ </li>
+
+ <li>
+     <code>sqlors</code> has various improvements.
+ </li>
+
+ <li>
+     Fix a bunch of DB API bugs.
+ </li>
+
+ <li>
+     Fix bug with <code>storify</code> when it received multiple inputs (tx Ben Woosley).
+ </li>
+
+ <li>
+     Fix bug with returning a generator (tx Zbynek Winkler).
+ </li>
+
+ <li>
+     Fix bug where len returned a long on query results (tx F.S).
+ </li>
+</ul>
+<p><strong>2006-01-31: 0.131 (not officially released)</strong>
+</p>
+<ul>
+ <li>
+     New function <code>_interpolate</code> used internally for interpolating strings.
+ </li>
+
+ <li>
+     Redone database API. <code>select</code>, <code>insert</code>, <code>update</code>, and <code>delete</code> all made consistent. Database queries can now do more complicated expressions like <code>$foo.bar</code> and <code>${a+b}</code>. You now have to explicitly pass the dictionary to look up variables in. Pass <code>vars=locals()</code> to get the old functionality of looking up variables .
+ </li>
+
+ <li>
+     New functions <code>sqllist</code> and <code>sqlors</code> generate certain kinds of SQL.
+ </li>
+</ul>
+<p><strong>2006-01-30: 0.13</strong>
+</p>
+<ul>
+ <li>
+     New functions <code>found</code>, <code>seeother</code>, and <code>tempredirect</code> now let you do other kinds of redirects. <code>redirect</code> now also takes an optional status parameter. (tx many)
+ </li>
+
+ <li>
+     New functions <code>expires</code> and <code>lastmodified</code> make it easy to send those headers.
+ </li>
+
+ <li>
+     New function <code>gone</code> returns a 410 Gone (tx David Terrell).
+ </li>
+
+ <li>
+     New function <code>urlquote</code> applies url encoding to a string.
+ </li>
+
+ <li>
+     New function <code>iterbetter</code> wraps an iterator and allows you to do <strong>getitem</strong>s on it.
+ </li>
+
+ <li>
+     Have <code>query</code> return an <code>iterbetter</code> instead of an iterator.
+ </li>
+
+ <li>
+     Have <code>debugerror</code> show tracebacks with the innermost frame first.
+ </li>
+
+ <li>
+     Add <code>__hash__</code> function to <code>threadeddict</code> (and thus, <code>ctx</code>).
+ </li>
+
+ <li>
+     Add <code>context.host</code> value for the requested host name.
+ </li>
+
+ <li>
+     Add option <code>db_printing</code> that prints database queries and the time they take.
+ </li>
+
+ <li>
+     Add support for database pooling (tx Steve Huffman).
+ </li>
+
+ <li>
+     Add support for passing values to functions called by <code>handle</code>. If you do <code>('foo', 'value')</code> it will add <code>'value'</code> as an argument when it calls <code>foo</code>.
+ </li>
+
+ <li>
+     Add support for scgi (tx David Terrell for the patch).
+ </li>
+
+ <li>
+     Add support for web.py functions that are iterators (tx Brendan O'Connor for the patch).
+ </li>
+
+ <li>
+     Use new database cursors on each call instead of reusing one.
+ </li>
+
+ <li>
+     <code>setcookie</code> now takes an optional <code>domain</code> argument.
+ </li>
+
+ <li>
+     Fix bug in autoassign.
+ </li>
+
+ <li>
+     Fix bug where <code>debugerror</code> would break on objects it couldn't display.
+ </li>
+
+ <li>
+     Fix bug where you couldn't do <code>#include</code>s inline.
+ </li>
+
+ <li>
+     Fix bug with <code>reloader</code> and database calls.
+ </li>
+
+ <li>
+     Fix bug with <code>reloader</code> and base templates.
+ </li>
+
+ <li>
+     Fix bug with CGI mode on certain operating systems.
+ </li>
+
+ <li>
+     Fix bug where <code>debug</code> would crash if called outside a request.
+ </li>
+
+ <li>
+     Fix bug with <code>context.ip</code> giving weird values with proxies.
+ </li>
+</ul>
+<p><strong>2006-01-29: 0.129</strong>
+</p>
+<ul>
+ <li>
+     Add Python 2.2 support.
+ </li>
+</ul>
+<p><strong>2006-01-28: 0.128</strong>
+</p>
+<ul>
+ <li>
+     Fix typo in <code>web.profile</code>.
+ </li>
+</ul>
+<p><strong>2006-01-28: 0.127</strong>
+</p>
+<ul>
+ <li>
+     Fix bug in error message if invalid dbn is sent (tx Panos Laganakos).
+ </li>
+</ul>
+<p><strong>2006-01-27: 0.126</strong>
+</p>
+<ul>
+ <li>
+     Fix typos in Content-Type headers (tx Beat Bolli for the prod).
+ </li>
+</ul>
+<p><strong>2006-01-22: 0.125</strong>
+</p>
+<ul>
+ <li>
+     Support Cheetah 2.0.
+ </li>
+</ul>
+<p><strong>2006-01-22: 0.124</strong>
+</p>
+<ul>
+ <li>
+     Fix spacing bug (tx Tommi Raivio for the prod).
+ </li>
+</ul>
+<p><strong>2006-01-16: 0.123</strong>
+</p>
+<ul>
+ <li>
+     Fix bug with CGI usage (tx Eddie Sowden for the prod).
+ </li>
+</ul>
+<p><strong>2006-01-14: 0.122</strong>
+</p>
+<ul>
+ <li>
+     Allow DELETEs from <code>web.query</code> (tx Joost Molenaar for the prod).
+ </li>
+</ul>
+<p><strong>2006-01-08: 0.121</strong>
+</p>
+<ul>
+ <li>
+     Allow import of submodules like <code>pkg.mod.cn</code> (tx Sridhar Ratna).
+ </li>
+
+ <li>
+     Fix a bug in <code>update</code> (tx Sergey Khenkin).
+ </li>
+</ul>
+<p><strong>2006-01-05: 0.12</strong>
+</p>
+<ul>
+ <li>
+     <strong>Backwards-incompatible change:</strong> <code>db_parameters</code> is now a dictionary.
+ </li>
+
+ <li>
+     <strong>Backwards-incompatible change:</strong> <code>sumdicts</code> is now <code>dictadd</code>.
+ </li>
+
+ <li>
+     Add support for PyGreSQL, MySQL (tx Hallgrimur H. Gunnarsson).
+ </li>
+
+ <li>
+     Use HTML for non-Cheetah error message.
+ </li>
+
+ <li>
+     New function <code>htmlquote()</code>.
+ </li>
+
+ <li>
+     New function <code>tryall()</code>.
+ </li>
+
+ <li>
+     <code>ctx.output</code> can now be set to a generator. (tx Brendan O'Connor)
+ </li>
+</ul>
+<p><strong>2006-01-04: 0.117</strong>
+</p>
+<ul>
+ <li>
+     Add support for psycopg 1.x. (tx Gregory Price)
+ </li>
+</ul>
+<p><strong>2006-01-04: 0.116</strong>
+</p>
+<ul>
+ <li>
+     Add support for Python 2.3. (tx Evan Jones)
+ </li>
+</ul>
+<p><strong>2006-01-04: 0.115</strong>
+</p>
+<ul>
+ <li>
+     Fix some bugs where database queries weren't reparameterized. Oops!
+ </li>
+
+ <li>
+     Fix a bug where <code>run()</code> wasn't getting the right functions.
+ </li>
+
+ <li>
+     Remove a debug statement accidentally left in.
+ </li>
+
+ <li>
+     Allow <code>storify</code> to be used on dictionaries. (tx Joseph Trent)
+ </li>
+</ul>
+<p><strong>2006-01-04: 0.114</strong>
+</p>
+<ul>
+ <li>
+     Make <code>reloader</code> work on Windows. (tx manatlan)
+ </li>
+
+ <li>
+     Fix some small typos that affected colorization. (tx Gregory Price)
+ </li>
+</ul>
+<p><strong>2006-01-03: 0.113</strong>
+</p>
+<ul>
+ <li>
+     Reorganize <code>run()</code> internals so mod_python can be used. (tx Nicholas Matsakis)
+ </li>
+</ul>
+<p><strong>2006-01-03: 0.112</strong>
+</p>
+<ul>
+ <li>
+     Make <code>reloader</code> work when <code>code.py</code> is called with a full path. (tx David Terrell)
+ </li>
+</ul>
+<p><strong>2006-01-03: 0.111</strong>
+</p>
+<ul>
+ <li>
+     Fixed bug in <code>strips()</code>. (tx Michael Josephson)
+ </li>
+</ul>
+<p><strong>2006-01-03: 0.11</strong>
+</p>
+<ul>
+ <li>
+     First public version.
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

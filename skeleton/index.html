@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>skeleton (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; skeleton
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>skeleton</h1>
+<p>Here's the skeleton of a typical web.py app (as of 0.2):
+</p>
+
+<h2>code.py</h2>
+<pre><code>import web
+import view, config
+from view import render
+
+urls = (
+    '/', 'index'    )
+
+class index:
+    def GET(self):
+        print render.base(view.listing())
+
+if __name__ == &quot;__main__&quot;:
+    web.run(urls, globals(), *config.middleware)
+</code></pre>
+<h2>config.py</h2>
+<pre><code>import web
+web.config.db_parameters = dict(dbn='postgres', db='appname', user='username', pw='')
+web.webapi.internalerror = web.debugerror
+middleware = [web.reloader]
+cache = False
+</code></pre>
+<h2>db.py</h2>
+<pre><code>import web
+
+def listing(**k):
+    return web.select('items', **k)
+</code></pre>
+<h2>view.py</h2>
+<pre><code>import web
+import db
+import config
+
+render = web.template.render('templates/', cache=config.cache)
+
+def listing(**k):
+    l = db.listing(**k)
+    return render.listing(l)
+
+web.template.Template.globals.update(dict(
+  datestr = web.datestr,
+  render = render
+))
+</code></pre>
+<h2>sql/tables.sql</h2>
+<pre><code>CREATE TABLE items (
+    id serial primary key,
+    author_id int references users,
+    body text,
+    created timestamp default (current_timestamp at time zone 'utc')
+);
+</code></pre>
+<h2>templates/base.html</h2>
+<pre><code>$def with (page, title=None)
+&lt;html&gt;&lt;head&gt;        &lt;title&gt;my site\
+$if title: : $title\
+&lt;/title&gt;    &lt;/head&gt;&lt;body&gt;    &lt;h1&gt;&lt;a href=&quot;/&quot;&gt;my site&lt;/a&gt;&lt;/h1&gt;
+$:page
+
+&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+<h2>templates/listing.html</h2>
+<pre><code>$def with (items)
+
+$for item in items:
+    $:render.item(item)
+</code></pre>
+<h2>templates/item.html</h2>
+<pre><code>$def with (item)
+
+&lt;p&gt;$item.body&lt;/p&gt;    
+&lt;p class=&quot;details&quot;&gt;created $datestr(item.created)&lt;/p&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

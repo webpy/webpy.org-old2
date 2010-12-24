@@ -1,0 +1,216 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>lec.ker - a simple del.icio.us clone (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; lec.ker - a simple del.icio.us clone
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>lec.ker - a simple del.icio.us clone</h1>
+<p><em>by Valentin Wüstholz</em>
+</p>
+
+<h3>database (MySQL):</h3>
+<pre><code>CREATE TABLE  `lecker`.`bookmarks` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `url` text NOT NULL,
+  `created` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `tags` text NOT NULL,
+  `title` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id` (`id`)
+);
+</code></pre>
+<h3>source code:</h3>
+<pre><code>todo-list/
+  lecker.py
+  templates/
+    view.html
+    edit.html
+    delete.html
+    search.html
+</code></pre>
+<h3><code>lecker.py</code></h3>
+<pre><code>    import web
+
+    urls = (
+        '/', 'view',
+        '/add', 'add',
+        '/delete', 'delete',
+        '/edit/([0-9]*)', 'edit',
+        '/search/(\S*)', 'search'        )
+
+    class view:
+        def GET(self):
+            bookmarks = list(web.select(&quot;bookmarks&quot;, order=&quot;created desc&quot;))
+            for b in bookmarks:
+                b.tags = b.tags.split()
+            web.render('view.html')
+
+    class add:
+        def POST(self):
+            i = web.input()
+            web.debug(type(i.tags))
+            n = web.insert('bookmarks', title=i.title, url=i.url, tags=i.tags)
+            web.seeother('./#t'+str(n))
+
+    class delete:
+        def GET(self):
+            bookmarks = web.select(&quot;bookmarks&quot;, order=&quot;title&quot;)
+            web.render('delete.html')
+        def POST(self):
+            i = web.input()
+            web.debug(i)
+            for item in i:
+                web.delete('bookmarks', 'id = '+item)
+            web.seeother('./#')
+
+    class edit:
+        def GET(self, id):
+            try:
+                bookmark = web.select(&quot;bookmarks&quot;, where=&quot;id = &quot;+id)[0]
+                web.render('edit.html')
+            except IndexError:
+                print &quot;This bookmark doesn't exist.&quot;            def POST(self, id):
+            i = web.input()
+            web.update('bookmarks', 'id = '+id, title=i.title, url=i.url, tags=i.tags)
+            web.seeother('../')
+
+    class search:
+        def GET(self, tag):
+            bookmarks = []
+            bs = list(web.select(&quot;bookmarks&quot;, order=&quot;created desc&quot;))
+            for b in bs:
+                b.tags = b.tags.split()
+                if tag in b.tags:
+                    bookmarks.append(b)
+            empty = (len(bookmarks) == 0)
+            web.render('search.html')
+        def POST(self, tag):
+            i = web.input()
+            tags = i.tags.split()
+            bookmarks = []
+            bs = list(web.select(&quot;bookmarks&quot;, order=&quot;created desc&quot;))
+            for b in bs:
+                b.tags = b.tags.split()
+                if every(lambda t: t in b.tags, tags):
+                    bookmarks.append(b)
+            empty = (len(bookmarks) == 0)
+            web.render('search.html')
+
+    def every(f, lst):
+        for x in lst:
+            if not f(x):
+                return False
+        return True
+
+    web.internalerror = web.debugerror
+    web.db_parameters = dict(dbn='mysql', user='root', pw='', db='lecker')
+    if __name__ == '__main__': web.run(urls, web.reloader)
+</code></pre>
+<h3><code>view.html</code></h3>
+<pre><code>    &lt;p&gt;&lt;center&gt;&lt;h1&gt;lec.ker&lt;/h1&gt;&lt;/center&gt;&lt;/p&gt;        
+    &lt;p&gt;        &lt;hr/&gt;        &lt;/p&gt;        
+    &lt;center&gt;        &lt;form name=&quot;search&quot; method=&quot;post&quot; action=&quot;search/#&quot;&gt;        &lt;p&gt;        &lt;p&gt;        &lt;input type=&quot;text&quot; name=&quot;tags&quot; size=&quot;50&quot; /&gt;        &lt;/p&gt;        &lt;input type=&quot;submit&quot; value=&quot;Search&quot; /&gt;        &lt;/p&gt;        &lt;/form&gt;        &lt;/center&gt;        
+    &lt;p&gt;        &lt;hr/&gt;        &lt;/p&gt;        
+    &lt;table border=&quot;0&quot; width=&quot;100%&quot;&gt;        #for bookmark in $bookmarks
+         &lt;colgroup&gt;               &lt;col width=&quot;50%&quot;&gt;               &lt;col width=&quot;35%&quot;&gt;               &lt;col width=&quot;15%&quot;&gt;             &lt;/colgroup&gt;             &lt;tr&gt;             &lt;form name=&quot;del$bookmark.id&quot; method=&quot;post&quot; action=&quot;delete&quot;&gt;             &lt;td&gt;               &lt;a href=&quot;$bookmark.url&quot;&gt; $bookmark.title &lt;/a&gt;             &lt;/td&gt;             &lt;td&gt;             #for tag in $bookmark.tags
+              &lt;a href=&quot;/search/$tag&quot;&gt; $tag &lt;/a&gt; |
+         #end for
+         &lt;/td&gt;             &lt;td align=&quot;right&quot;&gt;             &lt;a href=&quot;edit/$bookmark.id&quot;&gt;(edit)&lt;/a&gt;             &lt;input type=&quot;hidden&quot; name=&quot;$bookmark.id&quot; value=&quot;1&quot; /&gt;             &lt;a href=&quot;#&quot; onclick=document.del${bookmark.id}.submit()&gt;(delete)&lt;/a&gt;             &lt;/td&gt;             &lt;/form&gt;             &lt;/tr&gt;        #end for
+    &lt;/table&gt;        
+    &lt;p&gt;        &lt;hr/&gt;        &lt;/p&gt;        
+    &lt;form name=&quot;add&quot; method=&quot;post&quot; action=&quot;add&quot;&gt;        &lt;table border=&quot;0&quot; width=&quot;100%&quot;&gt;        &lt;p&gt;        &lt;tr&gt;          &lt;td&gt;            Title:
+      &lt;/td&gt;          &lt;td&gt;            &lt;input type=&quot;text&quot; name=&quot;title&quot; size=&quot;100&quot; /&gt;          &lt;/td&gt;        &lt;/tr&gt;        &lt;tr&gt;          &lt;td&gt;            Url:
+      &lt;/td&gt;          &lt;td&gt;            &lt;input type=&quot;text&quot; name=&quot;url&quot; size=&quot;100&quot; /&gt;          &lt;/td&gt;        &lt;/tr&gt;        &lt;tr&gt;          &lt;td&gt;            Tags:
+      &lt;/td&gt;          &lt;td&gt;            &lt;input type=&quot;text&quot; name=&quot;tags&quot; size=&quot;100&quot; /&gt;          &lt;/td&gt;        &lt;/tr&gt;        &lt;/p&gt;        &lt;/table&gt;        &lt;p&gt;        &lt;input type=&quot;submit&quot; value=&quot;Add&quot; /&gt;        &lt;/p&gt;        &lt;/form&gt;        
+    &lt;a href=&quot;delete&quot;&gt;Delete Bookmarks&lt;/a&gt;
+</code></pre>
+<h3><code>edit.html</code></h3>
+<pre><code>    &lt;p&gt;&lt;center&gt;&lt;h1&gt;lec.ker&lt;/h1&gt;&lt;/center&gt;&lt;/p&gt;        
+    &lt;p&gt;&lt;h2&gt;Edit Bookmark:&lt;/h2&gt;&lt;/p&gt;        
+    &lt;form method=&quot;post&quot; action=&quot;&quot;&gt;        &lt;p&gt;        &lt;p&gt;        Title:&lt;input type=&quot;text&quot; name=&quot;title&quot; value=&quot;$bookmark.title&quot; size=&quot;100&quot; /&gt;        &lt;/p&gt;        Url:&lt;input type=&quot;text&quot; name=&quot;url&quot; value=&quot;$bookmark.url&quot; size=&quot;100&quot; /&gt;        &lt;/p&gt;        Tags:&lt;input type=&quot;text&quot; name=&quot;tags&quot; value=&quot;$bookmark.tags&quot; size=&quot;100&quot; /&gt;        &lt;/p&gt;        &lt;input type=&quot;submit&quot; value=&quot;Edit&quot; /&gt;        &lt;/p&gt;        &lt;/form&gt;        
+    &lt;p&gt;        &lt;hr/&gt;        &lt;/p&gt;        
+    &lt;a href=&quot;../&quot;&gt;Back&lt;/a&gt;
+</code></pre>
+<h3><code>delete.html</code></h3>
+<pre><code>    &lt;p&gt;&lt;center&gt;&lt;h1&gt;lec.ker&lt;/h1&gt;&lt;/center&gt;&lt;/p&gt;        
+    &lt;form name = &quot;bookmarks&quot; method=&quot;post&quot; action=&quot;delete&quot;&gt;          &lt;p&gt;&lt;h2&gt;Delete Bookmarks:&lt;/h2&gt;&lt;/p&gt;        
+      &lt;p&gt;           #for bookmark in $bookmarks
+            &lt;input type=&quot;checkbox&quot; name=&quot;$bookmark.id&quot; value=&quot;1&quot;&gt; &lt;a href=&quot;$bookmark.url&quot;&gt; $bookmark.title &lt;/a&gt;&lt;br&gt;           #end for
+      &lt;/p&gt;          &lt;p&gt;&lt;input type=&quot;submit&quot; value=&quot;Delete&quot; /&gt;          &lt;/p&gt;        &lt;/form&gt;        
+    &lt;p&gt;        &lt;hr/&gt;        &lt;/p&gt;        
+    &lt;a href=&quot;../&quot;&gt;Back&lt;/a&gt;
+</code></pre>
+<h3><code>search.html</code></h3>
+<pre><code>    &lt;p&gt;&lt;center&gt;&lt;h1&gt;lec.ker&lt;/h1&gt;&lt;/center&gt;&lt;/p&gt;        
+    &lt;table border=&quot;0&quot; width=&quot;100%&quot;&gt;        #for bookmark in $bookmarks
+         &lt;colgroup&gt;               &lt;col width=&quot;50%&quot;&gt;               &lt;col width=&quot;35%&quot;&gt;               &lt;col width=&quot;15%&quot;&gt;             &lt;/colgroup&gt;             &lt;tr&gt;             &lt;form name=&quot;del$bookmark.id&quot; method=&quot;post&quot; action=&quot;../delete&quot;&gt;             &lt;td&gt;               &lt;a href=&quot;$bookmark.url&quot;&gt; $bookmark.title &lt;/a&gt;             &lt;/td&gt;             &lt;td&gt;             #for tag in $bookmark.tags
+              &lt;a href=&quot;../search/$tag&quot;&gt; $tag &lt;/a&gt; |
+         #end for
+         &lt;/td&gt;             &lt;td align=&quot;right&quot;&gt;             &lt;a href=&quot;../edit/$bookmark.id&quot;&gt;(edit)&lt;/a&gt;             &lt;input type=&quot;hidden&quot; name=&quot;$bookmark.id&quot; value=&quot;1&quot; /&gt;             &lt;a href=&quot;#&quot; onclick=document.del${bookmark.id}.submit()&gt;(delete)&lt;/a&gt;             &lt;/form&gt;             &lt;/td&gt;             &lt;/form&gt;             &lt;/tr&gt;        #end for
+    &lt;/table&gt;        #if $empty
+         No Bookmarks were found.
+    #end if
+    &lt;/p&gt;        
+    &lt;p&gt;        &lt;hr/&gt;        &lt;/p&gt;        
+    &lt;a href=&quot;../&quot;&gt;Back&lt;/a&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

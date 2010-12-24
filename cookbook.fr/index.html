@@ -1,0 +1,367 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Web.py Cookbook (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Web.py Cookbook
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Web.py Cookbook</h1>
+<p>Autres langages : <a href="/ja" class="internal">japan 日本語</a> | <a href="/zh-cn" class="internal">chinese 简体中文</a> | <a href="/../cookbook" class="internal">english</a> | ...
+</p>
+<p>Documentation de type Cookbook pour web.py 0.3. Veuillez noter que certaines de ces fonctions ne sont pas disponibles dans les versions précedentes. 
+   La version actuelle 0.3 est la branche développement.
+</p>
+
+<h1>Mise en forme</h1>
+<ol>
+ <li><p>En termes de mise en forme, essayez d'utiliser un format de type cookbook... Comme ceci:
+</p>
+
+<h3>Probleme: Vous voulez accéder aux données de la base ...</h3>
+
+<h3>Solution: Utilisez ce code ...</h3>
+
+ </li>
+
+ <li><p>Notez que les urls n'ont pas besoin de &quot;web&quot; dans leur structures -- juste &quot;/cookbook/select&quot; , et pas &quot;/cookbook/web.select&quot;.  <br />
+</p>
+
+ </li>
+
+ <li><p>Cette documentation est finalement pour la version 0.3, donc veuillez ajouter du code qui ne fonctionne qu'avec cette version.
+</p>
+
+ </li>
+</ol>
+<hr />
+
+
+<h2>Basique:</h2>
+<ul>
+ <li>
+     <a href="/helloworld/fr" class="internal">Hello World</a>. 
+ </li>
+
+ <li>
+     <a href="/staticfiles/fr" class="internal">Servir des fichiers statiques</a>.  <br />
+ </li>
+
+ <li>
+     <a href="/url_handling/fr" class="internal">Comprendre la gestion des URLs</a>.  <br />
+ </li>
+
+ <li>
+     <a href="/redirect+seeother/fr" class="internal">Seeother et Redirect</a>.  <br />
+ </li>
+
+ <li>
+     <a href="/subapp/fr" class="internal">Utiliser les sous-applications</a>.  <br />
+ </li>
+
+ <li>
+     <a href="/xmlfiles/fr" class="internal">Servir du XML</a>.   <br />
+ </li>
+
+ <li>
+     <a href="/postbasic/fr" class="internal">Lire les données brutes d'un post</a>. 
+ </li>
+</ul>
+
+<h2>Avancé</h2>
+<ul>
+ <li>
+     <a href="/ctx/fr" class="internal">web.ctx</a>. 
+ </li>
+
+ <li>
+     <a href="/application_processors/fr" class="internal">Application processors, charger et décharger des hooks</a>. 
+ </li>
+
+ <li>
+     <a href="/background" class="internal">Comment utiliser web.background</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/custom_notfound/fr" class="internal">Personnaliser le message NotFound</a>. 
+ </li>
+
+ <li>
+     <a href="/streaming_large_files/fr" class="internal">Comment streamer de gros fichiers</a>. 
+ </li>
+
+ <li>
+     <a href="/logging/fr" class="internal">Contrôler les evènements sur le serveur intégré par défaut</a>. 
+ </li>
+
+ <li>
+     <a href="/ssl/fr" class="internal">Configurer le support SSL dans le serveur intégré</a>.
+ </li>
+
+ <li>
+     <a href="/runtime-language-switch" class="internal">Run-time language switch</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+</ul>
+
+<h2>Sessions et état des utilisateurs:</h2>
+<ul>
+ <li>
+     <a href="/sessions/fr" class="internal">Travailler avec les sessions</a>. 
+ </li>
+
+ <li>
+     <a href="/session_with_reloader/fr" class="internal">Utiliser session avec reloader</a>. 
+ </li>
+
+ <li>
+     <a href="/session_in_template/fr" class="internal">Utiliser session dans les gabarits</a>. 
+ </li>
+
+ <li>
+     <a href="/cookies/fr" class="internal">Travailler avec les cookies</a>. 
+ </li>
+
+ <li>
+     <a href="/userauth/fr" class="internal">Authentification des utilisateurs</a>. 
+ </li>
+
+ <li>
+     <a href="/userauthpgsql" class="internal">Authentification des utilisateurs avec base de données Postgresql</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/sessions_with_subapp/fr" class="internal">Utiliser les sessions avec les sous-applications</a>. 
+ </li>
+</ul>
+
+<h2>Utils:</h2>
+<ul>
+ <li>
+     <a href="/sendmail" class="internal">Envoi de Mail</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/sendmail_using_gmail/fr" class="internal">Envoi de Mail en utilisant Gmail</a>. 
+ </li>
+
+ <li>
+     <a href="/webservice" class="internal">Webservice en utilisant soaplib + WSDL</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+</ul>
+
+<h2>Modèles de mise en forme, gabarits de mise en page:</h2>
+<ul>
+ <li>
+     <a href="/docs/0.3/templetor.fr " class="internal">Templetor: le système de gabarits de web.py</a>
+ </li>
+
+ <li>
+     <a href="/layout_template/fr" class="internal">Mise en page selon un gabarit</a>. 
+ </li>
+
+ <li>
+     <a href="/alternating_style" class="internal">Alterner un style</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/template_import" class="internal">Importer des fonctions dans les gabarits</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/i18n_support_in_template_file " class="internal">i18n support dans les fichiers gabarits</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/template_mako" class="internal">Utiliser le moteur de gabarit Mako dans webpy</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/template_cheetah" class="internal">Utiliser le moteur de gabarit Cheetah dans webpy</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/template_jinja" class="internal">Utiliser le moteur de gabarit  Jinja2 dans webpy</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/templates_on_gae" class="internal">Comment utiliser les gabarits sur Google App Engine</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>)
+ </li>
+</ul>
+
+<h2>Essais:</h2>
+<ul>
+ <li>
+     <a href="/testing_with_paste_and_nose" class="internal">Tester avec Paste et Nose</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/restful_doctesting_using_request" class="internal">RESTful doctesting using an application's request method</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+</ul>
+
+<h2>Entrées utilisateurs:</h2>
+<ul>
+ <li>
+     <a href="/fileupload/fr" class="internal">Uploader un fichier</a>. 
+ </li>
+
+ <li>
+     <a href="/storeupload/fr" class="internal">Stocker un fichier uploadé</a>. 
+ </li>
+
+ <li>
+     <a href="/limiting_upload_size/fr" class="internal">Comment limiter la taille des fichiers uploadés</a>. 
+ </li>
+
+ <li>
+     <a href="/input/fr" class="internal">Accéder aux entrées utilisateurs par le biais de web.input</a>. 
+ </li>
+
+ <li>
+     <a href="/forms/fr" class="internal">Comment utiliser les formulaires</a>. 
+ </li>
+
+ <li>
+     <a href="/form_fields" class="internal">Rendu individuel des champs de formulaires</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+</ul>
+
+<h2>Base de données:</h2>
+<ul>
+ <li>
+     <a href="/multidbs" class="internal">Multiples bases de données</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/select" class="internal">Select: Récupérer les entrées d'une base de données</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/update" class="internal">Update: Mettre à jour les entrées d'une base de données</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/delete" class="internal">Delete: Supprimer les entrées d'une base de données</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/insert" class="internal">Insert: Ajouter des entrées à une base de donnée</a>.  - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/query" class="internal">Query: Base de données - Requêtes avancées</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/transactions" class="internal">Query: How to use database transactions</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/sqlalchemy" class="internal">Comment utiliser sqlalchemy</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/sqlite-udf" class="internal">Intégrer SQLite UDF (user-defined-functions) à la couche de base de données webpy</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/where_dict" class="internal">Utiliser un dictionnaire comme clause where</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+</ul>
+
+<h2>Déploiement:</h2>
+<ul>
+ <li>
+     <a href="/fastcgi-lighttpd/fr" class="internal">Déploiement Fastcgi au travers lighttpd</a>. 
+ </li>
+
+ <li>
+     <a href="/fastcgi-apache" class="internal">Déploiement Fastcgi au travers Apache</a>.  - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/cgi-apache" class="internal">Déploiement CGI au travers Apache</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     Déploiement mod_python au travers Apache (requis)
+ </li>
+
+ <li>
+     <a href="/mod_wsgi-apache " class="internal">Déploiement mod_wsgi au travers Apache</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/mod_wsgi-nginx " class="internal">Déploiement mod_wsgi au travers Nginx</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+
+ <li>
+     <a href="/fastcgi-nginx" class="internal">Déploiement Fastcgi au travers Nginx</a>. - traduction demandée, voir <a href="/docs/0.3.fr/todo" class="internal">Todo</a>
+ </li>
+</ul>
+
+<h2>Sous-domaines:</h2>
+<ul>
+ <li>
+     Sous-domaines et comment accéder au nom utilisateur (requis)
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

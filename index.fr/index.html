@@ -1,0 +1,405 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>A propos de Web.py (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; A propos de Web.py
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>A propos de Web.py</h1>
+<p>Autre langages : <a href="/" class="internal">english</a> | ...
+</p>
+<p><strong>web.py</strong> est un framework pour python qui est aussi simple qu'il est puissant. Web.py est dans le domaine publique; vous pouvez l'utiliser à toutes fins sans aucunes restrictions.
+</p>
+
+<h2>Une application complète web.py</h2>
+<pre><code>import web
+
+urls = (
+    '/(.*)', 'hello'
+)
+app = web.application(urls, globals())
+
+class hello:        
+    def GET(self, name):
+        if not name: 
+            name = 'World'
+        return 'Hello, ' + name + '!'
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre>
+<h2>Pour commençer</h2>
+<p>web.py 0.33 a été réalisé le 2009-10-28: <a href="/static/web.py-0.33.tar.gz">web.py-0.33.tar.gz</a>
+</p>
+<p>Pour avoir toujours la dernière version de web.py, exécutez:
+</p>
+<pre><code>git clone git://github.com/webpy/webpy.git
+ln -s `pwd`/webpy/web .
+</code></pre><p>ou bien téléchargez la dernière version en <a href="http://github.com/webpy/webpy/zipball/master">zip</a> ou <a href="http://github.com/webpy/webpy/tarball/master">tarball</a>.
+</p>
+<p>Mise à jour depuis une version plus ancienne? Assurez-vous de <a href="http://webpy.org/docs/0.3/upgrade">lire le guide de mise à jour</a>.
+</p>
+
+<h2>Qui utilise web.py ?</h2>
+<p>web.py a été publié alors que Aaron Swartz travaillait sur <a href="http://reddit.com/">reddit.com</a>, où le site l'utilisait pour grandir et devenir l'un des 1000 premiers sites selon Alexa et servait des millions de pages vues tous les jours. &quot;C'est le framework anti-framework. web.py ne vous gagne en aucune manière,&quot; expliquait le fondateur Steve Huffman. (Le site a été réécrit en utilisant d'autres outils, après avoir été acquis par Condé Nast.)
+</p>
+<p><a href="http://frinki.com">Frinki</a>, Un réseau social de type Facebook en espagnol.
+</p>
+<p><a href="http://makehistory.national911memorial.org">Make History</a>, un projet du 9/11 Memorial Museum, qui est conçu avec Web.py en tête de Google App Engine. Le 11 septembre 2009, il reçevait près de 200.000 visiteurs. &quot;C'est la première fois que je travaille avec web.py et essentiellement en Python,&quot; note son développeur. &quot;web.py est génial.&quot;
+</p>
+<p><a href="http://www.local.ch">local.ch</a>, Le répertoire téléphonique en ligne officiel de Suisse - utilise web.py en service d'arrière plan pour suivre les contenus expirés - code en open-source sur <a href="http://github.com/harryf/urldammit/tree/master">urldammit</a>
+</p>
+<p><a href="https://sitecanary.com/">sitecanary.com</a> un site pour être alerté quand votre site web est hors-service.
+</p>
+<p><a href="http://watchdog.net/">watchdog.net</a>, un site de service politique, construit en web.py.
+</p>
+<p><a href="http://www.archivd.com">archivd.com</a>, une application web pour des recherches collaboratives et de l'archivage, réalisé avec web.py
+</p>
+<p><a href="http://www.colr.org">colr.org</a>, un site de ponctions de couleurs, réalisé avec web.py.
+</p>
+<p><a href="http://www.chiefmall.com/">Chiefmall</a>, un outil de recherche d'entrepeneurs, qui a été réalisé avec web.py.
+</p>
+<p><a href="http://www.grouplite.com">grouplite.com</a> utilise web.py.
+</p>
+<p><a href="http://yandex.ru">Yandex</a>, Un fournisseur d'acces internet Russe dont la page d'accueil seule reçoit 70 millions de visites par jour, utilise web.py pour certains projets.
+</p>
+<p><a href="http://www.lshift.net/">LShift</a> a utilisé web.py pour construire des sites web pour <a href="http://exproretail.com/">Expro</a> et <a href="http://travel.dk.com/">publisher Dorling Kindersley</a>. &quot;web.py nous permet de faire ce que nous faisons de mieux,&quot; rapportent-ils. &quot;il réalise les applications web avec brio, sans nous obliger à faire des compromis sur la flexibilité et l'originalité.&quot;
+</p>
+<p><a href="http://micropledge.com/">micropledge</a>, une application Web qui recueille des fonds pour des idées de logiciels, et qui est construite avec web.py. &quot;Nous avons apprécié sont intégration avec son approche minimale,&quot; raconte le développeur Ben Hoyt.
+</p>
+<p>Le <a href="http://xhtml-css.com/">bivalidateur</a> vérifie votre HTML et la validation CSS.
+</p>
+<p><a href="http://jottit.com">jottit.com</a> est construit avec web.py.  Jottit permet d'obtenir un site web aussi facilement que le remplissage d'un champ de saisie. 
+</p>
+<p><a href="http://taskodone.com/">Tasko</a> élaboré avec web.py. Tasko est un gestionnaire de tâches en ligne qui utilise un format de fichier de texte brut pour stocker toutes les informations.
+</p>
+<p><a href="http://damiga.com/">Damiga</a> est bâtit avec web.py. Damiga est un endroit où vous pouvez anonymement et librement dire au monde ce que vous ressentez à propos d'autres personnes: amis, célébrités, même des personnages de fiction. C'est aussi un endroit où vous pouvez voir ce que le monde pense de vous. 
+</p>
+<p><a href="http://fotosaur.us">Fotosaur.us</a>, une incroyable application de marque-pages d'images, réalisée avec web.py.
+</p>
+<p><a href="http://uris.us">URIs.us</a> est un service pour créer des urls courtes. Déployé sur Google App Engine
+</p>
+<p><a href="http://xykra.org">xykra</a> est un wiki minimaliste (160 lignes de Python) qui utilise <a href="http://daringfireball.net/projects/markdown/">Markdown</a>.
+</p>
+<p><a href="http://edgarest.com">Edgarest</a> est réalisé avec Web.py. Edgarest fournit un accès rapide et une recherche intuitive de SEC Filings (publication de documents boursiers)
+</p>
+<p><a href="http://wklej.to">Wklej.to</a> est une application nopaste/Pastebin( application web qui permet aux utilisateurs de télécharger des morceaux de textes) avec une api ouverte et libre, et naturellement des modules Desktop et des clients.
+</p>
+<p><a href="http://www.biomed-search.com">Biomed Search</a> recherche plus de un million d'images biomédicales dans des tailles bien visibles.
+</p>
+<p>&quot;[web.py a inspiré le] framework web que nous utilisons tel que FriendFeed [et] l'application framework livrée avec App Engine...&quot;  <br />
+    - <a href="http://bret.appspot.com/entry/experimenting-google-app-engine">Brett Taylor</a>, co-fondateur de FriendFeed et leader technique original de Google App Engine
+</p>
+<p>&quot;Dans l'écosystème des frameworks web, quelque chose doit occuper le créneau du &quot;petit, léger et rapide&quot;. web.py est celui-là.&quot;  <br />
+   - Lloyd Dalton, <a href="http://colr.org">colr.org</a>
+</p>
+<p>&quot;Nous avons terminé la réécriture de notre serveur il y a quelques jours avec web.py et c'était tout ce que nous souhaitions.&quot;  <br />
+   - Sam Hsiung, <a href="http://www.youos.com/">YouOS</a>
+</p>
+<p>&quot;Django vous permet d'écrire des applications web en Django. TurboGears vous permet d'écrire des applications web en TurboGears. Web.py vous permet d'écrire des applications web en Python.&quot;  <br />
+   - Adam Atlas
+</p>
+<p>&quot;très élégant et concis (sans oublier que c'est écrit par Aaron Swartz, dont les compétences en codage sont impressionnantes), et ça ne m'a pas fait perdre de temps.&quot;   <br />
+   - Jonas Galvez, Aupeo <a href="http://shortb.net/~f561f1">#</a>
+</p>
+<p>&quot;Le premier framework ... sur lequel je peux bidouiller du code et voir quelque chose fonctionner sans même être obligé de comprendre la logique de celui-ci. Un plaisir à intégrer.&quot;   <br />
+   - Delaunay Antoine built <a href="http://github.com/antoine/ibrouteur/">a photo gallery</a> and <a href="http://metagenda.org">an agenda</a> with it
+</p>
+<p>&quot;Guido [van Rossum, Créateur de Python], vous constaterez probablement que web.py convient le mieux à votre style. ...Si vous ne l'aimez pas, je ne peux imaginer lequel des autres douzaines d'autres framework sortis vous <em>pourriez</em> aimer.&quot;   <br />
+   - Phillip J. Eby, créateur du Python Web Server Gateway Interface (WSGI) <a href="http://shortb.net/~f561f2">#lien</a>
+</p>
+<p>&quot;... l'exemple [Cheetah] que j'ai vu sur web.py à l'air &quot;bon&quot;. (web.py itself OTOH gets an &quot;F&quot;, for undocumented code with too much magic behavior. upvars(), bah.)&quot;  [ Note traducteur : A préciser]
+   - Guido van Rossum, Créateur de Python <a href="http://shortb.net/+f561f3">#Lien</a>
+</p>
+<p>&quot;il suffit de dire je crois, que Aaron se dirige dans la bonne direction.&quot;   <br />
+   - Harry Fuecks: <a href="http://www.sitepoint.com/blogs/2006/01/06/a-simple-wiki-with-webpy/">un simple wiki avec web.py</a>
+</p>
+<p>&quot;un moment très fascinant pour moi. Le même sentiment que j'ai eu lorsque j'ai écrit pour la première fois un script PHP. il est certain que ça me permettra d'apprendre python de façon amusante. Bon travail Aaron !&quot;   <br />
+   - Kamal <a href="http://www.k4ml.com/node/165">Un simple blog en webpy, apprendre python de façon amusante</a>
+</p>
+
+<h3>Documentation web.py :</h3>
+<ul>
+ <li><p><a href="/install" class="internal">installation</a>
+</p>
+<ul>
+ <li>
+     <a href="/install" class="internal">english</a>
+ </li>
+
+ <li>
+     <a href="/install_macosx" class="internal">mac os x</a>
+ </li>
+
+ <li>
+     <a href="/install/es" class="internal">español</a>
+ </li>
+
+ <li>
+     <a href="/install/ja" class="internal">日本語</a>
+ </li>
+
+ <li>
+     <a href="/install/zh-cn" class="internal">简体中文</a>
+ </li>
+
+ <li>
+     <a href="/install/it" class="internal">Italiano</a>
+ </li>
+
+ <li>
+     <a href="/install/fr" class="internal">français</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li><p><a href="/tutorial3" class="internal">tutoriaux pour la version 0.3 (dernière en date)</a>
+</p>
+<ul>
+ <li>
+     <a href="/tutorial3.en" class="internal">english</a>
+ </li>
+
+ <li>
+     <a href="/tutorial3.zh-cn" class="internal">简体中文</a>
+ </li>
+
+ <li>
+     <a href="http://webpy.infogami.com/tutorial2.ru">p?????? 0.2</a>
+ </li>
+
+ <li>
+     <a href="http://www.dup2.org/files/web.py%200.2%20tutorial.html">????</a>
+ </li>
+
+ <li>
+     <a href="/templetor" class="internal">template.py tutorial</a>
+ </li>
+
+ <li>
+     <a href="/form" class="internal">form.py (short) tutorial</a>
+ </li>
+
+ <li>
+     <a href="/tutorial2.ja" class="internal">日本語</a>
+ </li>
+
+ <li>
+     <a href="http://webpy.org/tutorial2.el">e???????</a>
+ </li>
+
+ <li>
+     <a href="/tutorial3.fr" class="internal">français</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li><p><a href="/tutorial" class="internal">tutoriaux (anciennes versions)</a>:
+</p>
+<ul>
+ <li>
+     <a href="http://webpy.org/tutorial">english</a>
+ </li>
+
+ <li>
+     <a href="/tutorial/es" class="internal">español</a>
+ </li>
+
+ <li>
+     português: <a href="http://www.writely.com/View.aspx?docid=bbcm927cd2fmj">1</a> <a href="http://www.writely.com/View.aspx?docid=bbcnjdbhbfh6n">2</a> <a href="http://www.writely.com/View.aspx?docid=bccxp4cgw36p3">3</a>
+ </li>
+
+ <li>
+     <a href="http://sunfox.org/tutoriel-web-py-fr/">français</a>
+ </li>
+
+ <li>
+     <a href="http://bobuk.infogami.com/webpytrans">p??????</a>
+ </li>
+
+ <li>
+     <a href="http://kinneko.googlepages.com/webpy_tutorial_ja">日本語</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li><p><a href="/docs/0.3.fr" class="internal">Documentation</a>
+</p>
+
+ </li>
+
+ <li><p>FAQ:
+</p>
+<ul>
+ <li>
+     <a href="http://webpy.org/faq">english</a>
+ </li>
+
+ <li>
+     <a href="/faq/es" class="internal">español</a>
+ </li>
+
+ <li>
+     <a href="/faq/ru" class="internal">???????</a>
+ </li>
+
+ <li>
+     <a href="http://kinneko.googlepages.com/webpy_faq">???</a>
+ </li>
+
+ <li>
+     <a href="/faq/ja" class="internal">日本語</a>
+ </li>
+
+ <li>
+     <a href="/faq/zh-cn" class="internal">简体中文</a>
+ </li>
+
+ <li>
+     <a href="/faq/fr" class="internal">français</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li><p>cookbook:
+</p>
+<ul>
+ <li>
+     <a href="/cookbook/ja" class="internal">日本語</a>
+ </li>
+
+ <li>
+     <a href="/cookbook" class="internal">english</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/zh-cn" class="internal">简体中文</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/fr" class="internal">français</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li><p><a href="/src" class="internal">exemples de code</a>
+</p>
+
+ </li>
+
+ <li><p><a href="/hosts" class="internal">friendly hosts</a>
+</p>
+
+ </li>
+
+ <li><p><a href="/related" class="internal">related projects</a>
+</p>
+
+ </li>
+
+ <li><p><a href="/tricks" class="internal">tricks</a>
+</p>
+
+ </li>
+
+ <li><p><a href="http://www.bestessays.ca/" class="internal">best essays</a>
+</p>
+
+ </li>
+</ul>
+
+<h3>Communauté web.py</h3>
+<ul>
+ <li><p><a href="http://groups.google.com/group/webpy/" title="web.py google group"><strong>mail list</strong></a>: home of the web.py discussion
+</p>
+
+ </li>
+
+ <li><p><a href="irc://irc.freenode.net/webpy" title="#webpy on irc.freenode.net"><strong>irc channel</strong></a>: home of the web.py talk
+</p>
+
+ </li>
+
+ <li><p><a href="http://luke.jottit.com/webpy_logo">powered by web.py buttons</a>
+</p>
+
+ </li>
+</ul>
+
+<h3>Developpement web.py</h3>
+<ul>
+ <li><p><a href="http://github.com/webpy/webpy">git repository</a>
+</p>
+
+ </li>
+
+ <li><p><a href="http://launchpad.net/webpy">launchpad site</a>
+</p>
+
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>install macos x (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; install macos x
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>install macos x</h1>
+<p>Install Webpy 0.1 via darwinports.  <br />
+</p>
+<p>Adapted from <a href="http://macdevlog.com/webpy01-install.html">macdevlog</a>
+</p>
+<ol>
+ <li><p>Install <a href="http://macports.org/downloads/DarwinPorts-1.3.1-10.4.dmg">macports</a>.
+</p>
+
+ </li>
+
+ <li><p>update macports.
+</p>
+<pre><code>sudo port selfupdate
+</code></pre>
+ </li>
+
+ <li><p>Get python.  <br />
+</p>
+<pre><code>sudo port install python24
+</code></pre>
+ </li>
+
+ <li><p>Install postgreSQL
+</p>
+<pre><code>sudo port install postgresql81
+</code></pre>
+ </li>
+
+ <li><p>Get web.py
+</p>
+<pre><code>curl -O &quot;http://webpy.org/web.py&quot;
+</code></pre>
+ </li>
+
+ <li><p>Install Cheetah 
+</p>
+<pre><code>curl -O &quot;http://jaist.dl.sourceforge.net/sourceforge/cheetahtemplate/Cheetah-1.0.tar.gz&quot;        gunzip Cheetah-1.0.tar.gz
+tar -xvf Cheetah-1.0.tar
+rm Cheetah-1.0.tar
+cd Cheetah-1.0
+sudo python ./setup.py install
+cd ..
+sudo rm -Rf Cheetah-1.0
+</code></pre>
+ </li>
+
+ <li><p>Install pyscopg
+</p>
+<p>The version in darwinports is the older 1.x code branch.  Since we've installed Postgres in to a non-standard location, we have to nugde the setup.cfg file just a little bit.
+</p>
+<pre><code>curl -O &quot;http://initd.org/pub/software/psycopg/psycopg2-latest.tar.gz&quot;        tar -xzvf psycopg2-latest.tar.gz
+rm psycopg2-latest.tar.gz
+cd psycopg2-2.0.4
+echo library_dirs=/opt/local/lib/postgresql81 &gt;&gt; setup.cfg
+echo include_dirs=/opt/local/include/postgresql81 &gt;&gt; setup.cfg
+sudo python setup.py install
+cd ..
+sudo rm -Rf psycopg2-2.0.4
+</code></pre>
+ </li>
+
+ <li><p>Download <a href="http://www.pgadmin.org/download/macosx.php">pgadmin</a> (optional)
+</p>
+
+ </li>
+
+ <li><p>Setup postgresql
+</p>
+<p>To create a postgre user and group, we are going to use netinfo.  According to reports, Mas OS X 10.5 Leopard will be stripped of netinfo.  These commands are likely to be Tiger only.
+</p>
+<p>First, find an unused userID and groupID.  typically anything in the 200s or 300s will be unused on most Mac OS X non-server systems.  Let's assumes uid 206 and gid 207
+   If you need to check which uid and gid are in use, the following netinfo commands can be used:
+</p>
+<pre><code>nireport / /users name uid
+nireport / /groups name gid
+</code></pre><p>Make the users and groups:
+</p>
+<pre><code>sudo niutil -create / /groups/postgres
+sudo niutil -createprop / /groups/postgres gid 207
+sudo niutil -create / /users/postgres
+sudo niutil -createprop / /users/postgres uid 206
+sudo niutil -createprop / /users/postgres gid 207
+sudo niutil -destroyprop / /users/postgres passwd changeme
+</code></pre><p>Now, we need a data store.  We can use the Users/Shared directory for this.
+</p>
+<pre><code>mkdir /Users/Shared/PostgreSQL
+sudo mkdir /Users/Shared/PostgreSQL/data
+sudo chown postgres /Users/Shared/PostgreSQL/data
+sudo chgrp postgres /Users/Shared/PostgreSQL/data
+sudo -u postgres /opt/local/lib/postgresql81/bin/initdb -D /Users/Shared/PostgreSQL/data
+</code></pre><p>The initdb comnmand will take a moment, but output the status and notify you of success at the end.
+</p>
+
+ </li>
+
+ <li><p>Starting and stopping postgreSQL
+</p>
+<p>The -b will launch the process in the backgroud.
+</p>
+<pre><code>sudo -b -u postgres /opt/local/lib/postgresql81/bin/postmaster -D /Users/Shared/PostgreSQL/data &gt;/Users/Shared/PostgreSQL/logfile 2&gt;&amp;1
+</code></pre><p>This is how you stop a postgres process.
+</p>
+<pre><code>sudo -u postgres /opt/local/lib/postgresql81/bin/pg_ctl -D /Users/Shared/PostgreSQL/data stop
+</code></pre>
+ </li>
+
+ <li><p>Preparing PostgreSQL
+</p>
+<p>Create a user and a test db.  Our user is called webpy and the name of the database is webpydb.  
+</p>
+<pre><code>sudo -u postgres /opt/local/lib/postgresql81/bin/createuser --no-superuser --createdb --no-createrole webpy
+sudo -u postgres /opt/local/lib/postgresql81/bin/createdb  --username=webpy webpydb
+sudo -u postgres /opt/local/lib/postgresql81/bin/createlang  plpgsql webpydb
+sudo -u postgres /opt/local/lib/postgresql81/bin/psql -c &quot;create group webpydb&quot;        sudo -u postgres /opt/local/lib/postgresql81/bin/psql -c &quot;alter group webpydb add user webpy&quot;
+</code></pre><p>If these commands are successful, you should see 'CREATE ROLE', 'CREATE DATABASE', 'CREATE LANGUAGE', 'CREATE ROLE', and 'ALTER ROLE' printed out for the respective commands.  
+</p>
+
+ </li>
+
+ <li><p>Hardening PostgreSQL
+</p>
+<p>During most of these steps, we shell into root.  Be careful or your could break something.
+</p>
+<pre><code>cd /Users/Shared/PostgreSQL/
+sudo sh
+cd data
+</code></pre><p>Backup the pg_hba.conf file and then remove the 1 line that starts with local and the 2 lines that start with host.  These default values are way to insecure.
+</p>
+<pre><code>mv pg_hba.conf pg_hba.conf.bak
+sed -e '/^local/ d' -e '/^host / d' pg_hba.conf.bak &gt; pg_hba.conf
+</code></pre><p>Make the conf file secure.  These are based off of the <a href="http://developer.apple.com/internet/opensource/postgres.html">Apple recommended settings</a>.  Feel free to customize if you know what you are doing.
+</p>
+<pre><code>echo 'local   all         all                               md5' &gt;&gt; pg_hba.conf
+echo 'host    all         postgres    127.0.0.1/32          md5' &gt;&gt; pg_hba.conf
+echo 'host    samegroup   all         127.0.0.1/32          md5' &gt;&gt; pg_hba.conf
+echo 'host    all         postgres    ::1/128               md5' &gt;&gt; pg_hba.conf
+echo 'host    samegroup   all         ::1/128               md5' &gt;&gt; pg_hba.conf
+chown postgres pg_hba.conf
+exit
+</code></pre><p>Done with root.  All that remains is to assign passwords to the username.  Have you have ever had that dream where you go to school or work but have forgotten your pants?.  Skipping this step is kind of like that part of the dream where the cute girl is laughing and pointing at your open port.  Make sure the command outputs 'ALTER ROLE' to verify success.
+</p>
+<pre><code>sudo -u postgres /opt/local/lib/postgresql81/bin/psql -c &quot;alter user postgres with password 'changeme1'&quot;        sudo -u postgres /opt/local/lib/postgresql81/bin/psql -c &quot;alter user webpy with password 'changeme2'&quot;
+</code></pre><p>Time to reload and restart pgSQL
+</p>
+<pre><code>sudo -u postgres /opt/local/lib/postgresql81/bin/pg_ctl -D /Users/Shared/PostgreSQL/data reload
+</code></pre>
+ </li>
+</ol>
+<hr />
+
+<p>You can follow the <a href="http://webpy.org/tutorial">webpy tutorial</a> as long as you make the following change:    <br />
+</p>
+<pre><code>web.db_parameters = dict(dbn='postgres', user='webpy', pw='changeme2', db='webpydb')
+</code></pre><p>Also, you can use the following command to send database SELECT and INSERT querys:
+</p>
+<pre><code>/opt/local/lib/postgresql81/bin/psql webpy webpy SOME_QUERY
+</code></pre><p>These folowing  two items are for production deployment.  You won't not need them if you are just taking a quick look at web.py.  If you do want to play with around with a simple server setup, the following commands will get you started.
+</p>
+<pre><code>sudo port install lighttpd
+curl -O http://www.saddi.com/software/flup/dist/flup-r2028.tar.gz
+</code></pre><pre><code>
+</code></pre><p>References:
+</p>
+<ul>
+ <li>
+     <a href="http://www.postgresql.org/docs/8.1/interactive/">PostgreSQL 8.1.4 Documentation</a>
+ </li>
+
+ <li>
+     <a href="http://developer.apple.com/internet/opensource/postgres.html">PostgreSQL on Mac OS X</a>
+ </li>
+
+ <li>
+     <a href="http://www.macdevcenter.com/pub/a/mac/2002/06/07/postgresql.html?page=1">PostgreSQL for Mac OS X</a>
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

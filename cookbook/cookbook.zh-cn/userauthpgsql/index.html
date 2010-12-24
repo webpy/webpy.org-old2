@@ -1,0 +1,280 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>在PostgreSQL下实现用户认证 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; 在PostgreSQL下实现用户认证
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>在PostgreSQL下实现用户认证</h1>
+
+<h2>问题</h2>
+<ul>
+ <li>
+     如何利用PostgreSQL数据库实现一个用户认证系统？
+ </li>
+</ul>
+
+<h2>解法</h2>
+<ul>
+ <li>
+     用户认证系统有很多功能。在这个例子中，将展示如何在PostgreSQL数据库环境下一步一步完成一个用户认证系统
+ </li>
+</ul>
+
+<h2>必需</h2>
+<ul>
+ <li>
+     因为要用到make模板和postgreSQL数据库，所以要:
+     import web
+     from web.contrib.template import render_mako
+     import pg
+ </li>
+</ul>
+
+<h2>第一步：创建数据库</h2>
+<p>首先，为创建一个用户表。虽然这个表结构非常简单，但对于大部分项目来说都足够用了。
+</p>
+
+<h2></h2>
+<pre><code>CREATE TABLE example_users
+(
+  id serial NOT NULL,
+  user character varying(80) NOT NULL,
+  pass character varying(80) NOT NULL,
+  email character varying(100) NOT NULL,
+  privilege integer NOT NULL DEFAULT 0,
+  CONSTRAINT utilisateur_pkey PRIMARY KEY (id)
+)
+</code></pre>
+<h2>第二步：确定网址</h2>
+<p>登录和注销对应两个网址：
+</p>
+<ul>
+ <li><p>&quot;Login&quot; 对应登录页
+</p>
+
+ </li>
+
+ <li><p>&quot;Reset&quot; 对应注销页
+</p>
+
+ </li>
+</ul>
+
+<h2></h2>
+<pre><code>urls = (
+    '/login', 'login',
+    '/reset', 'reset',
+     )
+</code></pre>
+<h2>第三步：判断用户是否登录</h2>
+<p>要判断用户是否已登录，是非常简单的，只要有个变量记录用户登录的状态即可。在login/reset类中使用这段代码:
+</p>
+
+<h2></h2>
+<pre><code>def logged():
+    if session.login==1:
+        return True
+    else:
+        return False
+</code></pre>
+<h2>第四步：简单的权限管理</h2>
+<p>我把我的用户划为四类：管理员，用户，读者（已登录），访客（未登录）。根据example_users表中定义的不同权限，选择不同的模板路径。
+</p>
+
+<h2></h2>
+<pre><code>def create_render(privilege):
+    if logged():
+        if privilege==0:
+            render = render_mako(
+                directories=['templates/reader'],
+                input_encoding='utf-8',
+                output_encoding='utf-8',
+                )
+        elif privilege==1:
+            render = render_mako(
+                directories=['templates/user'],
+                input_encoding='utf-8',
+                output_encoding='utf-8',
+                )
+        elif privilege==2:
+            render = render_mako(
+                directories=['templates/admin'],
+                input_encoding='utf-8',
+                output_encoding='utf-8',
+                )
+    else:
+        render = render_mako(
+            directories=['templates/communs'],
+            input_encoding='utf-8',
+            output_encoding='utf-8',
+            )
+    return render
+</code></pre>
+<h2>第五：登录(Login)和注销(Reset)的python类</h2>
+<p>现在，让我们用个轻松的方法来解决：
+   - 如果你已登录，就直接重定向到login_double.html模板文件
+   - 否则，还是到login.html。
+</p>
+
+<h2></h2>
+<pre><code>class login:
+    def GET(self):
+        if logged():
+            render = create_render(session.privilege)
+            return &quot;%s&quot; % (
+                render.login_double()               )
+        else:
+            render = create_render(session.privilege)
+            return &quot;%s&quot; % (
+                render.login()
+                )
+</code></pre><ul>
+ <li>
+     好了。现在写POST()方法。从.html文件中，我们得到表单提交的变量值(见login.html)，并根据变量值得到example_users表中对应的user数据
+ </li>
+
+ <li>
+     如果登录通过了，就重定向到login_ok.html。
+ </li>
+
+ <li>
+     如果没通过，就重定向到login_error.html。
+ </li>
+</ul>
+
+<h2><br /></h2>
+<pre><code>    def POST(self):
+        user, passwd = web.input().user, web.input().passwd
+        ident = db.query(&quot;select * from example_users where user = '%s'&quot; % (user)).getresult()
+        try:
+            if passwd==ident[0][2]:
+                session.login=1
+                session.privilege=ident[0][4]
+                render = create_render(session.privilege)
+                return &quot;%s&quot; % (
+                        render.login_ok()
+                        )
+            else:
+                session.login=0
+                session.privilege=0
+                render = create_render(session.privilege)
+                return &quot;%s&quot; % (
+                    render.login_error()
+                    )
+        except:
+            session.login=0
+            session.privilege=0
+            render = create_render(session.privilege)
+            return &quot;%s&quot; % (
+                render.login_error()
+                )
+</code></pre><p>对于reset方法，只要清除用户session，再重定向到logout.html模板页即可。
+</p>
+
+<h2></h2>
+<pre><code>class reset:
+    def GET(self):
+        session.login=0
+        session.kill()
+        render = create_render(session.privilege)
+        return &quot;%s&quot; % (
+            render.logout()
+            )
+</code></pre>
+<h2>6th: 第六步：HTML模板帮助</h2>
+<p>嗯，我认为没有人想看这个，但我喜欢把所有的信息都提供出来。最重要的就是login.html。
+</p>
+
+<h2></h2>
+<pre><code>&lt;FORM action=/login method=POST&gt;
+    &lt;table id=&quot;login&quot;&gt;
+        &lt;tr&gt;
+            &lt;td&gt;User: &lt;/td&gt;
+            &lt;td&gt;&lt;input type=text name='user'&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Password: &lt;/td&gt;
+            &lt;td&gt;&lt;input type=&quot;password&quot; name=passwd&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;input type=submit value=LOGIN&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/form&gt;
+</code></pre>
+<h2>第七：问题或疑问？</h2>
+<ul>
+ <li>
+     邮件：您可以联想我，我的邮箱是guillaume(at)process-evolution(dot)fr
+ </li>
+
+ <li>
+     IRC：#webpy on irc.freenode.net (pseudo: Ephedrax) 
+ </li>
+
+ <li>
+     翻译：我是法国人，我的英文不好...你可以修改我的文档(译注：哈哈，谦虚啥，你那是没见过wrongway的山东英文...)
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

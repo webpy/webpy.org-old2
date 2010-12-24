@@ -1,0 +1,121 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Templating with Genshi (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Templating with Genshi
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Templating with Genshi</h1>
+<p> 
+ 
+<h2>code.py</h2> 
+<p>Put your &quot;code.py&quot; in root directory.
+</p> 
+<pre><code># -*- coding: utf-8 -*-
+ 
+import web
+from web.contrib import template
+ 
+render = template.render_genshi(['./templates/'])
+ 
+urls = (
+    '/', 'index'
+)
+ 
+class index:
+    def GET(self):
+        name = 'John Doe'
+        return render.index(name=name)
+ 
+app = web.application(urls, globals())
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre> 
+<h2>index.html</h2> 
+<p>Put your &quot;index.html&quot; in &quot;template&quot; directory.
+</p> 
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;html xmlns:py=&quot;http://genshi.edgewall.org/&quot;&gt;
+&lt;body&gt;
+&lt;p&gt;Hello, $name.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre> 
+<h2>refer</h2> 
+<ul> 
+ <li> 
+     <a href="http://groups.google.com/group/genshi/t/4f3fa1beddbd4ffc">genshi on gae 2010 - Genshi | Google Groups</a> 
+ </li> 
+ 
+ <li> 
+     <a href="http://genshi.edgewall.org/browser/trunk/examples/webpy?rev=332">/trunk/examples/webpy – Genshi</a> 
+ </li> 
+ 
+ <li> 
+     <a href="http://webpy.org/docs/0.3/api">api docs (web.py)</a> 
+ </li> 
+</ul> 
+ 
+ 
+</p>
+
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

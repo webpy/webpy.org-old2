@@ -1,0 +1,105 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Render individual form fields (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Render individual form fields
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Render individual form fields</h1>
+
+<h3>Problem</h3>
+<p>You want to render individual form fields in templates
+</p>
+
+<h3>Solution</h3>
+<p>You can use the <code>render()</code> method for individual fields to render the fields in your template.
+</p>
+<p>Let's assume you want to create a name/surname form. Very simple, with only two fields, and no validation, just for testing purposes.
+</p>
+<pre><code>from web import form
+simple_form = form.Form(
+    form.Textbox('name', description='Name'),
+    form.Textbox('surname', description='Surname'),
+)
+</code></pre><p>Usually you would either use <code>simple_form.render()</code> or <code>simple_form.render_css()</code>. But what if you want to render individual form fields one by one, so you can have more control over how it appears in your template? For that, you can use the <code>render()</code> method on individual fields.
+</p>
+<p>We have defined two fields with names <code>name</code> and <code>surname</code>. Those names automatically become attributes of <code>simple_form</code> object.
+</p>
+<pre><code>&gt;&gt;&gt; simple_form.name.render()
+'&lt;input type=&quot;text&quot; name=&quot;name&quot; id=&quot;name&quot; /&gt;'
+&gt;&gt;&gt; simple_form.surname.render()
+'&lt;input type=&quot;text&quot; name=&quot;surname&quot; id=&quot;surname&quot; /&gt;'
+</code></pre><p>You can also render individual descriptions in a similar way:
+</p>
+<pre><code>&gt;&gt;&gt; simple_form.surname.description
+'Surname'
+</code></pre><p>What if you have a small template snippet (partial template) that you'd like to use universally for all form fields you have defined? You can iterate fields by using the <code>inputs</code> attribute of your form object. Here's an example:
+</p>
+<pre><code>&gt;&gt;&gt; for input in simple_form.inputs:
+...     print input.description
+...     print input.render()
+... 
+Name
+&lt;input type=&quot;text&quot; name=&quot;name&quot; id=&quot;name&quot; /&gt;
+Surname
+&lt;input type=&quot;text&quot; name=&quot;surname&quot; id=&quot;surname&quot; /&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

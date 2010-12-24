@@ -1,0 +1,154 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>FAQ (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; FAQ
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>FAQ</h1>
+<ol>
+ <li><p><strong>如何使用template.py模板?</strong>
+</p>
+<p>基本的文档内容与一些代码片段，请查看 <a href="/templetor" class="internal">template.py doc</a>
+</p>
+<p>通过web.py应用显示页面，使用如下
+</p>
+<pre><code>    homepage = template.Template(open(&quot;homepage.tmpl&quot;).read())
+    print homepage()
+</code></pre>
+ </li>
+
+ <li><p><strong>为什么urls是一个长长的数组？</strong>
+</p>
+<p>如果是一个dictionary，那么就不会被排序好。 如果是一个tuples数组, 那需要更加多的文字输入。
+</p>
+
+ </li>
+
+ <li><p><strong>如何来通过web.py服务器来处理静态文件比如JavaScripts 或像PNG、JPG这些图片？</strong>
+</p>
+<p>在运行web.py服务代码的目录下创建一个文件夹命名为 <code>static</code>。 然后将你需要的静态文件放到这个 <code>static</code> 文件夹下。 比如，   请求URL <code>http://localhost/static/logo.png</code> 将会把图片 <code>./static/logo.png</code> 传递给客户端。
+</p>
+
+ </li>
+
+ <li><p><strong>哪里可以找到更多帮助？</strong>
+</p>
+<p>Google Groups 上的 <a href="http://groups.google.com/group/webpy">web.py group</a> 会很有用。
+</p>
+
+ </li>
+
+ <li><p><strong>如何来更改默认的 &quot;not found&quot; 页面？</strong>
+</p>
+<p>你可以改写你自己的notfound函数并将它赋值给 web.webapi.notfound
+</p>
+<pre><code>    def my_notfound(): 
+        print &quot;MY OWN NOT FOUND&quot; 
+    web.notfound = my_notfound
+</code></pre>
+ </li>
+
+ <li><p><strong>将webpy模块导入后，在python中如何才能够自动补全？</strong>
+</p>
+<p>在IPython中， 导入webpy之后自动补全功能可能会不可用。 你还是可以使用 'python' 的自动补全功能。请尝试输入如下：
+</p>
+<pre><code>    import readline, rlcompleter; readline.parse_and_bind(&quot;tab: complete&quot;)
+</code></pre><p>使用tab吧！:-)
+</p>
+<p>为了能在python运行时可以默认提供该补全功能。 创建文件命名为 '~/.pythonstartup.py' 并将以上import代码放入其中。 然后设置  'PYTHONSTARTUP' 环境变量指向该文件。
+</p>
+<p>在bash中，如下所示；编辑 ~/.bashrc 并添加：
+</p>
+<pre><code>    export PYTHONSTARTUP=~/.pythonstartup.py
+</code></pre>
+ </li>
+
+ <li><p><strong>为什么不能访问数据库？</strong>
+</p>
+<p>If you're trying to access the database from a non-web-serving thread (e.g. you created a new thread or you never started serving web pages) then you need to run <code>web.load()</code>. Sorry, this will be fixed in web.py 0.3.
+</p>
+
+ </li>
+
+ <li><p><strong>能否多次遍历IterBetter？</strong>
+</p>
+<p>不可以。 通过 <code>ib = list(ib)</code> 将IterBetter转变为数组。
+</p>
+
+ </li>
+
+ <li><p><strong>如何输出debug信息到console？</strong>
+</p>
+<p>web.debug(&quot;I will get printed to the console and not the body of the webpage&quot;)
+</p>
+
+ </li>
+
+ <li><p><strong>我凑巧遇到web.py的一个bug。我需要提交到何处？</strong>
+</p>
+<p>请到 <a href="https://launchpad.net/webpy">webpy launchpad site</a>, 登录(如果没有帐号请注册) 并点击 &quot;report a bug&quot;。
+</p>
+
+ </li>
+</ol>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

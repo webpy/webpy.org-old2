@@ -1,0 +1,105 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Sessions with Sub-apps (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Sessions with Sub-apps
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Sessions with Sub-apps</h1>
+<p>Other languages: <a href="/../cookbook/sessions_with_subapp/fr" class="internal">français</a> | ...
+</p>
+
+<h3>Note</h3>
+<p><em>This solutions is taken from <a href="http://www.mail-archive.com/webpy@googlegroups.com/msg02557.html" class="internal">this</a> post on the web.py mailing list.</em>
+</p>
+
+<h2>Problem</h2>
+<p>In its default behavior, session information can only be shared from within the main application, even if you 'import' the session from other modules. You need to be able to access session information from 'sub applications' but how?
+</p>
+
+<h2>Solution</h2>
+<p>In your app.py (or main.py) initialize your session like this:
+</p>
+<pre><code>session = web.session.Session(app, web.session.DiskStore('sessions'),
+initializer = {'test': 'woot', 'foo':''})
+</code></pre><p>.. and create a processor via web.loadhook:
+</p>
+<pre><code>def session_hook():
+    web.ctx.session = session
+
+app.add_processor(web.loadhook(session_hook))
+</code></pre><p>.. and now in your 'sub-apps' (like sub-app.py) you can access the the session information like this:
+</p>
+<pre><code>print web.ctx.session.test
+web.ctx.session.foo = 'bar'
+</code></pre><p>.. if you want to make sessions avaible in templates you should change session_hook function like this:
+</p>
+<pre><code>def session_hook():
+    web.ctx.session = session
+    web.template.Template.globals['session'] = session
+</code></pre><p>.. and now you can write in template something like this:
+</p>
+<pre><code>$session.get('logged_in', ''):
+    &lt;p&gt;You are $session.username&lt;/p&gt;
+$else:
+    &lt;p&gt;You are not logged in&lt;/p&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

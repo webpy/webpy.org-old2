@@ -1,0 +1,148 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Use Mako template engine in webpy (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Use Mako template engine in webpy
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Use Mako template engine in webpy</h1>
+
+<h3>Problem</h3>
+<p>How to use Mako template engine in webpy?
+</p>
+
+<h3>Solution</h3>
+<p>You need to install both Mako and webpy(0.3) first: <a href="http://www.makotemplates.org">http://www.makotemplates.org/</a> and then try out the following code snippet:
+</p>
+<pre><code># encoding: utf-8
+# File: code.py
+
+import web
+
+from web.contrib.template import render_mako
+
+urls = (
+        '/(.*)', 'hello'
+        )
+
+app = web.application(urls, globals(), autoreload=True)
+
+# input_encoding and output_encoding is important for unicode
+# template file. Reference:
+# http://www.makotemplates.org/docs/documentation.html#unicode
+render = render_mako(
+        directories=['templates'],
+        input_encoding='utf-8',
+        output_encoding='utf-8',
+        )
+
+class hello:
+    def GET(self, name):
+        return render.hello(name=name)
+        # Another way:
+        #return render.hello(**locals())
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre><p>Template file:
+</p>
+<pre><code>## File: templates/hello.html
+
+Hello, ${name}.
+</code></pre>
+<h3>Note:</h3>
+<p>if you use Apache + mod_wsgi to deploy webpy apps, you may get the similar error msg in your apache error log:
+</p>
+<pre><code>[Sat Jun 21 21:56:22 2008] [error] [client 192.168.122.1] TopLevelLookupException: Cant locate template for uri 'index.html'
+</code></pre><p>You have to specify location of templates as absolute path as no
+   guarantees as to what current working directory will be.
+</p>
+<p>You can use relative paths in order to make it easier too. e.g.
+</p>
+<pre><code>import os
+
+render = render_mako(
+        directories=[os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),],
+        input_encoding='utf-8',
+        output_encoding='utf-8',
+        )
+</code></pre>
+<h1>Reference:</h1>
+<ul>
+ <li>
+     http://code.google.com/p/modwsgi/wiki/ApplicationIssues
+ </li>
+</ul>
+
+<h1>i18n support in Mako template file:</h1>
+<p>Please refer to cookbook 'i18n support in webpy template file' for i18n support in mako template file:
+</p>
+<ul>
+ <li>
+     Cookbook: <a href="/i18n_support_in_template_file " class="internal">i18n support in webpy template file</a>
+ </li>
+</ul>
+
+<h1>Note:</h1>
+<p>Babel is only needed to generate the .mo files.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

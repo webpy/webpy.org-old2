@@ -1,0 +1,140 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Symonds.net (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Symonds.net
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Symonds.net</h1>
+<p>I was able to get web.py running without too much trouble on my hosting service <a href="http://symonds.net/">Symonds.net</a>. I created a personal status page with it, which can be viewed <a href="http://deepak.jois.name">here</a>. The source code for the page is also included.
+</p>
+
+<h2>Getting it up</h2>
+<p>web.py can be run on Symonds.net using FastCGI.
+</p>
+<p>Note that the Python installation on Symonds.net did not have the following modules installed, so I had to install it inside my local folder.  <br />
+</p>
+<ul>
+ <li>
+     Cheetah
+ </li>
+
+ <li>
+     <a href="http://www.saddi.com/software/flup/">flup</a>
+ </li>
+</ul>
+<p>Follow the instructions on your host:
+</p>
+<ul>
+ <li>
+     change directory into the newly created domain, e.g : <code>cd deepak</code>
+ </li>
+
+ <li>
+     <code>wget http://webpy.org/web.py</code>
+ </li>
+
+ <li>
+     <code>wget http://www.saddi.com/software/flup/dist/flup-r1839.tar.gz</code>
+ </li>
+
+ <li>
+     <code>tar zxvf flup-r1839.tar.gz</code>
+ </li>
+
+ <li>
+     <code>mv flup-r1839/flup/ ./flup</code>
+ </li>
+</ul>
+<p>On your local machine, as superuser :
+</p>
+<ul>
+ <li>
+     Download Cheetah from <a href="http://sourceforge.net/project/showfiles.php?group_id=28961&amp;package_id=20864&amp;release_id=391008">http://sourceforge.net/project/showfiles.php?group_id=28961&amp;package_id=20864&amp;release_id=391008</a> and extract it.
+ </li>
+
+ <li>
+     Extract it using <code>tar xvzf  Cheetah-2.0rc4.tar.gz</code>
+ </li>
+
+ <li>
+     Install it using : <code>cd Cheetah-2.0rc4</code> and <code>python setup.py install</code>
+ </li>
+
+ <li>
+     Copy the folder named <code>/usr/lib/python&lt;version&gt;/site-packages/Cheetah</code> to your host in the same folder you downloaded <code>web.py</code> : <code>scp -r /usr/lib/python2.4/site-packages/Cheetah username@hostname:public_html/deepak/</code>
+ </li>
+</ul>
+<p>After that, include the following in the <code>.htaccess</code> file inside the folder you downloaded <code>web.py</code>:
+</p>
+<pre><code> Options FollowSymLinks ExecCGI
+
+ &lt;Files *py&gt;     SetHandler cgi-script
+ Addhandler cgi-script py
+ &lt;/Files&gt;
+</code></pre><p>You might also want to include some URL redirection directives like :
+</p>
+<pre><code>  RewriteEngine on
+  RewriteRule    ^status$ status.py/status
+</code></pre><p>After this, you should be able to view your web.py app like <a href="http://deepak.jois.name/status">here</a>.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

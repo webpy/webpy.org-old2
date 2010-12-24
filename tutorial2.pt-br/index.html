@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>tutorial do web.py 0.2 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; tutorial do web.py 0.2
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>tutorial do web.py 0.2</h1>
+
+<h2>Começando</h2>
+<p>Então você sabe Python e quer fazer um site. O web.py fornece o código que torna essa uma tarefa fácil.
+</p>
+<p>Se você quiser fazer o tutorial inteiro, você precisará destes programas: Python, web.py, flup, psycopg2 e Postgres (ou um banco de dados equivalente e adaptador correspondente para Python). Para detalhes, veja <a href="http://webpy.org/">webpy.org</a>.
+</p>
+<p>Se você já tem um projeto web.py, dê uma olhada na página de <a href="http://webpy.infogami.com/upgrade_to_point2">atualização</a> (em inglês) para informações sobre migração.
+</p>
+<p>Vamos começar.
+</p>
+
+<h2>Tratamento de URLs</h2>
+<p>A parte mais importante de qualquer site é a estrutura de suas URLs. Suas URLs não são simplesmente aquela coisa que os visitantes vêem e mandam para seus amigos; elas também criam um modelo mental de como seu site funciona. Em sites populares como o <a href="http://del.icio.us/">del.icio.us</a>, as URLs são até uma parte da interface com o usuário. O web.py faz com que criar boas URLs seja fácil.
+</p>
+<p>Para começar sua aplicação com web.py, abra um novo arquivo de texto (vamos chamá-lo de 'codigo.py') e digite:
+</p>
+<pre><code>import web
+</code></pre><p>Isso serve para importar o módulo do web.py.
+</p>
+<p>Agora precisamos dizer ao web.py qual será nossa estrutura de URLs. Vamos começar com algo simples:
+</p>
+<pre><code>urls = (
+  '/', 'index'    )
+</code></pre><p>A primeira parte é uma <a href="http://osteele.com/tools/rework/">expressão regular</a> que corresponde a uma URL, como <code>/</code>, <code>/ajuda/faq</code>, <code>/item/(\d+)</code>, etc. (<code>\d+</code> corresponde a uma seqüência de dígitos. Os parênteses pedem que aquela parte da correspondência seja &quot;capturada&quot; para ser usada mais tarde.) A segunda parte é o nome de uma classe para a qual a requisição HTTP deve ser enviada, como <code>index</code>, <code>view</code>, <code>welcomes.hello</code> (este último corresponde à classe <code>hello</code> do módulo <code>welcomes</code>), ou <code>get_\1</code>. <code>\1</code> é substituído pela primeira captura feita pela sua expressão regular; as capturas que sobrarem são passadas para a sua função.
+</p>
+<p>Essa linha diz que queremos que a URL <code>/</code> (i.é., a página inicial) seja tratada pela classe chamada <code>index</code>.
+</p>
+<p>Agora precisamos escrever a classe <code>index</code>. Apesar de a maioria das pessoas não perceber enquanto navega por aí, seu navegador usa uma linguagem conhecida como HTTP para comunicar-se com a internet. Os detalhes não são importantes, mas o princípio básico é que os visitantes da Web pedem aos servidores web que realizem certas funções (como <code>GET</code> ou <code>POST</code>) em URLs (como <code>/</code> ou <code>/foo?f=1</code>). 
+</p>
+<p><code>GET</code> é a função com a qual estamos todos acostumados: é a usada para pedir o texto de uma página da web. Quando você digita <code>harvard.edu</code> no seu navegador, ele literalmente pede ao servidor web de Harvard <code>GET /</code>.  A segunda mais famosa, <code>POST</code>, é comumente usada ao enviar certos tipos de formulários, como um pedido para comprar algo. Você usar <code>POST</code> sempre que o envio de um pedido <em>faz alguma coisa</em> (como cobrar de seu cartão de crédito e processar um pedido). Isso é crucial, pois URLs do tipo <code>GET</code> podem ser transmitidas por aí e indexadas por mecanismos de busca -- você quer isso para a maioria das suas página, mas com certeza <em>não</em> para coisas como processar pedidos (imagine se o Google tentasse comprar tudo no seu site!).
+</p>
+<p>No nosso código para o web.py, a distinção entre os dois é clara:
+</p>
+<pre><code>class index:
+    def GET(self):
+        print &quot;Olá, mundo!&quot;
+</code></pre><p>Essa função <code>GET</code> será chamada pelo web.py sempre que alguém fizer um pedido <code>GET</code> para a URL <code>/</code>.
+</p>
+<p>Ok, agora só falta terminar com uma linha que manda o web.py começar a servir as páginas da web:
+</p>
+<pre><code>if __name__ == &quot;__main__&quot;: web.run(urls, globals())
+</code></pre><p>Isso manda o web.py servir as URLs que listamos acima, procurando as classes no nome de espaços global para o arquivo atual.
+</p>
+<p>Perceba que, embora eu esteja falando bastante, nós só temos umas cinco linhas de código. É só isso que você precisa para fazer uma aplicação completa com o web.py. Se você for até sua linha de comando e digitar:
+</p>
+<pre><code>$ python codigo.py
+Launching server: http://0.0.0.0:8080/
+</code></pre><p>Você terá sua aplicação web.py executando um servidor web de verdade no seu computador. Visite essa URL e você deverá ver &quot;Olá, mundo!&quot; (Você pode adicionar um endereço IP/porta depois de &quot;codigo.py&quot; para controlar onde o web.py executa o servidor. Você também pode fazê-lo rodar um servidor <code>fastcgi</code> ou <code>scgi</code>.)
+</p>
+<p><strong>Nota:</strong> Você pode especificar o número de porta a usar pela linha de comando desta maneira, se não puder ou não quiser usar o padrão:
+</p>
+<pre><code>$ python codigo.py 1234
+</code></pre>
+<h2>Desenvolvimento</h2>
+<p>O web.py também tem algumas ferramentas para nos ajudar com a depuração. Antes do 'if <strong>name</strong>' na última linha, adicione:
+</p>
+<pre><code>web.webapi.internalerror = web.debugerror
+</code></pre><p>Isso lhe fornecerá mensagens de erro mais úteis, quando for o caso. Coloque também na última linha <code>web.reloader</code>, de modo que ela se torne:
+</p>
+<pre><code>if __name__ == &quot;__main__&quot;: web.run(urls, globals(), web.reloader)
+</code></pre><p>Isso diz ao web.py que use o &quot;middleware&quot; web.reloader (middleware é uma função intermediária que adiciona certos recursos ao seu servidor web), que recarrega seus arquivos assim que você os edita, de modo que você pode imediatamente ver as alterações no seu navegador. (Contudo, para algumas alterações mais drásticas, você ainda precisará reiniciar o servidor.) Você provavelmente deverá tirar isso ao deixar seu site público, mas é um recurso excelente durante o desenvolvimento. Também há o <code>web.profiler</code>, que, no final de cada página, fornece informações sobre quanto tempo cada função tomou, de modo que você possa tornar seu código mais rápido.
+</p>
+
+<h2>Templating</h2>
+<p>Escrever HTML de dentro do Python pode tornar-se um empecilho; é muito mais divertido escrever código Python de dentro do HTML. Por sorte, o web.py torna isso bastante fácil.
+</p>
+<p><strong>Nota:</strong> Versões antigas do web.py usavam <a href="http://www.cheetahtemplate.org/">Cheetah templates</a>. Você é, é claro, livre para usar esse ou qualquer outro software com o web.py, mas ele não é mais suportado oficialmente.
+</p>
+<p>Vamos criar um novo diretório para nossos templates (vamos chamá-lo de <code>templates</code>). Dentro dele, crie um novo arquivo cujo nome termine em HTML (vamos chamá-lo de <code>index.html</code>). Agora, dentro dele, você pode escrever código HTML normal:
+</p>
+<pre><code>&lt;em&gt;Olá&lt;/em&gt;, mundo!
+</code></pre><p>Ou você pode usar a linguagem de templates do web.py para adicionar código ao seu HTML:
+</p>
+<pre><code>$def with (nome)
+
+$if nome:
+    Eu só queria dizer &lt;em&gt;olá&lt;/em&gt; para $nome.
+$else:
+    &lt;em&gt;Olá&lt;/em&gt;, mundo!
+</code></pre><p><strong>Nota: Atualmente, é necessário usar quatro espaços para a indentação.</strong>
+</p>
+<p>Como você pode ver, os templates parecem-se bastante com arquivos Python, exceto pela instrução <code>def with</code> no começo (ela diz com que parâmetros o template é chamado) e os <code>$</code>s colocados na frente de qualquer código.  Atualmente, o template.py requer que a instrução $def seja a primeira linha do arquivo.  Além disso, note que o web.py &quot;escapa&quot; as variáveis que forem usadas -- de modo que se, por alguma razão, o valor da variável <code>nome</code> conntém algum código HTML, ela será devidamente &quot;escapada&quot; e aparecerá como texto puro. Se você não deseja esse comportamento, use <code>$:nome</code> em vez de <code>$nome</code>.
+</p>
+<p>Agora volte ao <code>codigo.py</code>. Abaixo da primeira linha, insira:
+</p>
+<pre><code>render = web.template.render('templates/')
+</code></pre><p>Isso manda o web.py procurar por templates no seu diretório <code>templates</code>. Então altere a função <code>index.GET</code> para:
+</p>
+<pre><code>nome = 'João'
+print render.index(nome)
+</code></pre><p>('index' é o nome do template, e 'nome' é o parâmetro passado para ele)
+</p>
+<p>Visite seu site e ele deverá dizer olá para o João.
+</p>
+<p><strong>Dica para o desenvolvimento:</strong> Adicione <code>cache=False</code> ao final da sua chamada a <code>render</code> para que o web.py recarregue seus templates toda vez que você entrar na sua página.
+</p>
+<p>Agora mude sua URL para:
+</p>
+<pre><code>'/(.*)', 'index'
+</code></pre><p>e troque a definição de <code>index.GET</code> para:
+</p>
+<pre><code>def GET(self, nome):
+</code></pre><p>e apague a linha que define <code>nome</code>. Visite <code>/</code> e a página deverá dizer olá ao mundo. Visite <code>/José</code> e ela deverá dizer olá ao José.
+</p>
+<p>Se você quer aprender mais sobre os templates do web.py, visite a página do <a href="em inglês">[templetor]</a>.
+</p>
+
+<h2>Bancos de dados</h2>
+<p>Nota: Antes de poder começar a usar um banco de dados, certifique-se de que tem a biblioteca correspondente instalada. Para bancos de dados MySQL, use <a href="http://sourceforge.net/project/showfiles.php?group_id=22307">MySQLdb</a>; para o Postgres, use o <a href="http://initd.org/pub/software/psycopg/">psycopg2</a>.
+</p>
+<p>Acima da sua linha <code>web.run</code>, adicione:
+</p>
+<pre><code>web.config.db_parameters = dict(dbn='postgres', user='nome_do_usuario', pw='senha', db='nome_do_banco_de_dados')
+</code></pre><p>(Modifique isto -- especialmente <code>nome_do_usuario</code>, <code>senha</code>, and <code>nome_do_banco_de_dados</code> -- para os valores correspondentes à sua configuração. Usuários do MySQL também devem trocar <code>dbn</code> por <code>mysql</code>.)
+</p>
+<p>Crie uma tabela simples no seu banco de dados:
+</p>
+<pre><code>CREATE TABLE todo (
+  id serial primary key,
+  title text,
+  created timestamp default now(),
+  done boolean default 'f'    );
+</code></pre><p>E uma linha inicial:
+</p>
+<pre><code>INSERT INTO todo (title) VALUES ('Aprender web.py');
+</code></pre><p>Voltando ao <code>codigo.py</code>, modifique a função <code>index.GET</code> para:
+</p>
+<pre><code>def GET(self):
+    todos = web.select('todo')
+    print render.index(todos)
+</code></pre><p>e modifique o tratador de URLs de volta para simplesmente <code>/</code>.
+</p>
+<p>Edite o <code>index.html</code> de modo que ele se torne:
+</p>
+<pre><code>$def with (todos)
+&lt;ul&gt;
+$for todo in todos:
+    &lt;li id=&quot;t$todo.id&quot;&gt;$todo.title&lt;/li&gt;    &lt;/ul&gt;
+</code></pre><p>Visite novamente seu site, e você deverá ver uma tarefa na lista: &quot;Aprender web.py&quot;. Parabéns! Você fez uma aplicação completa que lê dados de um banco de dados. Agora vamos também gravar dados no banco de dados.
+</p>
+<p>No final de <code>index.html</code>, insira:
+</p>
+<pre><code>&lt;form method=&quot;post&quot; action=&quot;add&quot;&gt;    &lt;p&gt;&lt;input type=&quot;text&quot; name=&quot;title&quot; /&gt; &lt;input type=&quot;submit&quot; value=&quot;Adicionar&quot; /&gt;&lt;/p&gt;    &lt;/form&gt;
+</code></pre><p>E modifique sua lista de URLs para que fique assim:
+</p>
+<pre><code>'/', 'index',
+'/add', 'add'
+</code></pre><p>(Você deve ser muito cuidadoso com essas vírgulas.  Se você as omitir, o Python juntará as strings e verá <code>'/index/addadd'</code> no lugar da sua lista de URLs!)
+</p>
+<p>Agora adicione outra classe:
+</p>
+<pre><code>class add:
+    def POST(self):
+        i = web.input()
+        n = web.insert('todo', title=i.title)
+        web.seeother('/')
+</code></pre><p>(Viu como estamos usando o método <code>POST</code> para isso?)
+</p>
+<p><code>web.input</code> lhe dá acesso às variáveis que o usuário enviou através de um formulário.  Para obter dados de elementos com nomes idênticos em formato de lista (por exemplo, uma série de caixas de verificação com o atributo name=&quot;nome&quot;), use:
+</p>
+<pre><code>post_data=web.input(nome=[])
+</code></pre><p><code>web.insert</code> insere valores na tabela <code>todo</code> do banco de dados e lhe devolve o ID da nova linha. <code>seeother</code> redireciona os usuários para esse ID.
+</p>
+<p>Rapidinhas: <code>web.transact()</code> inicia uma transação. <code>web.commit()</code> confirma a transação e armazena os dados; <code>web.rollback()</code> desfaz as alterações. <code>web.update</code> funciona como <code>web.insert</code>, recebendo (em vez de devolver) um ID (ou uma string com uma sentença <code>WHERE</code>) após o nome da tabela.
+</p>
+<p><code>web.input</code>, <code>web.query</code> e outras funções do web.py devolvem &quot;Objetos de armazenamento&quot;, que são como dicionários mas também permitem que você use <code>d.foo</code> além de <code>d['foo']</code>. Isso realmente deixa certos códigos mais limpos.
+</p>
+<p>Você pode encontrar todos os detalhes sobre essas e todas as outras funções do web.py na <a href="http://new.webpy.org/docs">documentação</a> (em inglês).
+</p>
+<p>Isso termina o tutorial por enquanto. Dê uma olhada na documentação para ver o monte de coisas legais que você pode fazer com o web.py.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

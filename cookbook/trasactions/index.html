@@ -1,0 +1,118 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>How to use database transactions (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; How to use database transactions
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>How to use database transactions</h1>
+
+<h3>Problem</h3>
+<p>How to use database transactions
+</p>
+
+<h3>Solution</h3>
+<p>The web.DB class has a method <code>transaction</code> which returns a transaction object. The transaction object can be used to commit or rollback a transaction.
+</p>
+<pre><code>import web
+
+db = web.databse(dbn=&quot;postgres&quot;, db=&quot;webpy&quot;, user=&quot;foo&quot;, pw=&quot;&quot;)
+t = db.transaction()
+try:
+    db.insert('person', name='foo')
+    db.insert('person', name='bar')
+except:
+    t.rollback()
+    raise
+else:
+    t.commit()
+</code></pre><p>With python 2.5+, transaction can be used as with statement also.
+</p>
+<pre><code>db = web.databse(dbn=&quot;postgres&quot;, db=&quot;webpy&quot;, user=&quot;foo&quot;, pw=&quot;&quot;)
+
+with db.transaction():
+    db.insert('person', name='foo')
+    db.insert('person', name='bar')
+</code></pre><p>It is also possible to have nested transactions.
+</p>
+<pre><code>def post(title, body, tags):
+    t = db.transaction()
+    try:
+        post_id = db.insert('post', title=title, body=body)
+        add_tags(post_id, tags)
+    except:
+        t.rollback()
+    else:
+        t.commit()
+
+def add_tags(post_id, tags):
+    t = db.transaction()
+    try:
+        for tag in tags:
+            db.insert('tag', post_id=post_id, tag=tag)
+    except:
+        t.rollback()
+    else:
+        t.commit()
+</code></pre><p>Nested transactions are ignored for sqlite as they are not supported.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

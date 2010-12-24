@@ -1,0 +1,162 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Configuration recommandée (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Configuration recommandée
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Configuration recommandée</h1>
+<p>Autre langages : <a href="/recommended_setup" class="internal">english</a> | ...
+</p>
+
+<h3>Sommaire</h3>
+<ul>
+ <li>
+     <a href="#webserver">Serveurs web</a>
+ </li>
+
+ <li>
+     <a href="#database">Bases de données</a>
+ </li>
+
+ <li>
+     <a href="#pool">Pool de connexions</a>
+ </li>
+
+ <li>
+     <a href="#template">Modèles, gabarits</a>
+ </li>
+
+ <li>
+     <a href="#userinput">Entrées utilisateurs</a>
+ </li>
+</ul>
+<p>Web.py recommande les logiciels suivants pour les serveurs de production:
+</p>
+<p><a name="webserver"></a>
+</p>
+
+<h2>Serveurs web:</h2>
+<p>Webpy dispose d'un serveur web interne, mais il devrait être utilisé pour le développement seulement. Pour le déploiement, un serveur plus robuste est recommandé, comme l'un de ceux-ci:
+</p>
+<ul>
+ <li>
+     <a href="http://www.lighttpd.net/download/">lighttpd</a> [BSD] <a href="http://trac.lighttpd.net/trac/wiki/#ReferenceDocumentation">(doc)</a> via <a href="http://trac.saddi.com/flup">flup's fastcgi</a> <a href="'easy_install flup'">BSD</a>
+ </li>
+
+ <li>
+     <a href="http://www.apache.org/">Apache</a> [Apache] via <a href="http://code.google.com/p/modwsgi/">(mod_wsgi)</a> [Apache]
+ </li>
+</ul>
+<p><a name="database"></a>
+</p>
+
+<h2>Bases de données:</h2>
+<p>Webpy ne nécessite pas de base de données pour fonctionner. Il supporte néanmoins les bases suivantes:
+</p>
+<ul>
+ <li>
+     <a href="http://www.postgresql.org/download/">postgresql</a> [BSD] <a href="http://www.postgresql.org/docs/">(doc)</a> avec <a href="http://initd.org/pub/software/psycopg/">psycopg2</a> [BSD] <a href="http://www.initd.org/tracker/psycopg/wiki/PsycopgTwo">(doc)</a> comme client python. ('easy_install psycopg2')
+ </li>
+
+ <li>
+     <a href="http://dev.mysql.com/downloads/mysql/5.0.html">mysql</a> [GPL] <a href="http://www.mysql.org/doc/">(doc)</a> avec <a href="http://sourceforge.net/project/showfiles.php?group_id=22307">MySQLdb</a> [CNRI] <a href="http://mysql-python.sourceforge.net/MySQLdb.html">(doc)</a> comme client python ('easy_install MySQL-python')
+ </li>
+
+ <li>
+     <a href="http://www.sqlite.org/">sqlite</a> [Public domain] <a href="http://www.sqlite.org/docs.html">(doc)</a> avec <a href="http://code.google.com/p/pysqlite/">pysqlite</a> comme client python ('easy_install pysqlite').
+ </li>
+</ul>
+<p><a name="pool"></a>
+</p>
+
+<h2>Pool de connexions:</h2>
+<p>Pour les sites à haut traffic, le pool de connexion autorise Webpy à conserver de multiples connexions aux bases de données ouvertes, afin d'accélérer l'accès aux bases. Cette option est facultative, mais disponible comme échelon tactique.
+</p>
+<ul>
+ <li>
+     <a href="http://www.w4py.org/downloads/DBUtils/">DBUtils</a> [CNRI] <a href="http://www.webwareforpython.org/DBUtils/Docs/UsersGuide.html">(doc)</a> ('easy_install DBUtils')
+ </li>
+</ul>
+<p><a name="template"></a>
+</p>
+
+<h2>Modèles, gabarits:</h2>
+<p>Webpy possède son propre système de gabarit qui permet aux utilisateurs d'autoriser l'écriture de gabarits aux utilisateurs moins épprouvés, et d'utiliser une syntaxe proche de celle du python dans les templates.
+</p>
+<ul>
+ <li>
+     template.py [built-in] <a href="/docs/0.3/templetor.fr">(doc)</a>
+ </li>
+</ul>
+<p><a name="userinput"></a>
+</p>
+
+<h2>Entrées utilisateurs:</h2>
+<p>Markdown permet aux utilisateurs de Webpy d'écrire du texte qui est convertit en HTML dans la page. Ce n'est pas indispensable, mais c'est la meilleure façon de générer du HTML à partir des entrées utilisateur.
+</p>
+<ul>
+ <li>
+     <a href="http://sourceforge.net/project/showfiles.php?group_id=153041">python-markdown</a> [BSD] <a href="http://www.freewisdom.org/projects/python-markdown/">(doc)</a>
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Sessions (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Sessions
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Sessions</h1>
+<p>Other languages: <a href="/../cookbook/sessions/fr" class="internal">français</a> | ...
+</p>
+
+<h3>Problem</h3>
+<p>How to use sessions in web.py.
+</p>
+
+<h3>Solution</h3>
+<p><em>sessions doesn't work in <a href="/tutorial3.en#developing" class="internal">debug</a> mode because it interfere with reloading. see <a href="/session_with_reloader" class="internal">session_with_reloader</a> for more details.</em>
+</p>
+<p>The <code>web.session</code> module provides session support. Here is a simple application to count using sessions.
+</p>
+<pre><code>import web
+web.config.debug = False
+urls = (
+    &quot;/count&quot;, &quot;count&quot;,
+    &quot;/reset&quot;, &quot;reset&quot;
+)
+app = web.application(urls, locals())
+session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'count': 0})
+
+class count:
+    def GET(self):
+        session.count += 1
+        return str(session.count)
+
+class reset:
+    def GET(self):
+        session.kill()
+        return &quot;&quot;
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre><p>The session object is loaded with the session data before handling the request and saves the session data after handling the request, if modified. Note in the current (11-22-2008) version of web.py, one must turn off debug to use the development server with sessions.
+</p>
+<p>The optional <code>initializer</code> argument to Session specifies the initial session.
+</p>
+<p>You can use <code>DBStore</code> instead of <code>DiskStore</code> if you prefer to store sessions in database instead of disk. For using DBStore you need to have a table with the following schema.
+</p>
+<pre><code> create table sessions (
+    session_id char(128) UNIQUE NOT NULL,
+    atime timestamp NOT NULL default current_timestamp,
+    data text
+);
+</code></pre><p>And you need to pass <code>db</code> object and session table name to the constructor of <code>DBStore</code>.
+</p>
+<pre><code>db = web.database(dbn='postgres', db='mydatabase', user='myname', pw='')
+store = web.session.DBStore(db, 'sessions')
+session = web.session.Session(app, store, initializer={'count': 0})
+</code></pre><p>Options related to sessions can be modified using the <code>sessions_parameters</code> dict in <code>web.config</code>. The default values are shown below.
+</p>
+<pre><code>web.config.session_parameters['cookie_name'] = 'webpy_session_id'
+web.config.session_parameters['cookie_domain'] = None
+web.config.session_parameters['timeout'] = 86400, #24 * 60 * 60, # 24 hours   in seconds
+web.config.session_parameters['ignore_expiry'] = True
+web.config.session_parameters['ignore_change_ip'] = True
+web.config.session_parameters['secret_key'] = 'fLjUfxqXtfNoIldA0A0J'
+web.config.session_parameters['expired_message'] = 'Session expired'
+</code></pre><ul>
+ <li>
+     <code>cookie_name</code> - name of the cookie used to store the session id
+ </li>
+
+ <li>
+     <code>cookie_domain</code> - domain for the cookie used to store the session id
+ </li>
+
+ <li>
+     <code>timeout</code> - number of second of inactivity that is allowed before the session expires
+ </li>
+
+ <li>
+     <code>ignore_expiry</code> - if <code>True</code>, the session timeout is ignored
+ </li>
+
+ <li>
+     <code>ignore_change_ip</code> - if <code>False</code>, the session is only valid when it is accessed from the same ip address that created the session
+ </li>
+
+ <li>
+     <code>secret_key</code>       - <a href="http://en.wikipedia.org/wiki/Salt_%28cryptography%29">salt</a> used in session id hash generation
+ </li>
+
+ <li>
+     <code>expired_message</code>  - message displayed when the session expires
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

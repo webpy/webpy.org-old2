@@ -1,0 +1,112 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Comprendre la gestion des urls (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Comprendre la gestion des urls
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Comprendre la gestion des urls</h1>
+<p>Autres langages <a href="/../url_handling" class="internal">english</a> | ...
+</p>
+
+<h2>Probleme: Comment conçevoir un gestionnaire d'url / distribuer un schéma pour l'ensemble du site</h2>
+
+<h2>Solution:</h2>
+<p>Le schéma de traitement des urls de web.py est simple, mais puissant et flexible. Au sommet de chaque application, vous trouverez habituellement le schéma complet de distribution des urls défini comme un tuple:
+</p>
+<pre><code>urls = (
+    &quot;/tasks/?&quot;, &quot;signin&quot;,
+    &quot;/tasks/list&quot;, &quot;listing&quot;,
+    &quot;/tasks/post&quot;, &quot;post&quot;,
+    &quot;/tasks/chgpass&quot;, &quot;chgpass&quot;,
+    &quot;/tasks/act&quot;, &quot;actions&quot;,
+    &quot;/tasks/logout&quot;, &quot;logout&quot;,
+    &quot;/tasks/signup&quot;, &quot;signup&quot;
+)
+</code></pre><p>Le format de ce tuple est: <em>motif du chemin url</em>, <em>gestionnaire de classe</em> ce modèle se répètera tant que des motifs de chemins urls sont définis. Si vous ne comprenez pas la relation entre les motifs des chemins urls et les gestionnaire de classe, veuillez lire l'exemple <a href="/../helloworld/fr" class="internal">Hello World</a> ou le <a href="/tutorial3.fr" class="internal">rapide tutorial</a> avant de lire d'autres astuces cookbook.
+</p>
+
+<h2>Correspondance des chemins</h2>
+<p>Vous pouvez utiliser la puissance des expressions régulières pour conçevoir des modèles urls plus flexibles. Par exemple,
+   /(test1|test2) capturera soit /test1, soit /test2. Le point clef à comprendre est que ce filtrage se déroule sur le 'chemin' même de l'url. Par exemple, pour l'url suivante:
+</p>
+<pre><code>http://localhost/myapp/greetings/hello?name=Joe
+</code></pre><p>Le chemin de cette URL est <em>/myapp/greetings/hello</em>. web.py ajoutera en interne ^ et $ à la structure de l'url, ce qui fait que le motif <em>/task/</em> ne filtrera pas <em>/tasks/addnew</em>. Tandis qu'il filtre le chemin, vous ne pouvez pas utiliser un motif de type: <em>/tasks/delete?name=(.+)</em> alors que la partie après ? appelée 'requête' n'est pas filtrée. Pour une description détaillée des éléments d'URL, veuillez lire <a href="/cookbook/ctx" class="internal">web.ctx</a>.
+</p>
+
+<h2>Capture de paramètres</h2>
+<p>Dans un motif url vous pouvez capturer des paramètres qui peuvent être utilisés dans votre gestionnaire de classe:
+</p>
+<pre><code>/users/list/(.+), &quot;list_users&quot;
+</code></pre><p>Les blocs après <em>list/</em>  sont capturés et peuvent être utilisés comme paramètres dans GET et POST:
+</p>
+<pre><code>class list_users:
+    def GET(self, name):
+        return &quot;Liste des infos conçernant l'utilisateur: {0}&quot;.format(name)
+</code></pre><p>Vous pouvez définir plusieurs paramètres si vous le souhaitez. Notez simplement, que les paramètres de requête URL (qui apparaissent après le ?) peuvent être obtenues à l'aide de <a href="/cookbook/input" class="internal">web.input()</a>
+</p>
+
+<h2>Note sur les sous_applications</h2>
+<p>Afin de mieux traiter de grandes applications Web, web.py encourage l'utilisation des <a href="/cookbook/subapp/fr" class="internal">sous-applications</a>. Tout en concevant des mécanismes d'URL avec des sous-applications, gardez à l'esprit que le chemin (web.ctx.path) trouvera un  chemin parent dépouillé. 
+   Par exemple, si dans l'application principale, vous transmettez un format d'url &quot;/blog&quot; à la sous-application 'blog', dans votre sous-application blog, tous les formats d'url commençeront avec &quot;/&quot;, et non avec /blog. Lisez les astuces cookbook <a href="/cookbook/ctx" class="internal">web.ctx</a> pour plus de détails.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>MetaClassAutoURLS (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; MetaClassAutoURLS
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>MetaClassAutoURLS</h1>
+<p>web.py maps URLs regexes to classes via a list like so:
+</p>
+<pre><code>class Default(object):
+    ''' Action for / '''        def GET(self):
+        pass
+
+class Login(object):
+    ''' Action for /login '''        def GET(self):
+        pass
+
+    def POST(self):
+        pass
+
+urls = [&quot;/&quot;, &quot;Default&quot;, &quot;/login&quot;, &quot;Login&quot;]
+</code></pre><p>One of the disadvantages of this approach is that for large applications, the urls list can get very long and tedious to maintain.  Things get worse during long refactorings/reorgnanizations because it's easy to typo a class or module name or just forget to update the urls list.  After spending a couple hours debugging just this problem and then smacking myself on the forehead for missing such a simple mistake, I thought to myself, <em>There's got to be a way to automate this!</em>  After some research, I found that metaclasses can do exactly what I want:
+</p>
+<pre><code>urls = [ ]
+
+class ActionMetaClass(type):
+    def __init__(klass, name, bases, attrs):
+        urls.append(attrs[&quot;url&quot;])
+        urls.append(&quot;%s.%s&quot; % (klass.__module__, name))
+
+class Default(object):
+    __metaclass__ = ActionMetaClass
+    url = &quot;/&quot;
+    def GET(self):
+        pass
+
+class Login(object):
+    __metaclass__ = ActionMetaClass
+    url = &quot;/login&quot;
+    def GET(self):
+        pass
+
+    def POST(self):
+        pass
+</code></pre><p>Of course, this is a simple example that leaves a lot to be desired (handling attrs lacking a url key, for instance), but it should get you on your way.
+</p>
+<hr />
+
+<p><strong>AaronSw writes:</strong> That's a clever idea. One improvement might be to have the classes inherit from a class with the metaclass set, so you don't have that unsightly <code>__metaclass__</code> every time.
+</p>
+<p><strong>xunil writes:</strong> Yeah, I went w/ this approach in the end since I found that I wanted each action class to inherit some common functionality anyway.  You can <a href="http://www.theanykey.com/svn/">view the source</a> for <a href="http://dev.theanykey.com">my incomplete site</a> which uses a metaclass and decorators.
+</p>
+<hr />
+
+<p>May be it's better to do it with decorators?
+</p>
+<p><strong>xunil writes:</strong> I originally tried to use decorators to do this since I was already familiar w/ them, but unless I'm missing something, decorators don't work on classes eg.
+</p>
+<pre><code>@action(&quot;/&quot;)
+class Default:
+    def GET(self):
+        pass
+</code></pre><p>That won't work.  <a href="http://www.python.org/dev/peps/pep-0318/">The PEP for decorators</a> describes it, but apparently it was never incorporated into the language (perhaps b/c metaclasses are available and do the same thing).
+</p>
+<hr />
+
+<p>I couldn't figure out how to get this to work with URL classes in separate files, so I did something a little different, based on <a href="http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/436873">this Python Cookbook recipe</a>:
+</p>
+<pre><code>import os, web
+
+urls = [ ]
+
+for aaa in os.listdir(os.getcwd()):
+    module_name, ext = os.path.splitext(aaa)
+    if module_name.startswith('cgi_') and ext == '.py':
+        module = __import__(module_name)
+        urls.append(module.url[0])
+        urls.append(module_name + &quot;.&quot; + module.url[1])
+
+if __name__ == &quot;__main__&quot;:
+    web.run(urls)
+</code></pre><p>And then e.g. cgi_hello.py (in the same directory) would be:
+</p>
+<pre><code>import web
+url = ('/(.*)', 'hello')
+
+class hello:
+    def GET(self, name):
+        i = web.input(times=1)
+        if not name: name = 'world'            for c in xrange(int(i.times)): print 'Hello,', name+'!'
+</code></pre><p>Is this a terrible way to do it?
+</p>
+<hr />
+
+<p><strong>xunil writes:</strong> This is not altogether a bad idea, but it again decouples the URL information from the class, making it a module-level tuple or list.  You could combine your importing logic w/ my metaclass idea, actually, and achieve the same thing as me eg.
+</p>
+<pre><code>import os, web
+
+for aaa in os.listdir(os.getcwd()):
+    module_name, ext = os.path.splitext(aaa)
+    if module_name.startswith('cgi_') and ext == '.py':
+        module = __import__(module_name)
+
+if __name__ == &quot;__main__&quot;:
+    import metaclass
+    web.run(metaclass.urls)
+</code></pre><p>metaclass.py:
+</p>
+<pre><code>urls = [ ]
+
+class ActionMetaClass(type):
+    def __init__(klass, name, bases, attrs):
+        urls.append(attrs[&quot;url&quot;])
+        urls.append(&quot;%s.%s&quot; % (klass.__module__, name))
+</code></pre><p>cgi_hello.py:
+</p>
+<pre><code>import web
+from metaclass import ActionMetaClass
+
+class hello:
+    __metaclass__ = ActionMetaClass
+    url = '/(.*)'
+    def GET(self, name):
+        i = web.input(times=1)
+        if not name: name = 'world'            for c in xrange(int(i.times)): print 'Hello,', name+'!'
+</code></pre><hr />
+
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>
