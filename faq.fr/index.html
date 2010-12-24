@@ -1,0 +1,115 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>FAQ (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; FAQ
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>FAQ</h1>
+<p>Autres langages : <a href="/faq/es" class="internal">español</a> | <a href="/faq/ru" class="internal">russian ???????</a> |<a href="/faq/ja" class="internal"> Japan 日本語</a> | <a href="/faq/zh-cn" class="internal">chinese 简体中文</a> | <a href="/faq" class="internal">english</a> | ...
+</p>
+<p>Des exemples de code pour de nombreuses questions communes peuvent être trouvées dans la section <a href="/cookbook/fr" class="internal">cookbook</a>.
+</p>
+<ol>
+ <li><p><strong>Pourquoi les urls ne sont qu'une longue liste?</strong>
+</p>
+<p>Si elles étaient de type dictionnaire, elles ne seraient pas classées. Si c'etait une liste tuples, ce serait plus long à taper.
+</p>
+
+ </li>
+
+ <li><p><strong>Comment puis-je servir des fichiers statiques comme les JavaScripts ou des images de type PNG ou JPG avec le serveur web.py?</strong>
+</p>
+<p>Créez un repertoire ( ou dossier) appelé 'static' au même emplacement que le script qui fait tourner le server web.py (par défaut code.py). Puis placez les fichiers statiques (scripts javascripts, css, images) que vous voulez servir dans ce dossier 'static'. Par exemple, l'URL 'http://localhost/static/logo.png' enverra l'image './static/logo.png' au client.
+</p>
+
+ </li>
+
+ <li><p><strong>Où puis-je trouver de l'aide supplémentaire??</strong>
+</p>
+<p>Les Groupes Google proposent le <a href="http://groups.google.com/group/webpy">groupe web.py </a> qui est très utile.
+</p>
+
+ </li>
+
+ <li><p><strong>Comment afficher un débugage dans la console</strong>
+</p>
+<p>web.debug(&quot;Je serai affiché dans la console et NON dans le corps de la page web.&quot;)
+</p>
+
+ </li>
+
+ <li><p><strong>Je suis tombé sur un bug dans web.py. Ou puis-je l'annonçer?</strong>
+</p>
+<p>Allez sur le site <a href="https://launchpad.net/webpy">webpy launchpad</a>, connectez-vous (ou enregistrez-vous) et cliquez sur &quot;report a bug&quot;.
+</p>
+
+ </li>
+
+ <li><p><strong>Qu'est-ce que ce fameux 'ctx' que je vois dans les exemples ?</strong>
+</p>
+<p>'ctx' est une classe qui permet d'utiliser des variables contextuelles dans votre code, comme par exemple, la page  référante, le navigateur du client... voir <a href="/cookbook/ctx/fr" class="internal">web.ctx</a>
+</p>
+
+ </li>
+</ol>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

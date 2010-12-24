@@ -1,0 +1,118 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>db.insert 向数据库中新增数据 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; db.insert 向数据库中新增数据
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>db.insert 向数据库中新增数据</h1>
+
+<h3>问题</h3>
+<p>如何向数据加新增数据？
+</p>
+
+<h3>解决办法</h3>
+<p>在 0.3 中，数据库连接如下：
+</p>
+<pre><code>db = web.database(dbn='postgres', db='mydata', user='dbuser', pw='')
+</code></pre><p>数据库连接写好以后，“insert” 操作如下：
+</p>
+<pre><code># 向 'mytable' 表中插入一条数据
+sequence_id = db.insert('mytable', firstname=&quot;Bob&quot;,lastname=&quot;Smith&quot;,joindate=web.SQLLiteral(&quot;NOW()&quot;))
+</code></pre><p>上面的操作带入了几个参数，我们来说明一下：
+</p>
+<ul>
+ <li>
+     tablename
+ </li>
+
+ <li>
+     seqname   <br />
+ </li>
+
+ <li>
+     _test  <br />
+ </li>
+
+ <li>
+     **values 
+ </li>
+</ul>
+
+<h2>tablename</h2>
+<p>表名，即你希望向哪个表新增数据。
+</p>
+
+<h2>seqname</h2>
+<p>可选参数，默认 None。Set <code>seqname</code> to the ID if it's not the default, or to <code>False</code>.
+</p>
+
+<h2>_test</h2>
+<p><code>_test</code> 参数可以让你看到 SQL 的执行过程：
+</p>
+<pre><code>results = db.select('mytable', offset=10, _test=True) 
+&gt;&lt;sql: 'SELECT * FROM mytable OFFSET 10'&gt;
+</code></pre>
+<h2>**values</h2>
+<p>字段参数。如果没有赋值，数据库可能创建默认值或者发出警告。
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

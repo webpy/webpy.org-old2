@@ -1,0 +1,149 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>CGI deployment on Apache (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; CGI deployment on Apache
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>CGI deployment on Apache</h1>
+<p>Here are the simple steps needed to create and run an web.py application.
+</p>
+<ul>
+ <li><p>Install web.py and flups
+</p>
+
+ </li>
+
+ <li><p>Create the application as documented
+</p>
+<pre><code>if __name__ == &quot;__main__&quot;:
+    web.application(urls, globals()).run()
+</code></pre>
+ </li>
+</ul>
+<p>For our example, let it be named <code>app.py</code>, located in <code>/www/app</code> and we need it accessible as <code>http://server/app/app.py</code>.
+</p>
+<ul>
+ <li><p>Configure Apache (version 2.2 in this example)
+</p>
+<pre><code>ScriptAlias /app &quot;/www/app/&quot;
+&lt;Directory &quot;/www/app/&quot;&gt;
+        Options +ExecCGI +FollowSymLinks
+        Order allow,deny
+        Allow from all
+&lt;/Directory&gt;
+</code></pre>
+ </li>
+</ul>
+<p>That's it. Your application is accessible via <code>http://server/app/app.py/</code>. Additional URLs handled by the application are added to the end of the URL, for examples <code>http://server/app/app.py/myurl</code>.
+</p>
+<ul>
+ <li><p>.htaccess configuration 
+</p>
+<pre><code>      Options +ExecCGI
+      AddHandler cgi-script .py
+      DirectoryIndex index.py
+      &lt;IfModule mod_rewrite.c&gt;
+          RewriteEngine on
+          RewriteBase /
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteCond %{REQUEST_URI} !^/favicon.ico$
+          RewriteCond %{REQUEST_URI} !^(/.*)+index.py/
+          RewriteRule ^(.*)$ index.py/$1 [PT]
+      &lt;/IfModule&gt;
+</code></pre>
+ </li>
+</ul>
+<p>Here it is assumed that your application is called index.py. The above htaccess checks if some static file/directory exists failing which it routes the data to your index.py. Change the Rewrite Base to a sub-directory if needed.
+</p>
+
+<h1>Hiding the script name using mod_rewrite (tested with webpy 0.33)</h1>
+<p>(warning: this section written by someone new to webpy; it works, but may not follow prescribed practices)
+</p>
+<p>If you want your app accessible as <code>http://server/app/</code> and not <code>http://server/app/app.py/</code> (i.e. <code>http://server/app/articles/</code> and not <code>http://server/app/app.py/articles</code>) then you need to tweak mod_rewrite a bit. Here's an example of the relevant bit in a .htaccess file (placed in <code>/www/app</code> or wherever <code>app.py</code> is):
+</p>
+<pre><code>RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app.py/$1 [L]
+</code></pre><p>It's cruder than the rewrite rules presented above. The first rule states that if a file exists it should be served by the webserver (ideally you'd want something more secure than that, like only certain file types, or only static/). The second line says in any request of form <code>.../app.py/blah</code> we should run <code>app.py</code> and give it <code>blah</code>.
+</p>
+<p>So now if you go to <code>http://server/app/</code> you'll hit <code>app.py</code>'s handler for <code>'/'</code>. If you go to <code>http://server/app/articles</code>, the handler for <code>'/articles'</code>, etc.
+</p>
+<p>Are we done? Well, that's what I thought. There's still one problem: webpy doesn't know how things were rewritten on the way <em>in</em>, so it doesn't know how to rewrite them on the way <em>out</em>.
+</p>
+<p>For instance, one can normally use `web.url()<code>to compose urls such that the right content is found. Want</code>static/style.css<code>? Call</code>web.url('/static/style.css') and you'll get ... <code>/app/app.py/static/style.css</code> ... not what we wanted. That doesn't exist. Problem.
+</p>
+<p>If you don't use <code>web.url()</code>, it can still bite you because <em>webpy</em> does. Say <code>raise web.seeother('/')</code> and you'll end up at <code>http://server/app/app.py/</code>, which defeats the purpose of hiding it using mod_rewrite.
+</p>
+<p>How to fix that prefix on the way out then? That's stored in <code>web.ctx.homepath</code>. Unfortunately, efforts to modify that didn't work for me. Some old forum post said it comes from the environment variable <code>SCRIPT_NAME</code> but that didn't work either. It turns out <code>REAL_SCRIPT_NAME</code> works though, so we can add the following to our <code>app.py</code>, before initialising webpy:
+</p>
+<pre><code>import os
+
+home = '/app'
+os.environ[&quot;SCRIPT_NAME&quot;] = home
+os.environ[&quot;REAL_SCRIPT_NAME&quot;] = home
+
+#and calling web.application or whatever goes here or after
+</code></pre><p>This seems to work. Running <code>raise web.seeother('/')</code> gets us to <code>http://server/app/</code> like we wanted.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,371 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Installation (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Installation
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Installation</h1>
+<p>Autre langages : <a href="/install/es" class="internal">español</a> | <a href="/install/ja" class="internal">Japan</a> | <a href="/install/zh-cn" class="internal">chinese</a> | <a href="/install/it" class="internal">italiano</a> | <a href="/install" class="internal">english</a> 
+</p>
+
+<h2>Sommaire</h2>
+<ul>
+ <li>
+     <a href="#installation">Installation</a><ul>
+ <li>
+     <a href="#macosx">.. sur MacOS X</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li>
+     <a href="#dev">Développement</a>
+ </li>
+
+ <li>
+     <a href="#prod">Production</a><ul>
+ <li>
+     <a href="#lighttpd">LightTPD</a><ul>
+ <li>
+     <a href="#lighttpdfastcgi">...avec FastCGI</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li>
+     <a href="#apache">Apache</a><ul>
+ <li>
+     <a href="#apachecgi">...avec CGI</a>
+ </li>
+
+ <li>
+     <a href="#apachecgihtaccess">.. avec CGI en utilisant .htaccess</a>
+ </li>
+
+ <li>
+     <a href="#apachefastcgi">.. avec FastCGI</a>
+ </li>
+
+ <li>
+     <a href="#apachescgi">.. avec SCGI</a>
+ </li>
+
+ <li>
+     <a href="#apachemodpython">.. avec mod_python</a>
+ </li>
+
+ <li>
+     <a href="#apachemodwsgi">.. avec mod_wsgi</a>
+ </li>
+
+ <li>
+     <a href="#apachemodrewrite">.. avec mod_rewrite</a>
+ </li>
+</ul>
+
+ </li>
+</ul>
+
+ </li>
+</ul>
+<p><a name="installation"></a>
+</p>
+
+<h2>Installation</h2>
+<p>Pour installer web.py, commencez par télécharger l'archive:
+</p>
+<p><a href="/static/web.py-0.33.tar.gz">web.py-0.33.tar.gz</a>
+</p>
+<p>Décompressez l'archive et copier le dossier <em>web</em> dans le dossier de votre application. Ou, pour rendre web.py accessible par toutes les applications, exécutez:
+</p>
+<pre><code>python setup.py install
+</code></pre><p>Note: sur certains systèmes Unix (ou Linux), il vous faudra vous connecter en tant que root (commande su) ou exécuter:
+</p>
+<pre><code>sudo python setup.py install
+</code></pre><p>voir <a href="http://www.feuxi.com/Le-web-py-nouveau-est-arrive.html">paramètrage recommandé</a> 
+</p>
+<p>Une autre option est d'utiliser <a href="http://peak.telecommunity.com/DevCenter/EasyInstall">Easy Install</a>. Une fois Easy Install correctement paramétré, exécutez:
+</p>
+<pre><code>easy_install web.py
+</code></pre><p><a name="macosx"></a>
+</p>
+
+<h3>... Sur MacOS X</h3>
+<p>La procédure d'installation sur MacOS X n'a pas encore été traduite. Vous pouvez cependant visionner la version anglaise pour la version 0.1 : <a href="/install_macosx">Install MacOS X</a> 
+</p>
+<p><a name="dev"></a>
+</p>
+
+<h2>Développement:</h2>
+<p>webpy intègre son propre serveur web.  Apprenez comment écrire une application en suivant le <a href="/tutorial3.fr">tutoriel</a>.  Quand votre application est écrite, insérez votre code dans <code>code.py</code> et démarrez le serveur avec la commande:
+</p>
+<pre><code> python code.py
+</code></pre><p>Ouvrez votre navigateur et allez à l'adresse <a href="http://localhost:8080/">http://localhost:8080/</a> pour visualiser la page. Pour spécifier un port différent, utilisez simplement <code>python code.py 1234</code>.
+</p>
+<p><a name="prod"></a>
+</p>
+
+<h2>Production</h2>
+<p>Le serveur web intégré à web.py est bien pratique en phase de développement, mais pour un site en production, il vaut mieux prévoir quelque chose de plus sérieux. web.py fonctionne avec n'importe quel serveur http compatible avec  <a href="http://www.python.org/dev/peps/pep-0333/">WSGI</a>. 
+</p>
+<p>WSGI est une API permettant la communication entre serveur web et applications, similaire à Java's Servlet Interface. Pour faire fonctionner web.py avec CGI, FastCGI ou SCGI, il vous faudra installer <a href="http://trac.saddi.com/flup">flup</a> (<a href="http://www.saddi.com/software/flup/dist/">téléchargez ici</a>), qui permet d'interfacer WSGI avec ces différentes API.
+</p>
+<p>Pour utiliser une de ces variantes de CGI, ajoutez au début de votre <code>code.py</code> la ligne suivante :
+</p>
+<pre><code>#!/usr/bin/env python
+</code></pre><p>N'oubliez pas de le rendre exécutable: <code>chmod +x code.py</code>.
+</p>
+<p><a name="lighttpd"></a>
+</p>
+
+<h3>LightTPD</h3>
+<p><a name="lighttpdfastcgi"></a>
+</p>
+
+<h4>.. avec FastCGI</h4>
+<p>FastCGI associé à lighttpd est la manière recommandée d'utiliser web.py en production. <a href="http://reddit.com/">reddit.com</a> gère des millions de visites de cette façon.
+</p>
+<p>Votre configuration lighttpd doit ressemble à ceci:
+</p>
+<pre><code> server.modules = (&quot;mod_fastcgi&quot;, &quot;mod_rewrite&quot;)
+ server.document-root = &quot;/path/to/root/&quot;     
+ fastcgi.server = ( &quot;/code.py&quot; =&gt;     
+ (( &quot;socket&quot; =&gt; &quot;/tmp/fastcgi.socket&quot;,
+    &quot;bin-path&quot; =&gt; &quot;/path/to/root/code.py&quot;,
+    &quot;max-procs&quot; =&gt; 1
+ ))
+ )
+
+ url.rewrite-once = (
+   &quot;^/favicon.ico$&quot; =&gt; &quot;/static/favicon.ico&quot;,
+   &quot;^/static/(.*)$&quot; =&gt; &quot;/static/$1&quot;,
+   &quot;^/(.*)$&quot; =&gt; &quot;/code.py/$1&quot;
+ )
+</code></pre><p>Avec certaines versions de lighttpd, il est important de s'assurer que la propriété &quot;check-local&quot; du paramètre fastcgi.server est bien positionné à &quot;false&quot;, surtout si votre <code>code.py</code> est situé en dehors de la racine.
+</p>
+<p>Si vous recevez un message d'erreur indiquant qu'il n'est pas possible d'importer <em>flup</em>, installez-le en ligne de commande en utilisant la commande &quot;easy_install flup&quot;.
+</p>
+<p>Depuis la revision 145, il est nécessaire de définir une variable  &quot;bin-environment&quot; dans la configuration de fastcgi si votre code utilise des redirections.  Par exemple, si votre code redirige vers  http://domain.com/ et que vous voyez l'URL http://domain.com/code.py/ dans la barre de navigation, vous devrez modifier la configuration de fastcgi.server de la manière suivante:
+</p>
+<pre><code>fastcgi.server = ( &quot;/code.py&quot; =&gt;
+((
+   &quot;socket&quot; =&gt; &quot;/tmp/fastcgi.socket&quot;,
+   &quot;bin-path&quot; =&gt; &quot;/path/to/root/code.py&quot;,
+   &quot;max-procs&quot; =&gt; 1,
+   &quot;bin-environment&quot; =&gt; (
+     &quot;REAL_SCRIPT_NAME&quot; =&gt; &quot;&quot;
+   ),
+   &quot;check-local&quot; =&gt; &quot;disable&quot;
+))
+)
+</code></pre><p><a name="apache"></a>
+</p>
+
+<h3>Apache</h3>
+<p><a name="apachecgi"></a>
+</p>
+
+<h4>.. avec CGI</h4>
+<p>Ajoutez les lignes suivante à <code>httpd.conf</code> ou <code>apache2.conf</code>.
+</p>
+<pre><code>Alias /foo/static/ /path/to/static
+ScriptAlias /foo/ /path/to/code.py
+</code></pre><p><a name="apachecgihtaccess"></a>
+</p>
+
+<h4>.. avec CGI en utilisant .htaccess</h4>
+<p>CGI est facile à configurer mais ce n'est pas la meilleure des solutions pour les sites à très fort trafic.
+</p>
+<p>Ajoutez les lignes suivantes à votre fichier <code>.htaccess</code>:
+</p>
+<pre><code>Options +ExecCGI
+AddHandler cgi-script .py
+</code></pre><p>Ouvrez votre navigateur et aller à l'URL <code>http://example.com/code.py/</code>. N'oubliez pas le slash final, sinon vous aurez droit à une 'page non trouvée'. Pour que ça fonctionne sans avoir à indiquer <code>code.py</code> dans l'URL, il faut activer le 'mod_rewrite' dans votre fichier '.htaccess' (voir en fin de document).
+</p>
+<p>Note: la manière dont <code>web.py</code> est implémenté provoque une erreur du module <code>cgitb</code> à cause de la capture du <code>stdout</code>. Voici une façon de contourner le problème:
+</p>
+<pre><code>import cgitb; cgitb.enable()
+import sys
+
+# ... import web etc here...
+
+def cgidebugerror():
+    &quot;&quot;&quot;                                                                         
+    &quot;&quot;&quot;        _wrappedstdout = sys.stdout
+
+    sys.stdout = web._oldstdout
+    cgitb.handler()
+
+    sys.stdout = _wrappedstdout
+
+web.internalerror = cgidebugerror
+</code></pre><p><a name="apachefastcgi"></a>
+</p>
+
+<h4>.. avec FastCGI</h4>
+<p>FastCGI est facile à configurer et est aussi performant que 'mod_python'.
+</p>
+<p>Ajoutez les lignes suivantes à votre fichier <code>.htaccess</code>:
+</p>
+<pre><code>&lt;Files code.py&gt;      SetHandler fastcgi-script
+&lt;/Files&gt;
+</code></pre><p>Malheureusement, et contrairement à lighttpd, Apache ne donne aucune indication demandant à votre script web.py de fonctionner comme un serveur FastCGI, il faut donc l'indiquer à web.py de façon explicite, en ajoutant le code suivant dans votre script <code>code.py</code>, juste avant la ligne 
+   <code>if __name__ == &quot;__main__&quot;:</code> :
+</p>
+<pre><code>web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+</code></pre><p><a name="apachescgi"></a>
+</p>
+
+<h4>.. avec SCGI</h4>
+<p>Téléchargez et installez le <a href="http://www.mems-exchange.org/software/files/mod_scgi/">module mod_scgi</a>
+</p>
+<p>modifier le fichier 'httpd.conf':
+</p>
+<pre><code>LoadModule scgi_module Modules/mod_scgi.so
+SCGIMount / 127.0.0.1:8080
+</code></pre><p>redémarrez le serveur Apache et lancer votre 'code.py' avec la commande suivante:
+</p>
+<pre><code>python code.py 127.0.0.1:8080 scgi
+</code></pre><p>lancez votre navigateur et visitez l'adresse suivante 127.0.0.1
+   C'est aussi simple que ça...enfin, si ça marche du premier coup ;-) 
+</p>
+<p><a name="apachemodpython"></a>
+</p>
+
+<h4>.. avec mod_python</h4>
+<p>mod_python est aussi performant que FastCGI, mais il n'est pas aussi évident à configurer. Suivez le guide:
+</p>
+<p>Pour Python 2.5, procédez comme suit:
+</p>
+<pre><code>cd /usr/lib/python2.5/wsgiref
+# or in windows: cd /python2.5/lib/wsgiref
+wget -O modpython_gateway.py http://projects.amor.org/misc/browser/modpython_gateway.py?format=raw
+# or fetch the file from that address using your browser
+</code></pre><p>Pour Python &lt;2.5, procéder plutôt ceci:
+</p>
+<pre><code>cd /usr/lib/python2.4/site-packages
+# or in windows: cd /python2.4/lib/site-packages
+svn co svn://svn.eby-sarna.com/svnroot/wsgiref/wsgiref
+cd wsgiref
+wget -O modpython_gateway.py http://projects.amor.org/misc/browser/modpython_gateway.py?format=raw
+# or fetch the file from that address using your browser
+</code></pre><p>renommez votre script <code>code.py</code> en quelque chose comme <code>codep.py</code> et ajoutez le code suivant:
+</p>
+<pre><code>main = web.wsgifunc(web.webpyfunc(urls, globals()))
+</code></pre><p>Dans votre fichier <code>.htaccess</code>, ajoutez:
+</p>
+<pre><code>
+AddHandler python-program .py
+PythonHandler wsgiref.modpython_gateway::handler
+PythonOption wsgi.application codep::main
+</code></pre><p>Vous aurez surement aussi besoin d'ajouter une <code>RewriteRule</code> pour rediriger  <code>/</code> vers <code>/codep.py/</code>
+</p>
+<p><a name="apachemodwsgi"></a>
+</p>
+
+<h4>.. avec mod_wsgi</h4>
+<p>mod_wsgi est un nouveau module Apache  <a href="http://code.google.com/p/modwsgi/wiki/PerformanceEstimates">plus performant que mod_python</a> pour l'hébergement d'applications WSGI, et très facile à mettre en place.
+</p>
+<p>A la fin de votre script <code>code.py</code>, ajoutez la ligne suivante:
+</p>
+<pre><code>application = web.wsgifunc(web.webpyfunc(urls, globals()))
+</code></pre><p>mod_wsgi offre <a href="http://code.google.com/p/modwsgi/wiki/ConfigurationDirectives">plusieurs façons différentes</a> de spécifier l'URL pointant vers une application WSGI, mais une manière simple peut être d'ajouter le code suivant dans votre fichier '.htaccess':
+</p>
+<pre><code>&lt;Files code.py&gt;
+    SetHandler wsgi-script
+    Options ExecCGI FollowSymLinks
+&lt;/Files&gt;
+</code></pre><p>Si vous recevez un message d'erreur du style &quot;ImportError: No module named web&quot; dans le fichier error.log d'Apache, vous pouvez essayer de spécifier un chemin absolu dans votre script 'code.py' avant l'instruction 'import web':
+</p>
+<pre><code>import sys, os
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
+import web
+</code></pre><p>Plus d'information dans la section &quot;Application Working Directory&quot;  sur <a href="http://code.google.com/p/modwsgi/wiki/ApplicationIssues">Common problems with WSGI application</a>.
+</p>
+<p>Encore une fois, votre application devrait-être accessible à l'URL suivante: <code>http://example.com/code.py/</code> (sans oublier le slash final!!!).
+</p>
+<p><a name="apachemodrewrite"></a>
+</p>
+
+<h4>mod_rewrite pour Apache</h4>
+<p>Si vous voulez que webpy soit accessible par l'URL 'http://example.com' au lieu de  'http://example.com/code.py/' ajoutez les directives suivantes dans votre fichier <code>.htaccess</code>:
+</p>
+<pre><code>&lt;IfModule mod_rewrite.c&gt;      
+  RewriteEngine on
+  RewriteBase /
+  RewriteCond %{REQUEST_URI} !^/icons
+  RewriteCond %{REQUEST_URI} !^/favicon.ico$
+  RewriteCond %{REQUEST_URI} !^(/.*)+code.py/
+  RewriteRule ^(.*)$ code.py/$1 [PT]
+&lt;/IfModule&gt;
+</code></pre><p>Si le script <code>code.py</code> est situé dans le sous-répertoire <code>myapp/</code>, changez la directive  <code>RewriteBase /</code> en <code>RewriteBase /myapp/</code>. 
+</p>
+<p>Si vous avez d'autres fichiers statiques à exclure de la règle de réécriture  (fichiers CSS ou des images), indiquez-les également ici, en dupliquant et adaptant la ligne <code>RewriteCond %{REQUEST_URI} !^/icons.</code> ,par exemple, autant de fois que nécessaire.
+</p>
+<p>Pour plus d'information sur le module mod_rewrite et l'utilisation du fichier <code>.htaccess</code>, je vous conseille l'excellent article <a href="http://seo.feuxi.com/URL-Rewriting-pour-les-nuls.html">URL Rewriting pour les nuls</a>.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

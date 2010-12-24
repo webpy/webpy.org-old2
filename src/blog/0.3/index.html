@@ -1,0 +1,280 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Basic Blog in 0.3 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Basic Blog in 0.3
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Basic Blog in 0.3</h1>
+<p>A really basic blog. Note there isn't authentication on this, so anyone could create a post, but it shows the basic functionality.
+</p>
+
+<h2>Files</h2>
+<pre><code>/blog.py
+/schema.sql
+/templates:
+    /templates/view.html
+    /templates/new.html
+    /templates/base.html
+    /templates/index.html
+    /templates/edit.html
+/model.py
+</code></pre>
+<h3>/blog.py</h3>
+<pre><code>&quot;&quot;&quot; Basic blog using webpy 0.3 &quot;&quot;&quot;
+import web
+import model
+
+### Url mappings
+
+urls = (
+    '/', 'Index',
+    '/view/(\d+)', 'View',
+    '/new', 'New',
+    '/delete/(\d+)', 'Delete',
+    '/edit/(\d+)', 'Edit',
+)
+
+
+### Templates
+t_globals = {
+    'datestr': web.datestr
+}
+render = web.template.render('templates', base='base', globals=t_globals)
+
+
+class Index:
+
+    def GET(self):
+        &quot;&quot;&quot; Show page &quot;&quot;&quot;
+        posts = model.get_posts()
+        return render.index(posts)
+
+
+class View:
+
+    def GET(self, id):
+        &quot;&quot;&quot; View single post &quot;&quot;&quot;
+        post = model.get_post(int(id))
+        return render.view(post)
+
+
+class New:
+
+    form = web.form.Form(
+        web.form.Textbox('title', web.form.notnull, 
+            size=30,
+            description=&quot;Post title:&quot;),
+        web.form.Textarea('content', web.form.notnull, 
+            rows=30, cols=80,
+            description=&quot;Post content:&quot;),
+        web.form.Button('Post entry'),
+    )
+
+    def GET(self):
+        form = self.form()
+        return render.new(form)
+
+    def POST(self):
+        form = self.form()
+        if not form.validates():
+            return render.new(form)
+        model.new_post(form.d.title, form.d.content)
+        raise web.seeother('/')
+
+
+class Delete:
+
+    def POST(self, id):
+        model.del_post(int(id))
+        raise web.seeother('/')
+
+
+class Edit:
+
+    def GET(self, id):
+        post = model.get_post(int(id))
+        form = New.form()
+        form.fill(post)
+        return render.edit(post, form)
+
+
+    def POST(self, id):
+        form = New.form()
+        post = model.get_post(int(id))
+        if not form.validates():
+            return render.edit(post, form)
+        model.update_post(int(id), form.d.title, form.d.content)
+        raise web.seeother('/')
+
+
+app = web.application(urls, globals())
+
+if __name__ == '__main__':
+    app.run()
+</code></pre>
+<h3>/schema.sql</h3>
+<pre><code>
+
+CREATE TABLE entries (
+    id INT AUTO_INCREMENT,
+    title TEXT,
+    content TEXT,
+    posted_on DATETIME,
+    primary key (id)
+);
+</code></pre>
+<h3>/templates/view.html</h3>
+<pre><code>$def with (post)
+
+&lt;h1&gt;$post.title&lt;/h1&gt;
+$datestr(post.posted_on)&lt;br/&gt;
+
+$post.content
+</code></pre>
+<h3>/templates/new.html</h3>
+<pre><code>$def with (form)
+
+
+&lt;h1&gt;New Blog Post&lt;/h1&gt;
+&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+$:form.render()
+&lt;/form&gt;
+</code></pre>
+<h3>/templates/base.html</h3>
+<pre><code>$def with (page)
+
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My Blog&lt;/title&gt;
+    &lt;style&gt;
+        #menu {
+            width: 200px;
+            float: right;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;ul id=&quot;menu&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;/new&quot;&gt;New Post&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+$:page
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>/templates/index.html</h3>
+<pre><code>$def with (posts)
+
+&lt;h1&gt;Blog posts&lt;/h1&gt;
+
+&lt;ul&gt;
+$for post in posts:
+    &lt;li&gt;
+        &lt;a href=&quot;/view/$post.id&quot;&gt;$post.title&lt;/a&gt; 
+        from $datestr(post.posted_on) 
+        &lt;a href=&quot;/edit/$post.id&quot;&gt;Edit&lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<h3>/templates/edit.html</h3>
+<pre><code>$def with (post, form)
+
+&lt;h1&gt;Edit $form.d.title&lt;/h1&gt;
+
+&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+$:form.render()
+&lt;/form&gt;
+
+
+&lt;h2&gt;Delete post&lt;/h2&gt;
+&lt;form action=&quot;/delete/$post.id&quot; method=&quot;post&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Delete post&quot;/&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>/model.py</h3>
+<pre><code>import web, datetime
+
+db = web.database(dbn='mysql', db='blog', user='justin')
+
+def get_posts():
+    return db.select('entries', order='id DESC')
+
+def get_post(id):
+    try:
+        return db.select('entries', where='id=$id', vars=locals())[0]
+    except IndexError:
+        return None
+
+def new_post(title, text):
+    db.insert('entries', title=title, content=text, posted_on=datetime.datetime.utcnow())
+
+def del_post(id):
+    db.delete('entries', where=&quot;id=$id&quot;, vars=locals())
+
+def update_post(id, title, text):
+    db.update('entries', where=&quot;id=$id&quot;, vars=locals(),
+        title=title, content=text)
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

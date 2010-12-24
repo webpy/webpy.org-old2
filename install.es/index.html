@@ -1,0 +1,116 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>install/es (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; install/es
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>install/es</h1>
+
+<h2>Instalación</h2>
+<p>Para instalar web.py, descargar de:
+</p>
+<pre><code>http://webpy.org/web.py
+</code></pre><p>en el directorio donde se encuentra sus aplicaciones. También puedes hacer accesible las aplicaciones al directorio de Python site-packages. Para ver donde se encuentra, ejecute:
+</p>
+<pre><code>python -c &quot;import sys; print[x for x in sys.path if x.endswith('site-packages')][-1]&quot;
+</code></pre>
+<h2>Producción</h2>
+<p>El servidor web que inicias cuando ejecutas un programa en web.py, es algo muy agradable y placentero, pero si deseas sitios más populares, es interesante tener montado algo un poco más serio.
+</p>
+
+<h3>FastCGI</h3>
+<p>Lighttpd con soporte FastCGI lo más recomendable para montar web.py en un sitio en producción. Sitios como <a href="http://reddit.com/">reddit.com</a> soportan millones de peticiones y está funcionando con Lighttpd + FastCGI.
+</p>
+<p>Al inicio de su code.py añade:
+</p>
+<pre><code>#!/usr/bin/env python
+</code></pre><p>Y ejecute chmod +x code.py
+</p>
+
+<h4>lighttpd</h4>
+<p>Su configuración lighttpd puede ser parecida a:
+</p>
+<pre><code> server.modules = (&quot;mod_fastcgi&quot;, &quot;mod_rewrite&quot;)
+ server.document-root = &quot;/path/to/root/&quot;     fastcgi.server = ( &quot;/code.py&quot; =&gt;     (( &quot;socket&quot; =&gt; &quot;/tmp/fastcgi.socket&quot;,
+    &quot;bin-path&quot; =&gt; &quot;/path/to/root/code.py&quot;,
+    &quot;max-procs&quot; =&gt; 1
+ ))
+ )
+
+ url.rewrite-once = (
+   &quot;^/favicon.ico$&quot; =&gt; &quot;/static/favicon.ico&quot;,
+   &quot;^/static/(.*)$&quot; =&gt; &quot;/static/$1&quot;,
+   &quot;^/(.*)$&quot; =&gt; &quot;/code.py/$1&quot;,
+ )
+</code></pre>
+<h4>Apache</h4>
+<p>Si deseas utilizar FastCGI con Apache en lugar de otra opción, tienes que instalar mod_fastcgi y usar .htaccess así: 
+</p>
+<pre><code>&lt;Files code.py&gt;    SetHandler fastcgi-script
+&lt;/Files&gt;
+</code></pre><p>Desafortunadamente, con Apache no pasa como con lighttpd, y tenemos que decirle de forma explícita que interactuamos con el servidor FastCGI, así que tenemos que añadir este código para decirle a web.py que usamos el servidor FastCGI:
+</p>
+<pre><code>web.runwsgi = web.runfcgi
+</code></pre>
+<h3>mod_python</h3>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

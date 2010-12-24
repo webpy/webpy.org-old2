@@ -1,0 +1,110 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Understanding URL Handling (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Understanding URL Handling
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Understanding URL Handling</h1>
+<p>Other languages : <a href="/../cookbook/url_handling/fr" class="internal">français</a> | ...
+</p>
+<p><code>Problem</code>: how to design a url handling / dispatching scheme for the entire site
+</p>
+<p><code>Solution</code>:
+</p>
+<p>web.py's URL handling scheme is simple yet powerful and flexible.  at the top of each application, you usually see the full URL dispatching scheme defined as a tuple:
+</p>
+<pre><code>urls = (
+    &quot;/tasks/?&quot;, &quot;signin&quot;,
+    &quot;/tasks/list&quot;, &quot;listing&quot;,
+    &quot;/tasks/post&quot;, &quot;post&quot;,
+    &quot;/tasks/chgpass&quot;, &quot;chgpass&quot;,
+    &quot;/tasks/act&quot;, &quot;actions&quot;,
+    &quot;/tasks/logout&quot;, &quot;logout&quot;,
+    &quot;/tasks/signup&quot;, &quot;signup&quot;
+)
+</code></pre><p>The format of this tuple is: <em>url-path-pattern</em>, <em>handler-class</em> this pattern will repeat as more url patterns are defined.  If you don't understand the relationship between url pattern and handler classes, please read the <a href="/helloworld" class="internal">Hello World example</a> or <a href="/tutorial3.en" class="internal">Quick Start Tutorial</a> before reading any other cookbook recipes.
+</p>
+<p><code>Path Matching</code>
+</p>
+<p>You can utilize the power of regular expressions to design more flexible url patterns. For example, /(test1|test2) will catch either /test1 or /test2.  The key point to understand is that this matching happens on the <code>path</code> of your URL. For example, the following URL:
+</p>
+<pre><code>http://localhost/myapp/greetings/hello?name=Joe
+</code></pre><p>The path of this URL is <em>/myapp/greetings/hello</em>.  web.py will internally add ^ and $ to the url pattern so that the pattern <em>/tasks/</em> will not match <em>/tasks/addnew</em>.  As it matches against the path, you can not use a pattern like: <em>/tasks/delete?name=(.+)</em> as the part after ? is called <code>query</code> and is not matched against.  For a detailed description of URL components, please read <a href="/cookbook/ctx" class="internal">web.ctx</a>.
+</p>
+<p><code>Capture Parameters</code>
+</p>
+<p>In the url pattern you can catch parameters which can be used in your handler class:
+</p>
+<pre><code>&quot;/users/list/(.+)&quot;, &quot;list_users&quot;
+</code></pre><p>The chunk after <em>list/</em> are captured and can be used as a parameter in GET or POST:
+</p>
+<pre><code>class list_users:
+    def GET(self, name):
+        return &quot;Listing info about user: {0}&quot;.format(name)
+</code></pre><p>You can define more than one parameters as you wish.  Also note that URL query parameters (which appears after the ?) can be obtained using <a href="/cookbook/input" class="internal">web.input()</a>
+</p>
+<p><code>Note on sub-applications</code>
+</p>
+<p>To better handle larger web applications, web.py support <a href="/cookbook/subapp" class="internal">sub-applications</a>.  While designing url scheme with sub applications, keep in mind that the path (web.ctx.path) will get the parent path stripped off. e.g. if in the main application, you define to forward url pattern &quot;/blog&quot; to the 'blog' sub-application, in your blog sub-application all url patterns starts with &quot;/&quot;, <code>not</code> /blog.  Read the <a href="/cookbook/ctx" class="internal">web.ctx</a> cookbook recipe for more details.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>faq (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; faq
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>faq</h1>
+<ol>
+ <li><p><strong>template.pyを使いたいのですがどうすれば良いですか?</strong>
+</p>
+<p>基本的なドキュメントやサンプルコードについては <a href="/templetor" class="internal">template.py ドキュメント</a> を参照してください。
+</p>
+<p>web.py app内部からテンプレートファイル (homepage.tmpl) を使用して表示するには以下のように記述します。
+</p>
+<pre><code>  # Version 0.2x
+  homepage = template.Template(open(&quot;homepage.tmpl&quot;).read())
+  print homepage()
+
+  # web.py 0.3
+  homepage = web.template.Template(open(&quot;homepage.tmpl&quot;).read())
+  return homepage()
+</code></pre>
+ </li>
+
+ <li><p><strong>なぜ urls は単に1つの長いリストなのですか?</strong>
+</p>
+<p>もし辞書なら使用されないし、それがタプルであってもタイピング数が多いからです。
+</p>
+
+ </li>
+
+ <li><p><strong>どのようにして、静的ファイル JavaScriptsや画像(PNGやJPEG)をweb.pyサーバに配置すればいいですか?</strong>
+</p>
+<p>web.pyサーバを実行するスクリプトファイル(チュートリアルでは code.py を指す)のディレクトリに、新しく静的ファイル用のディレクトリ static を作成してください。 
+   次に、作成したディレクトリに静的ファイル logo.png を配置してください。
+</p>
+<p>たとえば、画像のURLが http://localhost:8080/static/logo.png ならば ./static/logo.png がクライアントに送られます。 
+</p>
+
+ </li>
+
+ <li><p><strong>どこで私は、補足支援できますか?</strong>
+</p>
+<p>Googleグループに <a href="http://groups.google.com/group/webpy">web.py group</a>があるので、そちらでお願いします。
+</p>
+
+ </li>
+
+ <li><p><strong>デフォルトのページがない場合 &quot;not found&quot;と表示されますが、どのようにしてそれを変更できますか?</strong>
+</p>
+<p>web.webapi.notfound を変更することで独自のページを作成することができます。
+</p>
+<pre><code>    # 0.2x
+    def my_notfound(): 
+        print &quot;MY OWN NOT FOUND&quot; 
+    web.webapi.notfound = my_notfound 
+
+    # 0.3
+    -
+</code></pre>
+ </li>
+
+ <li><p><strong>webpyをロードした後、どうすれば自動補完できますか?</strong>
+</p>
+<p>IPythonでは、webpyをインポートします。
+   自動補完が動作しない場合は、'python' の自動補完を試してみてください。( readline ):
+</p>
+<pre><code>    import readline, rlcompleter; readline.parse_and_bind(&quot;tab: complete&quot;)
+</code></pre><p>タブで補完されます。
+</p>
+<p>'Python' を実行した時、デフォルトで何か処理を行いたい場合は、'~/.pythonstartup.py' ファイルに記述します。そのファイルに前述した import文を記述し、環境変数に 'PYTHONSTARTUP' を追加します。
+</p>
+<p>私はbashで以下のようにしています。~/.bashrcを編集し、以下の行を足します。
+</p>
+<pre><code>    export PYTHONSTARTUP=~/.pythonstartup.py
+</code></pre>
+ </li>
+
+ <li><p><strong>データベースにアクセスできません、どうしてですか?</strong>
+</p>
+<p>Web-servingスレッド以外のスレッドからデータベースにアクセスする場合（例えば、新しいスレッドを作ったとか、Webページのserveを開始しなかった場合とか）には、<code>web.load()</code>を実行する必要があります。web.py 0.3では修正される予定です。ごめんなさい。
+</p>
+
+ </li>
+
+ <li><p><strong>IterBetterは複数回イテレートできますか？</strong>
+</p>
+<p>できません。<code>ib = list(ib)</code>でIterBetterをリストに変換してください。
+</p>
+
+ </li>
+
+ <li><p><strong>どのようにデバッグ文をコンソールに出力しますか？</strong>
+</p>
+<p>web.debug(&quot;デバッグ文&quot;)
+</p>
+
+ </li>
+
+ <li><p><strong>もしwebpyの不具合(バグ)を見つけた場合どこで報告すればいいのですか？</strong>
+</p>
+<p><a href="https://launchpad.net/webpy">ここ(webpy launchpad site)</a> からバグ報告することができます。ログインが必要な場合は登録を行ってからバグ報告をしてください。
+</p>
+
+ </li>
+</ol>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

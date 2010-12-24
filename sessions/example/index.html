@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Session example (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Session example
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Session example</h1>
+<p>put this in code.py and run <em>python code.py</em>
+</p>
+<pre><code>import time
+
+import web
+
+web.config.db_parameters = {
+                            'dbn' : 'postgres',
+                            'host' : 'localhost',
+                            'user' : 'web',
+                            'pw' : 'web',
+                            'db' : 'web'
+                    }
+
+##web.config.db_parameters = {
+##                          'dbn' : 'sqlite',
+##                          'db' : 'web.db'
+##                  }
+
+web.config.db_printing = True
+
+urls = (
+    '/(.*)', 'index'
+)
+
+class index:
+    def GET(self, rest):
+            # if you are going to use FileHandler
+            #web.config.session_parameters.handler = 'file'
+            # set the file prefix
+            #web.config.handler_parameters.file_prefix = 'sess'
+            # and directory
+            #web.config.handler_parameters.file_dir = '/tmp'
+
+            if rest == 'logout':
+                    web.ctx.session.start()
+                    web.ctx.session.destroy()
+                    web.redirect('/')
+                    return
+
+            print '&lt;html&gt;&lt;body&gt;'
+            print 'don\'t forget to create sqlite db-file web.db and table session_data'
+            print '&lt;br&gt;'
+            print '------------------------------------'
+            print '&lt;br&gt;'
+            print 'client cookies at start: ', web.websafe(web.cookies())
+            print '&lt;br&gt;'
+            print '------------------------------------'
+            print '&lt;br&gt;'
+
+            s = web.ctx.session
+            print 'starting session ...'
+            print '&lt;br&gt;'
+            s.start()
+            print '------------------------------------'
+            print '&lt;br&gt;'
+
+            print 'got session: ', web.websafe(s)
+            print '&lt;br&gt;'
+            print '------------------------------------'
+            print '&lt;br&gt;'
+
+            try:
+                    t = s.time
+            except AttributeError:
+                    t = False
+
+            print 'last hit at: ', web.websafe(t)
+            print '&lt;br&gt;'
+            print '------------------------------------'
+            print '&lt;br&gt;'
+
+            if not t:
+                    s['1'] = 0
+                    s['2'] = 0
+                    s['3'] = 0
+
+            if rest in ('1', '2', '3'):
+                    print '&lt;b&gt;you\'re on page no. ', rest, '&lt;/b&gt;'
+                    print '&lt;br&gt;'
+                    print '------------------------------------'
+                    print '&lt;br&gt;'
+                    s[rest] += 1
+
+            print 'changing data ...'
+            print '&lt;br&gt;'
+            s.time = time.strftime('%a, %d %b %Y %H:%M:%S')
+
+            print '------------------------------------'
+            print '&lt;br&gt;'
+            print 'page &lt;a href=&quot;/1&quot;&gt;1&lt;/a&gt;: ', s['1'], ' times'
+            print '&lt;br&gt;'
+            print 'page &lt;a href=&quot;/2&quot;&gt;2&lt;/a&gt;: ', s['2'], ' times'
+            print '&lt;br&gt;'
+            print 'page &lt;a href=&quot;/3&quot;&gt;3&lt;/a&gt;: ', s['3'], ' times'
+            print '&lt;br&gt;'
+            print '------------------------------------'
+            print '&lt;br&gt;'
+
+            print '&lt;a href=&quot;/logout&quot;&gt;destroy session&lt;/a&gt;'
+            print '&lt;br&gt;'
+
+            s.save()
+
+            print '&lt;!--'
+            print web.ctx
+            print '--&gt;'
+            print '&lt;/body&gt;&lt;/html&gt;'
+
+web.webapi.internalerror = web.debugerror
+
+if __name__ == '__main__':
+    web.run(urls, globals(), web.reloader)
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

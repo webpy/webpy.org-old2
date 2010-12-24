@@ -1,0 +1,202 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>How to upgrade from earlier versions of web.py to 0.3 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; How to upgrade from earlier versions of web.py to 0.3
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>How to upgrade from earlier versions of web.py to 0.3</h1>
+<p>Web.py 0.3 has some backward-incompatible changes. 
+</p>
+<ul>
+ <li>
+     <a href="#return">prints are replaced by return statements</a>
+ </li>
+
+ <li>
+     <a href="#app">new application framework</a>
+ </li>
+
+ <li>
+     <a href="#db">new database system</a>
+ </li>
+
+ <li>
+     <a href="#exceptions">http errors are exceptions</a>
+ </li>
+
+ <li>
+     <a href="#others">other incompatible changes</a>
+ </li>
+</ul>
+<p><a name="return"></a>
+</p>
+
+<h2>prints are replaced by return statements</h2>
+<p>In earlier versions of web.py the GET and POST methods used to print the data to be send to the client. Now instead of printing the data, the data must be returned from that function. This makes post-processing of returned data possible.
+</p>
+<p>If your old code is like this:
+</p>
+<pre><code>class hello:
+    def GET(self):
+        print &quot;Hello, world!&quot;
+</code></pre><p>It should become:
+</p>
+<pre><code>class hello:
+    def GET(self):
+        return &quot;Hello, world!&quot;
+</code></pre><p><code>yield</code> statements can also be used to return an iterator.
+</p>
+<pre><code>class hello:
+    def GET(self):
+        for i in range(5):
+            yield &quot;hello &quot; + str(i)
+</code></pre>
+<h2>new application framework</h2>
+<p>New application framework has been introduced in web.py 0.3 and due to that there is a slight change in the way the program's main section is written.
+</p>
+<p>If your old code has:
+</p>
+<pre><code>urls = (&quot;/&quot;, &quot;index&quot;)
+....
+
+if __name__ == &quot;__main__&quot;:
+    web.run(urls, globals())
+</code></pre><p>It should become:
+</p>
+<pre><code>urls = (&quot;/&quot;, &quot;index&quot;)
+app = web.application(urls, globals())
+
+....
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre><p><a name="db"></a>
+</p>
+
+<h2>new database system</h2>
+<p>The database module of web.py has been improved to make it more modular.
+</p>
+<p>If you have code like this:
+</p>
+<pre><code>web.config.db_parameters = dict(dbn='postgres', db='test', user='joe', password='secret')
+def foo():
+    web.insert('test', name='foo')
+</code></pre><p>It should become:
+</p>
+<pre><code>db = web.database(dbn='postgres', db='test', user='joe', password='secret')
+def foo():
+    db.insert('test', name='foo')
+</code></pre><p>Same applies to other database functions like <code>select</code>, <code>update</code>, <code>delete</code> and <code>query</code>.
+</p>
+<p>If you are using transactions, they should be changed too.
+</p>
+<pre><code>def foo():
+    web.transact()
+    web.insert('t1', name='foo')
+    web.insert('t2', name='bar')
+    web.commit()
+</code></pre><p>should become:
+</p>
+<pre><code>def foo():
+    t = db.transaction()
+    db.insert('t1', name='foo')
+    db.insert('t2', name='bar')
+    t.commit()
+</code></pre><p>If you are using python 2.5 or later, transactions can be used with <code>with</code> statement.
+</p>
+<pre><code>def foo():
+    with db.transaction():
+        db.insert('t1', name='foo')
+        db.insert('t2', name='bar')
+</code></pre><p><a name="exceptions"></a>
+</p>
+
+<h2>http errors are exceptions</h2>
+<p>In 0.3, all http errors have been changed to exceptions.
+</p>
+<p>If you have code like this:
+</p>
+<pre><code>def GET(self):
+    ....
+    if not page:
+        web.notfound()
+    else:
+        ....
+</code></pre><p>It should become:
+</p>
+<pre><code>def GET(self):
+    ....
+    if not page:
+        raise web.notfound()
+    else:
+    ....
+</code></pre><p><a name="others"></a>
+</p>
+
+<h2>Other incompatible changes</h2>
+<p>In web.py 0.3, <code>web.input()</code> returns values in unicode. This may create trouble sometimes.
+</p>
+<p>To force <code>web.input</code> to return strings instead of unicode values, use:
+</p>
+<pre><code>web.input(_unicode=False)
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

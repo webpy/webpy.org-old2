@@ -1,0 +1,136 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Site Layout Template (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Site Layout Template
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Site Layout Template</h1>
+<p>Other languages : <a href="/layout_template/fr" class="internal">français</a> | ...
+</p>
+
+<h3>Problem</h3>
+<p>How do I use a site-wide base template that displays across every page? (In other frameworks, this is called template inheritance.)
+</p>
+
+<h3>Solution</h3>
+<p>This can be done using the base attribute:
+</p>
+<pre><code>render = web.template.render('templates/', base='layout')
+</code></pre><p>Now if you do something like <code>render.foo()</code> it will render the <code>templates/foo.html</code> template and then wrap it in the <code>templates/layout.html</code> template.
+</p>
+<p>The format for &quot;layout.html&quot; should be a simple template that takes one variable.  For example:
+</p>
+<pre><code>$def with (content)
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Foo&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+$:content
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>If you don't want to use the base template for something, just create a second render object without the base attribute, like:
+</p>
+<pre><code>render_plain = web.template.render('templates/')
+</code></pre>
+<h3>Tip: Page title is set in other template files which are then used by the layout (layout.html). Example:</h3>
+<h5>templates/index.html</h5><pre><code>$var title: This is title.
+
+&lt;h3&gt;Hello, world&lt;/h3&gt;
+</code></pre><h5>templates/layout.html</h5><pre><code>$def with (content)
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;$content.title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+$:content
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>Tip: Add css files in other template files. Example:</h3>
+
+<h4>templates/login.html</h4>
+<pre><code>$var cssfiles: static/login.css static/login2.css
+
+hello, world.
+</code></pre>
+<h4>templates/layout.html</h4>
+<pre><code>$def with (content)
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;$content.title&lt;/title&gt;
+
+    $if content.cssfiles:
+        $for f in content.cssfiles.split():
+            &lt;link rel=&quot;stylesheet&quot; href=&quot;$f&quot; type=&quot;text/css&quot; media=&quot;screen&quot; charset=&quot;utf-8&quot;/&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+$:content
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>The HTML output code looks like below:
+</p>
+<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;static/login.css&quot; type=&quot;text/css&quot; media=&quot;screen&quot; charset=&quot;utf-8&quot;/&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;static/login2.css&quot; type=&quot;text/css&quot; media=&quot;screen&quot; charset=&quot;utf-8&quot;/&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

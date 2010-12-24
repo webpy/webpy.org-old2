@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Prototype (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Prototype
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Prototype</h1>
+<p>-
+</p>
+<pre><code># some modules that are expected to be used
+import time
+
+import pickle # the default ASCII &quot;pickling&quot;
+import sha # Python2.5 hashlib
+
+# settings
+web.config.session_parameters = {
+    use_flag : False, # will the session be used? if not then the Session object will not be created
+    timeout : 600,
+    id_seed : 'web.py',
+    regenerate_id : True, # boolean, on every request regenerate id and set again cookie
+    generator : False, # if False, use default generator
+
+    ignore_change_ip : True, # boolean, if the pair ( id, ip ) doesn't match the db, then fail/raise exception/...
+    ignore_expiration : False,
+
+    handler : DBHandler()
+}
+
+web.config.handler_parameters = { # optional handler settings
+    file_dir : '/tmp',
+    db_table : 'session_data' # table name
+}
+
+
+class Session( Storage ):
+        '''main session object
+                main instance variables
+                        _generator - reference to user-supplied &quot;unique random number generator&quot; or just to default session generator function
+                        _handler
+                        _id
+                        _data - internal Storage object'''
+
+        def __init__( self ):
+                pass
+
+        # public methods
+        def start( self ):
+                '''starts the session, regenerates id, sets cookies
+                        calls _identity, _verify, _generator function'''
+                pass
+
+        def get_id( self ):
+                '''returns current session id'''
+                pass
+
+        def cleanup( self ):
+                '''cleans expired sessions'''
+                pass
+
+        def save( self ):
+                '''save session data'''
+                pass
+
+        def destroy( self ):
+                '''removes session (including cookies)'''
+                pass            
+
+        # private methods
+        def _generate_id( self ):
+                '''implicit session id generator
+                        &quot;hashes&quot; ip, time, seed, microtime (?), ...'''
+                pass
+
+        def _identify( self ):
+                '''identifies session id (through cookies)'''
+                pass
+
+        def _verify( self ):
+                '''verifies with retreived data from handler object'''
+                pass
+
+        def _store( self ):
+                '''stores session data (wrapper around handler object)'''
+                pass
+
+        def _retreive( self ):
+                '''retreive session data (wrapper around handler object)'''
+                pass
+
+        def _remove( self ):
+                '''removes session data (wrapper around handler object)'''
+                pass
+# class
+
+class Handler:
+        '''abstract handler class'''
+        def __init__( self ):
+                pass
+
+        def store( self, ip, id, data ):
+                '''takes
+                        ip - client ip, probably number
+                        id - string
+                        data - dictionary'''
+                pass
+
+        def retreive( self, id ):
+                '''return ( id, ip, data, time ) or maybe dictionary'''
+                pass
+
+        def remove( self, id ):
+                pass
+# class
+
+def DBHandler( Handler ):
+        def __init__( self ):
+                pass
+
+        def clean( self, timeout ):
+                '''removes all expired sessions'''
+                pass
+# class
+
+def FileHandler( Handler ):
+        def __init__( self ):
+                '''takes dir where to create session files'''
+                pass
+# class
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

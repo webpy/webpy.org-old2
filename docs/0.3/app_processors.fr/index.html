@@ -1,0 +1,152 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Application processors (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Application processors
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Application processors</h1>
+<p>Autres langues : <a href="/../app_processors" class="internal">english</a> | ...
+</p>
+<p>les Application processors permettent au programmeur d'executer du code commun avant que chaque requête soit traitée. Ceci est utile pour les schémas d'authentification ou pour organiser l'état des utilisateurs à chaque requête. Des processors multiples peuvent être ajoutés par application, et ils seront executés dans l'ordre ou ils ont été ajoutés. Le plus basique processor ressemble à ça:
+</p>
+<pre><code>def proc(handle):
+    # faire tout ce dont vous avez besoin ici
+    web.ctx.user = web.cookies(user=None).user
+    # renvoi le traitement executé
+    return handle()
+
+app = web.application(urls, globals())
+# Ajouter le processor
+app.add_processor(proc)
+</code></pre><p>Le &quot;handle&quot; de l'application processor se réfère au code qui sera envoyé à l'URL correspondante (ou chaque processor successif). Cela vous permet d'utiliser &quot;try&quot; et &quot;except&quot;, de cette façon:
+</p>
+<pre><code>    def proc(handle):
+        try:
+            ret = handle()
+        except:
+            log_error('Uh oh')
+        return ret
+</code></pre><p>Voici un exemple de base sur la façon dont un système d'authentification est créé en utilisant les applications processors. Ce n'est pas sécurisé pour une utilisation réelle; Cela ne vise qu'à démontrer comment les application processors pouvent vérifier quelque chose avant que chaque URL ne soit traitée.
+</p>
+
+<h2>Exemple</h2>
+<pre><code>&quot;&quot;&quot; Application processors dans web.py &quot;&quot;&quot;
+import web
+
+urls = (
+    '/', 'Index',
+    '/login', 'Login',
+    '/logout', 'Logout',
+)
+
+class Index:
+
+    def GET(self):
+        return '&lt;html&gt;Hello %s &lt;a href=&quot;/logout&quot;&gt;Logout&lt;/a&gt;&lt;/html&gt;' \
+            % web.ctx.username
+
+
+class Login:
+
+    def GET(self):
+        return &quot;&quot;&quot;
+        &lt;html&gt;
+        &lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+            &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;Login&quot;&gt;
+        &lt;/form&gt;
+        &lt;/html&gt;
+        &quot;&quot;&quot;
+
+    def POST(self):
+        # only set cookie if user login succeeds
+        name = web.input(username=None).username
+        if name:
+            web.setcookie('username', name)
+        raise web.seeother('/')
+
+
+class Logout:
+
+    def GET(self):
+        web.setcookie('username', '', expires=-1)
+        raise web.seeother('/login')
+
+
+
+app = web.application(urls, globals())
+
+# Authentification Processor
+def auth_app_processor(handle):
+    path = web.ctx.path
+    web.ctx.username = name = web.cookies(username=None).username
+    if not name and path != '/login':
+        raise web.seeother('/login')
+    return handle()
+
+app.add_processor(auth_app_processor)
+
+
+if __name__ == '__main__':
+    app.run()
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>FileHandler for Sessions (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; FileHandler for Sessions
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>FileHandler for Sessions</h1>
+
+<h1>Specification</h1>
+
+<h2>Summary</h2>
+<p>The FileHandler will provide Handler-interface to file storage. It will store pickled data, session id &amp; client's IP address in specified directory as files. Also retreiving &amp; removing requested data by id will be implemented. On request the FileHandler will perform a generall clean up -&gt; delete old session files.
+</p>
+
+<h2>Implementation details</h2>
+<p>FileHandler is a derivate of Handler. All files will be created in the directory  web.config.handler_parameters.file_dir with prefix web.config.handler_parameters.file_prefix.
+</p>
+
+<h3>Public methods</h3>
+<ul>
+ <li>
+     store() - it will store the session data (&amp; pickle them before that); if the argument <em>old</em>id is set, it will look for an already storaged session data, it will create locks on both old &amp; new session files, it will try to retreive time of the old session creation; after the pickle data is stored, the lock will be released; it will call _acquire_lock(), _release_lock() and _session_file()
+ </li>
+
+ <li>
+     retreive() - it will retreive storaged data unpickled in a Storage object ( id, ip, time, data), if there aren't any for given id, it will return empty Storage object; all necessary lock procedures will be used; it will call _acquire_lock(), _release_lock() and _session_file()
+ </li>
+
+ <li>
+     remove() - it will remove storaged data for given id; all necessary lock procedures will be used, it will simply unlink the session file (ignoring if it's not existing); it will call _acquire_lock(), _release_lock() and _session_file()
+ </li>
+
+ <li>
+     clean() - it will remove all session data, which been updated longer then before given timeout; all necessary lock procedures will be used (however not blocking); it will call _acquire_lock() and _release_lock()
+ </li>
+</ul>
+
+<h3>Private methods</h3>
+<ul>
+ <li>
+     _session_file() - it will return the full name of the session storage file
+ </li>
+
+ <li>
+     _lock_file() - it will return the full name of the session storage lock file; ; it will call _session_file()
+ </li>
+
+ <li>
+     _acquire_lock() - it will create a lock file; if the lock file is already present, it will check, that the lock file is not older than 60s, in that case the old lock file will be erased; if blocking is set False, it will not wait; it will call _lock_file()
+ </li>
+
+ <li>
+     _release_lock() - it will simply unlink the session lock file (ignoring if it's not existing); it will call _lock_file()
+ </li>
+</ul>
+
+<h3>Requirements</h3>
+<p>FileHandler will need a storage directory (web.config.handler_parameters.file_dir) on the filesystem with write (&amp; read) permission.
+</p>
+<p><a href="/sessions">Sessions specs</a>
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

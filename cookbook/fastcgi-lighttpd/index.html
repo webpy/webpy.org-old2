@@ -1,0 +1,192 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Webpy + LightTTPD with FastCGi (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Webpy + LightTTPD with FastCGi
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Webpy + LightTTPD with FastCGi</h1>
+<p>Other languages: <a href="/../cookbook/fastcgi-lighttpd/fr" class="internal">français</a> | ...
+</p>
+<p><em>If you have problems with this recipe read this <a href="http://www.mail-archive.com/webpy@googlegroups.com/msg02800.html" class="internal">thread</a></em>
+</p>
+<p><em>The following applies on lighttpd version 1.4.18</em>
+</p>
+
+<h2>Note:  <br /></h2>
+<ul>
+ <li>
+     You may replace <code>code.py</code> with your own file name.
+ </li>
+
+ <li>
+     <code>/path-to/webpy-app</code> found below refers to the path to the directory contains your <code>code.py</code>
+ </li>
+
+ <li>
+     <code>/path-to/webpy-app/code.py</code> is the full path to your <strong>python file</strong>
+ </li>
+</ul>
+<p>If you are not certain what version you are running simply type: <code>lighttpd -v</code> at your console.
+</p>
+<p>Note: Earlier version of lighttpd may organize the .conf files differently. Yet, the same principles applied on them as well.
+</p>
+
+<h3>ligghttpd Configuration under Debian GNU/Linux</h3>
+<pre>
+Files and Directories in /etc/lighttpd:
+---------------------------------------
+
+lighttpd.conf:
+         main configuration file
+
+conf-available/
+        This directory contains a series of .conf files. These files contain
+        configuration directives necessary to load and run webserver modules.
+        If you want to create your own files they names should be
+        build as nn-name.conf where "nn" is two digit number (number
+        is used to find order for loading files)
+
+conf-enabled/
+        To actually enable a module for lighttpd, it is necessary to create a
+        symlink in this directory to the .conf file in conf-available/.
+
+Enabling and disabling modules could be done by provided
+/usr/sbin/lighty-enable-mod and /usr/sbin/lighty-disable-mod scripts.
+</pre>
+
+<p><strong>
+   For web py you should enable mod_fastcgi and mod_rewrite, thus run: <code>/usr/sbin/lighty-enable-mod</code> and supply <code>fastcgi</code>  <br />
+   (mod_rewrite will be enabled within <code>10-fastcgi.conf</code> file as you will see in a moment).
+</p>
+
+<h2>Below are instructions for the following files:</h2>
+<ul>
+ <li>
+     <code>/etc/lighttpd/lighttpd.conf</code>
+ </li>
+
+ <li>
+     <code>/etc/lighttpd/conf-available/10-fastcgi.conf</code>
+ </li>
+
+ <li>
+     <code>code.py</code>
+ </li>
+</ul>
+
+<h3><code>/etc/lighttpd/lighttpd.conf</code></h3>
+<pre>
+server.modules              = (
+            "mod_access",
+            "mod_alias",
+            "mod_accesslog",
+            "mod_compress",
+)
+server.document-root       = "/path-to/webpy-app"
+</pre>
+
+<p>In my case I used postgresql and therefore runs lighttpd as postgres in order to grant permissions to the database, therefore I added the line:
+</p>
+<pre>
+server.username = "postgres"
+</pre>
+
+
+<h3><code>/etc/lighttpd/conf-available/10-fastcgi.conf</code></h3>
+<pre>
+server.modules   += ( "mod_fastcgi" )
+server.modules   += ( "mod_rewrite" )
+
+fastcgi.server = ( "/code.py" =>
+ (( "socket" => "/tmp/fastcgi.socket",
+    "bin-path" => "/path-to/webpy-app/code.py",
+    "max-procs" => 1,
+   "bin-environment" => (
+     "REAL_SCRIPT_NAME" => ""
+   ),
+   "check-local" => "disable"
+ ))
+ )
+
+url.rewrite-once = (
+   "^/favicon.ico$" => "/static/favicon.ico",
+   "^/static/(.*)$" => "/static/$1",
+   "^/(.*)$" => "/code.py/$1",
+ )
+</pre>
+
+
+<h3><code>/code.py</code>  <br /></h3>
+<p>At the top of the file add:
+</p>
+<pre>
+#!/usr/bin/env python
+</pre>
+
+<p>and don't forget to make it executable (otherwise you will get a &quot;permission denied&quot; error):
+</p>
+<pre>
+$ chmod 755 /path-to/webpy-app/code.py
+</pre>
+
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

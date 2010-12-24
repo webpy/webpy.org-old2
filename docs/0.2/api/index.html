@@ -1,0 +1,1040 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>web.py 0.2 API documentation (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; web.py 0.2 API documentation
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>web.py 0.2 API documentation</h1>
+
+<h2><strong>init</strong>.py</h2>
+<p><code>main()</code>
+      : 
+</p>
+
+<h2>cheetah.py</h2>
+<p><code>upvars(level=2)</code>
+      : Guido van Rossum sez: don't use this function.
+</p>
+<p><code>render(template, terms=None, asTemplate=False, base=None, isString=False):</code>
+      : Renders a template, caching where it can.
+</p>
+<pre><code> `template` is the name of a file containing the a template in
+ the `templates/` folder, unless `isString`, in which case it's the 
+ template itself.
+
+ `terms` is a dictionary used to fill the template. If it's None, then
+ the caller's local variables are used instead, plus context, if it's not 
+ already set, is set to `context`.
+
+ If asTemplate is False, it `output`s the template directly. Otherwise,
+ it returns the template object.
+
+ If the template is a potential base template (that is, something other templates)
+ can extend, then base should be a string with the name of the template. The
+ template will be cached and made available for future calls to `render`.
+
+ Requires [Cheetah](http://cheetahtemplate.org/).
+</code></pre><p><code>class WebSafe(Filter)</code>
+      : 
+</p>
+
+<h2>db.py</h2>
+<p>Supports Firebird, MySQL, PostgreSQL, and SQLite.
+</p>
+<p><code>class UnknownParamstyle(Exception)</code>
+      : raised for unsupported db paramstyles
+</p>
+<pre><code> (currently supported: qmark, numeric, format, pyformat)
+</code></pre><p><code>aparam()</code>
+      : Returns the appropriate string to be used to interpolate
+        a value with the current <code>web.ctx.db_module</code> or simply %s
+        if there isn't one.
+</p>
+<pre><code>     &gt;&gt;&gt; aparam()
+     '%s'
+</code></pre><p><code>reparam(string_, dictionary)</code>
+      : Takes a string and a dictionary and interpolates the string
+        using values from the dictionary. Returns an <code>SQLQuery</code> for the result.
+</p>
+<pre><code>     &gt;&gt;&gt; reparam(&quot;s = $s&quot;, dict(s=True))
+     &lt;sql: &quot;s = 't'&quot;&gt;
+</code></pre><p><code>sqlify(obj)</code>
+      : converts <code>obj</code> to its proper SQL version
+</p>
+<pre><code>     &gt;&gt;&gt; sqlify(None)
+     'NULL'
+     &gt;&gt;&gt; sqlify(True)
+     &quot;'t'&quot;
+     &gt;&gt;&gt; sqlify(3)
+     '3'
+</code></pre><p><code>class SQLQuery</code>
+      : You can pass this sort of thing as a clause in any db function.
+        Otherwise, you can pass a dictionary to the keyword argument <code>vars</code>
+        and the function will call reparam for you.
+</p>
+<p><code>class SQLLiteral</code>
+      : Protects a string from <code>sqlquote</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; insert('foo', time=SQLLiteral('NOW()'), _test=True)
+     &lt;sql: 'INSERT INTO foo (time) VALUES (NOW())'&gt;
+</code></pre><p><code>sqlquote(a)</code>
+      : Ensures <code>a</code> is quoted properly for use in a SQL query.
+</p>
+<pre><code>     &gt;&gt;&gt; 'WHERE x = ' + sqlquote(True) + ' AND y = ' + sqlquote(3)
+     &lt;sql: &quot;WHERE x = 't' AND y = 3&quot;&gt;
+</code></pre><p><code>class UnknownDB(Exception)</code>
+      : raised for unsupported dbms
+</p>
+<p><code>connect(dbn, **keywords)</code>
+      : Connects to the specified database. 
+</p>
+<pre><code> `dbn` currently must be &quot;postgres&quot;, &quot;mysql&quot;, or &quot;sqlite&quot;. 
+
+ If DBUtils is installed, connection pooling will be used.
+</code></pre><p><code>class TransactionError(Exception): pass  class transaction:</code>
+      : A context that can be used in conjunction with &quot;with&quot; statements
+        to implement SQL transactions. Starts a transaction on enter,
+        rolls it back if there's an error; otherwise it commits it at the
+        end.
+</p>
+<p><code>transact()</code>
+      : Start a transaction.
+</p>
+<p><code>commit()</code>
+      : Commits a transaction.
+</p>
+<p><code>rollback(care=True)</code>
+      : Rolls back a transaction.
+</p>
+<p><code>query(sql_query, vars=None, processed=False, _test=False)</code>
+      : Execute SQL query <code>sql_query</code> using dictionary <code>vars</code> to interpolate it.
+        If <code>processed=True</code>, <code>vars</code> is a <code>reparam</code>-style list to use 
+        instead of interpolating.
+</p>
+<pre><code>     &gt;&gt;&gt; query(&quot;SELECT * FROM foo&quot;, _test=True)
+     &lt;sql: 'SELECT * FROM foo'&gt;
+     &gt;&gt;&gt; query(&quot;SELECT * FROM foo WHERE x = $x&quot;, vars=dict(x='f'), _test=True)
+     &lt;sql: &quot;SELECT * FROM foo WHERE x = 'f'&quot;&gt;
+     &gt;&gt;&gt; query(&quot;SELECT * FROM foo WHERE x = &quot; + sqlquote('f'), _test=True)
+     &lt;sql: &quot;SELECT * FROM foo WHERE x = 'f'&quot;&gt;
+</code></pre><p><code>sqllist(lst)</code>
+      : Converts the arguments for use in something like a WHERE clause.
+</p>
+<pre><code>     &gt;&gt;&gt; sqllist(['a', 'b'])
+     'a, b'
+     &gt;&gt;&gt; sqllist('foo')
+     'foo'
+     &gt;&gt;&gt; sqllist(u'foo')
+     u'foo'
+</code></pre><p>`sqlors(left, lst)<code>:</code>left is a SQL clause like <code>tablename.arg =</code> 
+        and <code>lst</code> is a list of values. Returns a reparam-style
+        pair featuring the SQL that ORs together the clause
+        for each item in the lst.
+</p>
+<pre><code>     &gt;&gt;&gt; sqlors('foo = ', [])
+     &lt;sql: '2+2=5'&gt;
+     &gt;&gt;&gt; sqlors('foo = ', [1])
+     &lt;sql: 'foo = 1'&gt;
+     &gt;&gt;&gt; sqlors('foo = ', 1)
+     &lt;sql: 'foo = 1'&gt;
+     &gt;&gt;&gt; sqlors('foo = ', [1,2,3])
+     &lt;sql: '(foo = 1 OR foo = 2 OR foo = 3)'&gt;
+</code></pre><p><code>sqlwhere(dictionary, grouping=' AND ')</code>
+      : Converts a <code>dictionary</code> to an SQL WHERE clause <code>SQLQuery</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; sqlwhere({'cust_id': 2, 'order_id':3})
+     &lt;sql: 'order_id = 3 AND cust_id = 2'&gt;
+     &gt;&gt;&gt; sqlwhere({'cust_id': 2, 'order_id':3}, grouping=', ')
+     &lt;sql: 'order_id = 3, cust_id = 2'&gt;
+</code></pre><p><code>select(tables, vars=None, what='*', where=None, order=None, group=None, limit=None, offset=None, _test=False):</code>
+      : Selects <code>what</code> from <code>tables</code> with clauses <code>where</code>, <code>order</code>, 
+        <code>group</code>, <code>limit</code>, and <code>offset</code>. Uses vars to interpolate. 
+        Otherwise, each clause can be a SQLQuery.
+</p>
+<pre><code>     &gt;&gt;&gt; select('foo', _test=True)
+     &lt;sql: 'SELECT * FROM foo'&gt;
+     &gt;&gt;&gt; select(['foo', 'bar'], where=&quot;foo.bar_id = bar.id&quot;, limit=5, _test=True)
+     &lt;sql: 'SELECT * FROM foo, bar WHERE foo.bar_id = bar.id LIMIT 5'&gt;
+</code></pre><p><code>insert(tablename, seqname=None, _test=False, **values)</code>
+      : Inserts <code>values</code> into <code>tablename</code>. Returns current sequence ID.
+        Set <code>seqname</code> to the ID if it's not the default, or to <code>False</code>
+        if there isn't one.
+</p>
+<pre><code>     &gt;&gt;&gt; insert('foo', joe='bob', a=2, _test=True)
+     &lt;sql: &quot;INSERT INTO foo (a, joe) VALUES (2, 'bob')&quot;&gt;
+</code></pre><p><code>update(tables, where, vars=None, _test=False, **values)</code>
+      : Update <code>tables</code> with clause <code>where</code> (interpolated using <code>vars</code>)
+        and setting <code>values</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; joe = 'Joseph'
+     &gt;&gt;&gt; update('foo', where='name = $joe', name='bob', age=5,
+     ...   vars=locals(), _test=True)
+     &lt;sql: &quot;UPDATE foo SET age = 5, name = 'bob' WHERE name = 'Joseph'&quot;&gt;
+</code></pre><p><code>delete(table, where=None, using=None, vars=None, _test=False)</code>
+      : Deletes from <code>table</code> with clauses <code>where</code> and <code>using</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; name = 'Joe'
+     &gt;&gt;&gt; delete('foo', where='name = $name', vars=locals(), _test=True)
+     &lt;sql: &quot;DELETE FROM foo WHERE name = 'Joe'&quot;&gt;
+</code></pre>
+<h2>debugerror.py</h2>
+<p><code>djangoerror()</code>
+      : 
+</p>
+<p><code>debugerror()</code>
+      : A replacement for <code>internalerror</code> that presents a nice page with lots
+        of debug information for the programmer.
+</p>
+<pre><code> (Based on the beautiful 500 page from [Django](http://djangoproject.com/), 
+ designed by [Wilson Miner](http://wilsonminer.com/).)
+</code></pre><p><code>emailerrors(email_address, olderror)</code>
+      : Wraps the old <code>internalerror</code> handler (pass as <code>olderror</code>) to 
+        additionally email all errors to <code>email_address</code>, to aid in 
+        debugging production websites.
+</p>
+<pre><code> Emails contain a normal text traceback as well as an
+ attachment containing the nice `debugerror` page.
+</code></pre>
+<h2>form.py</h2>
+<p><code>attrget(obj, attr, value=None)</code>
+      : 
+</p>
+<p><code>class Form</code>
+      : <strong>init</strong>(self, *inputs, <em></em>kw)
+        <code>inputs</code> is a list of form objects.
+        The only keyword accepted is &quot;validators&quot; which is a list of Validator objects.
+</p>
+<p><code>class Input(object)</code>
+      : <strong>init</strong>(self, name, *validators, <em></em>attrs)
+        <code>name</code> is the name of the object. It is the default value for the &quot;description&quot; attribute for the HTML form element.
+        The keywords, stored in the dictionary <code>attrs</code>, accepted are: &quot;description&quot;, &quot;value&quot;, &quot;pre&quot;, &quot;post&quot;, &quot;id&quot;, and &quot;class_&quot;
+</p>
+<p><code>class Textbox(Input)</code>
+      : 
+</p>
+<p><code>class Password(Input)</code>
+      : 
+</p>
+<p><code>class Textarea(Input)</code>
+      : 
+</p>
+<p><code>class Dropdown(Input)</code>
+      : 
+</p>
+<p><code>class Radio(Input)</code>
+      : 
+</p>
+<p><code>class Checkbox(Input)</code>
+      : 
+</p>
+<p><code>class Button(Input)</code>
+      : 
+</p>
+<p><code>class Hidden(Input)</code>
+      : 
+</p>
+<p><code>class File(Input)</code>
+      : 
+</p>
+<p><code>class Validator</code>
+      : 
+</p>
+<p><code>class regexp(Validator)</code>
+      : 
+</p>
+
+<h2>http.py</h2>
+<p><code>prefixurl(base='')</code>
+      : Sorry, this function is really difficult to explain.
+        Maybe some other time.
+</p>
+<p><code>expires(delta)</code>
+      : Outputs an <code>Expires</code> header for <code>delta</code> from now. 
+        <code>delta</code> is a <code>timedelta</code> object or a number of seconds.
+</p>
+<p><code>lastmodified(date_obj)</code>
+      : Outputs a <code>Last-Modified</code> header for <code>datetime</code>.
+</p>
+<p><code>modified(date=None, etag=None)</code>
+      : 
+</p>
+<p><code>redirect(url, status='301 Moved Permanently')</code>
+      : Returns a <code>status</code> redirect to the new URL. 
+        <code>url</code> is joined with the base URL so that things like 
+        <code>redirect(&quot;about&quot;)</code> will work properly.
+</p>
+<p><code>found(url)</code>
+      : A <code>302 Found</code> redirect.
+</p>
+<p><code>seeother(url)</code>
+      : A <code>303 See Other</code> redirect.
+</p>
+<p><code>tempredirect(url)</code>
+      : A <code>307 Temporary Redirect</code> redirect.
+</p>
+<p><code>write(cgi_response)</code>
+      : Converts a standard CGI-style string response into <code>header</code> and 
+        <code>output</code> calls.
+</p>
+<p><code>urlencode(query)</code>
+      : Same as urllib.urlencode, but supports unicode strings.
+</p>
+<pre><code>     &gt;&gt;&gt; urlencode({'text':'foo bar'})
+     'text=foo+bar'
+</code></pre><p><code>changequery(query=None, **kw)</code>
+      : Imagine you're at <code>/foo?a=1&amp;b=2</code>. Then <code>changequery(a=3)</code> will return
+        <code>/foo?a=3&amp;b=2</code> -- the same URL but with the arguments you requested
+        changed.
+</p>
+<p><code>url(path=None, **kw)</code>
+      : Makes url by concatinating web.ctx.homepath and path and the 
+        query string created using the arguments.
+</p>
+<p><code>background(func)</code>
+      : A function decorator to run a long-running function as a background thread. 
+        GOTCHA in postgres: Until the foreground task ends, any db access by background 
+        task will necessarily get old data from before the foreground task started
+        because psycopg2 begins a transaction in the foreground task until it quits.
+</p>
+<p><code>backgrounder(func)</code>
+      : 
+</p>
+<p><code>class Reloader</code>
+      : Before every request, checks to see if any loaded modules have changed on 
+        disk and, if so, reloads them.
+</p>
+<p><code>profiler(app)</code>
+      : Outputs basic profiling information at the bottom of each response.
+</p>
+
+<h2>httpserver.py</h2>
+<p><code>runbasic(func, server_address=(&quot;0.0.0.0&quot;, 8080))</code>
+      : Runs a simple HTTP server hosting WSGI app <code>func</code>. The directory <code>static/</code> 
+        is hosted statically.
+</p>
+<pre><code> Based on [WsgiServer][ws] from [Colin Stewart][cs].
+</code></pre><p><code>runsimple(func, server_address=(&quot;0.0.0.0&quot;, 8080))</code>
+      : Runs [CherryPy][cp] WSGI server hosting WSGI app <code>func</code>. 
+        The directory <code>static/</code> is hosted statically.
+</p>
+<pre><code> [cp]: http://www.cherrypy.org
+</code></pre>
+<h2>net.py</h2>
+<p><code>validipaddr(address)</code>
+      : returns True if <code>address</code> is a valid IPv4 address
+</p>
+<p><code>validipport(port)</code>
+      : returns True if <code>port</code> is a valid IPv4 port
+</p>
+<p><code>validip(ip, defaultaddr=&quot;0.0.0.0&quot;, defaultport=8080)</code>
+      : returns <code>(ip_address, port)</code> from string <code>ip_addr_port</code>
+</p>
+<p><code>validaddr(string_)</code>
+      : returns either (ip_address, port) or &quot;/path/to/socket&quot; from string_
+</p>
+<pre><code>     &gt;&gt;&gt; validaddr('/path/to/socket')
+     '/path/to/socket'
+     &gt;&gt;&gt; validaddr('8000')
+     ('0.0.0.0', 8000)
+     &gt;&gt;&gt; validaddr('127.0.0.1')
+     ('127.0.0.1', 8080)
+     &gt;&gt;&gt; validaddr('127.0.0.1:8000')
+     ('127.0.0.1', 8000)
+     &gt;&gt;&gt; validaddr('fff')
+     Traceback (most recent call last):
+         ...
+     ValueError: fff is not a valid IP address/port
+</code></pre><p><code>urlquote(val)</code>
+      : Quotes a string for use in a URL.
+</p>
+<pre><code>     &gt;&gt;&gt; urlquote('://?f=1&amp;j=1')
+     '%3A//%3Ff%3D1%26j%3D1'
+     &gt;&gt;&gt; urlquote(None)
+     ''
+     &gt;&gt;&gt; urlquote(u'\u203d')
+     '%E2%80%BD'
+</code></pre><p><code>httpdate(date_obj)</code>
+      : Formats a datetime object for use in HTTP headers.
+</p>
+<pre><code>     &gt;&gt;&gt; import datetime
+     &gt;&gt;&gt; httpdate(datetime.datetime(1970, 1, 1, 1, 1, 1))
+     'Thu, 01 Jan 1970 01:01:01 GMT'
+</code></pre><p><code>parsehttpdate(string_)</code>
+      : Parses an HTTP date into a datetime object.
+</p>
+<pre><code>     &gt;&gt;&gt; parsehttpdate('Thu, 01 Jan 1970 01:01:01 GMT')
+     datetime.datetime(1970, 1, 1, 1, 1, 1)
+</code></pre><p><code>htmlquote(text)</code>
+      : Encodes <code>text</code> for raw use in HTML.
+</p>
+<pre><code>     &gt;&gt;&gt; htmlquote(&quot;&lt;'&amp;\\&quot;&gt;&quot;)
+     '&amp;lt;&amp;#39;&amp;amp;&amp;quot;&amp;gt;'
+</code></pre><p><code>htmlunquote(text)</code>
+      : Decodes <code>text</code> that's HTML quoted.
+</p>
+<pre><code>     &gt;&gt;&gt; htmlunquote('&amp;lt;&amp;#39;&amp;amp;&amp;quot;&amp;gt;')
+     '&lt;\\'&amp;&quot;&gt;'
+</code></pre><p><code>websafe(val)</code>
+      : Converts <code>val</code> so that it's safe for use in UTF-8 HTML.
+</p>
+<pre><code>     &gt;&gt;&gt; websafe(&quot;&lt;'&amp;\\&quot;&gt;&quot;)
+     '&amp;lt;&amp;#39;&amp;amp;&amp;quot;&amp;gt;'
+     &gt;&gt;&gt; websafe(None)
+     ''
+     &gt;&gt;&gt; websafe(u'\u203d')
+     '\\xe2\\x80\\xbd'
+</code></pre>
+<h2>request.py</h2>
+<p><code>handle(mapping, fvars=None)</code>
+      : Call the appropriate function based on the url to function mapping in <code>mapping</code>.
+        If no module for the function is specified, look up the function in <code>fvars</code>. If
+        <code>fvars</code> is empty, using the caller's context.
+</p>
+<pre><code> `mapping` should be a tuple of paired regular expressions with function name
+ substitutions. `handle` will import modules as necessary.
+</code></pre><p><code>nomethod(cls)</code>
+      : Returns a <code>405 Method Not Allowed</code> error for <code>cls</code>.
+</p>
+<p><code>autodelegate(prefix='')</code>
+      : Returns a method that takes one argument and calls the method named prefix+arg,
+        calling <code>notfound()</code> if there isn't one. Example:
+</p>
+<pre><code>     urls = ('/prefs/(.*)', 'prefs')
+
+     class prefs:
+         GET = autodelegate('GET_')
+         def GET_password(self): pass
+         def GET_privacy(self): pass
+
+ `GET_password` would get called for `/prefs/password` while `GET_privacy` for 
+ `GET_privacy` gets called for `/prefs/privacy`.
+
+ If a user visits `/prefs/password/change` then `GET_password(self, '/change')`
+ is called.
+</code></pre><p><code>webpyfunc(inp, fvars, autoreload=False)</code>
+      : If <code>inp</code> is a url mapping, returns a function that calls handle.
+</p>
+<p><code>run(inp, fvars, *middleware)</code>
+      : Starts handling requests. If called in a CGI or FastCGI context, it will follow
+        that protocol. If called from the command line, it will start an HTTP
+        server on the port named in the first command line argument, or, if there
+        is no argument, on port 8080.
+</p>
+<pre><code> `input` is a callable, then it's called with no arguments.
+ Otherwise, it's a `mapping` object to be passed to `handle(...)`.
+
+ **Caveat:** So that `reloader` will work correctly, input has to be a variable,
+ it can't be a tuple passed in directly.
+
+ `middleware` is a list of WSGI middleware which is applied to the resulting WSGI
+ function.
+</code></pre>
+<h2>template.py</h2>
+<p><code>class ParseError(Exception): pass class Parser:</code>
+      : 
+</p>
+<p><code>class TemplateParser(Parser)</code>
+      : 
+</p>
+<p><code>class Stowage(storage)</code>
+      : 
+</p>
+<p><code>class WTF(AssertionError): pass class SecurityError(Exception):</code>
+      : The template seems to be trying to do something naughty.
+</p>
+<p><code>class Template</code>
+      : 
+</p>
+<p><code>class Handle</code>
+      : 
+</p>
+<p><code>class Fill(Handle)</code>
+      : 
+</p>
+<p><code>class render</code>
+      : 
+</p>
+<p><code>frender(fn, *a, **kw)</code>
+      : 
+</p>
+<p><code>test()</code>
+      : r&quot;&quot;&quot;Doctest for testing template module. 
+</p>
+<pre><code>     &gt;&gt;&gt; t = Template
+     &gt;&gt;&gt; t('1')()
+     '1\n'
+     &gt;&gt;&gt; t('$def with ()\n1')()
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a)\n$a')(1)
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a=0)\n$a')(1)
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a=0)\n$a')(a=1)
+     '1\n'
+     &gt;&gt;&gt; t('$if 1: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$if 1:\n    1')()
+     '1\n'
+     &gt;&gt;&gt; t('$if 0: 0\n$elif 1: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$if 0: 0\n$elif None: 0\n$else: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$if (0 &lt; 1) and (1 &lt; 2): 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$for x in [1, 2, 3]: $x')()
+     '1\n2\n3\n'
+     &gt;&gt;&gt; t('$for x in []: 0\n$else: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a)\n$while a and a.pop(): 1')([1, 2, 3])
+     '1\n1\n1\n'
+     &gt;&gt;&gt; t('$while 0: 0\n$else: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = 1\n$a')()
+     '1\n'
+     &gt;&gt;&gt; t('$# 0')()
+     ''
+     &gt;&gt;&gt; t('$def with (d)\n$for k, v in d.iteritems(): $k')({1: 1})
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a)\n$(a)')(1)
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a)\n$a')(1)
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a)\n$a.b')(storage(b=1))
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a)\n$a[0]')([1])
+     '1\n'
+     &gt;&gt;&gt; t('${0 or 1}')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = [1]\n$a[0]')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = {1: 1}\n$a.keys()[0]')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = []\n$if not a: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = {}\n$if not a: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = -1\n$a')()
+     '-1\n'
+     &gt;&gt;&gt; t('$ a = &quot;1&quot;\n$a')()
+     '1\n'
+     &gt;&gt;&gt; t('$if 1 is 1: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$if not 0: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$if 1:\n    $if 1: 1')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = 1\n$a')()
+     '1\n'
+     &gt;&gt;&gt; t('$ a = 1.\n$a')()
+     '1.0\n'
+     &gt;&gt;&gt; t('$({1: 1}.keys()[0])')()
+     '1\n'
+     &gt;&gt;&gt; t('$for x in [1, 2, 3]:\n\t$x')()
+     '    1\n    2\n    3\n'
+     &gt;&gt;&gt; t('$def with (a)\n$:a')(1)
+     '1\n'
+     &gt;&gt;&gt; t('$def with (a)\n$a')(u'\u203d')
+     '\xe2\x80\xbd\n'
+     &gt;&gt;&gt; t(u'$def with (a)\n$a $:a')(u'\u203d')
+     '\xe2\x80\xbd \xe2\x80\xbd\n'
+     &gt;&gt;&gt; t(u'$def with ()\nfoo')()
+     'foo\n'
+     &gt;&gt;&gt; def f(x): return x
+     ...
+     &gt;&gt;&gt; t(u'$def with (f)\n$:f(&quot;x&quot;)')(f)
+     'x\n'
+     &gt;&gt;&gt; t(u'$def with (f)\n$:f(x=&quot;x&quot;)')(f)
+     'x\n'
+     &gt;&gt;&gt; x = t('$var foo: bar')()
+     &gt;&gt;&gt; str(x)
+     ''
+     &gt;&gt;&gt; x.foo
+     'bar\n'
+</code></pre><p>see also <a href="/templetor" class="internal">template.py doc</a>
+</p>
+
+<h2>utils.py</h2>
+<p><code>class Storage(dict)</code>
+      : A Storage object is like a dictionary except <code>obj.foo</code> can be used
+        in addition to <code>obj['foo']</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; o = storage(a=1)
+     &gt;&gt;&gt; o.a
+     1
+     &gt;&gt;&gt; o['a']
+     1
+     &gt;&gt;&gt; o.a = 2
+     &gt;&gt;&gt; o['a']
+     2
+     &gt;&gt;&gt; del o.a
+     &gt;&gt;&gt; o.a
+     Traceback (most recent call last):
+         ...
+     AttributeError: 'a'
+</code></pre><p><code>storify(mapping, *requireds, **defaults)</code>
+      : Creates a <code>storage</code> object from dictionary <code>mapping</code>, raising <code>KeyError</code> if
+        d doesn't have all of the keys in <code>requireds</code> and using the default 
+        values for keys found in <code>defaults</code>.
+</p>
+<pre><code> For example, `storify({'a':1, 'c':3}, b=2, c=0)` will return the equivalent of
+ `storage({'a':1, 'b':2, 'c':3})`.
+
+ If a `storify` value is a list (e.g. multiple values in a form submission), 
+ `storify` returns the last element of the list, unless the key appears in 
+ `defaults` as a list. Thus:
+
+     &gt;&gt;&gt; storify({'a':[1, 2]}).a
+     2
+     &gt;&gt;&gt; storify({'a':[1, 2]}, a=[]).a
+     [1, 2]
+     &gt;&gt;&gt; storify({'a':1}, a=[]).a
+     [1]
+     &gt;&gt;&gt; storify({}, a=[]).a
+     []
+
+ Similarly, if the value has a `value` attribute, `storify will return _its_
+ value, unless the key appears in `defaults` as a dictionary.
+
+     &gt;&gt;&gt; storify({'a':storage(value=1)}).a
+     1
+     &gt;&gt;&gt; storify({'a':storage(value=1)}, a={}).a
+     &lt;Storage {'value': 1}&gt;
+     &gt;&gt;&gt; storify({}, a={}).a
+     {}
+</code></pre><p><code>rstrips(text, remove)</code>
+      : removes the string <code>remove</code> from the right of <code>text</code>
+</p>
+<pre><code>     &gt;&gt;&gt; rstrips(&quot;foobar&quot;, &quot;bar&quot;)
+     'foo'
+</code></pre><p><code>lstrips(text, remove)</code>
+      : removes the string <code>remove</code> from the left of <code>text</code>
+</p>
+<pre><code>     &gt;&gt;&gt; lstrips(&quot;foobar&quot;, &quot;foo&quot;)
+     'bar'
+</code></pre><p><code>strips(text, remove)</code>
+      : removes the string <code>remove</code> from the both sides of <code>text</code> 
+            &gt;&gt;&gt; strips(&quot;foobarfoo&quot;, &quot;foo&quot;)
+            'bar'
+</p>
+<p><code>utf8(text)</code>
+      : Encodes text in utf-8.         <br />
+            &gt;&gt; utf8(u'u1234') # doctest doesn't seem to like utf-8
+            'xe1x88xb4'
+</p>
+<pre><code>     &gt;&gt;&gt; utf8('hello')
+     'hello'
+     &gt;&gt;&gt; utf8(42)
+     '42'
+</code></pre><p><code>class TimeoutError(Exception): pass def timelimit(timeout):</code>
+      : A decorator to limit a function to <code>timeout</code> seconds, raising <code>TimeoutError</code>
+        if it takes longer.
+</p>
+<pre><code>     &gt;&gt;&gt; import time
+     &gt;&gt;&gt; def meaningoflife():
+     ...     time.sleep(.2)
+     ...     return 42
+     &gt;&gt;&gt; 
+     &gt;&gt;&gt; timelimit(.1)(meaningoflife)()
+     Traceback (most recent call last):
+         ...
+     TimeoutError: took too long
+     &gt;&gt;&gt; timelimit(1)(meaningoflife)()
+     42
+
+ _Caveat:_ The function isn't stopped after `timeout` seconds but continues 
+ executing in a separate thread. (There seems to be no way to kill a thread.)
+
+ inspired by &lt;http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/473878&gt;
+</code></pre><p><code>class Memoize</code>
+      : 'Memoizes' a function, caching its return values for each input.
+</p>
+<pre><code>     &gt;&gt;&gt; import time
+     &gt;&gt;&gt; def meaningoflife():
+     ...     time.sleep(.2)
+     ...     return 42
+     &gt;&gt;&gt; fastlife = memoize(meaningoflife)
+     &gt;&gt;&gt; meaningoflife()
+     42
+     &gt;&gt;&gt; timelimit(.1)(meaningoflife)()
+     Traceback (most recent call last):
+         ...
+     TimeoutError: took too long
+     &gt;&gt;&gt; fastlife()
+     42
+     &gt;&gt;&gt; timelimit(.1)(fastlife)()
+     42
+</code></pre><p><code>re_subm(pat, repl, string)</code>
+      : Like re.sub, but returns the replacement <em>and</em> the match object.
+</p>
+<pre><code>     &gt;&gt;&gt; t, m = re_subm('g(oo+)fball', r'f\\1lish', 'goooooofball')
+     &gt;&gt;&gt; t
+     'foooooolish'
+     &gt;&gt;&gt; m.groups()
+     ('oooooo',)
+</code></pre><p><code>group(seq, size)</code>
+      : Returns an iterator over a series of lists of length size from iterable.
+</p>
+<pre><code>     &gt;&gt;&gt; list(group([1,2,3,4], 2))
+     <a href="/1, 2], [3, 4" class="internal">1, 2], [3, 4</a>
+</code></pre><p><code>class IterBetter</code>
+      : Returns an object that can be used as an iterator 
+        but can also be used via <strong>getitem</strong> (although it 
+        cannot go backwards -- that is, you cannot request 
+        <code>iterbetter[0]</code> after requesting <code>iterbetter[1]</code>).
+</p>
+<pre><code>     &gt;&gt;&gt; import itertools
+     &gt;&gt;&gt; c = iterbetter(itertools.count())
+     &gt;&gt;&gt; c[1]
+     1
+     &gt;&gt;&gt; c[5]
+     5
+     &gt;&gt;&gt; c[3]
+     Traceback (most recent call last):
+         ...
+     IndexError: already passed 3
+</code></pre><p><code>dictreverse(mapping)</code>
+      : &gt;&gt;&gt; dictreverse({1: 2, 3: 4})
+            {2: 1, 4: 3}
+</p>
+<p><code>dictfind(dictionary, element)</code>
+      : Returns a key whose value in <code>dictionary</code> is <code>element</code> 
+        or, if none exists, None.
+</p>
+<pre><code>     &gt;&gt;&gt; d = {1:2, 3:4}
+     &gt;&gt;&gt; dictfind(d, 4)
+     3
+     &gt;&gt;&gt; dictfind(d, 5)
+</code></pre><p><code>dictfindall(dictionary, element)</code>
+      : Returns the keys whose values in <code>dictionary</code> are <code>element</code>
+        or, if none exists, [].
+</p>
+<pre><code>     &gt;&gt;&gt; d = {1:4, 3:4}
+     &gt;&gt;&gt; dictfindall(d, 4)
+     [1, 3]
+     &gt;&gt;&gt; dictfindall(d, 5)
+     []
+</code></pre><p><code>dictincr(dictionary, element)</code>
+      : Increments <code>element</code> in <code>dictionary</code>, 
+        setting it to one if it doesn't exist.
+</p>
+<pre><code>     &gt;&gt;&gt; d = {1:2, 3:4}
+     &gt;&gt;&gt; dictincr(d, 1)
+     3
+     &gt;&gt;&gt; d[1]
+     3
+     &gt;&gt;&gt; dictincr(d, 5)
+     1
+     &gt;&gt;&gt; d[5]
+     1
+</code></pre><p><code>dictadd(*dicts)</code>
+      : Returns a dictionary consisting of the keys in the argument dictionaries.
+        If they share a key, the value from the last argument is used.
+</p>
+<pre><code>     &gt;&gt;&gt; dictadd({1: 0, 2: 0}, {2: 1, 3: 1})
+     {1: 0, 2: 1, 3: 1}
+</code></pre><p><code>listget(lst, ind, default=None)</code>
+      : Returns <code>lst[ind]</code> if it exists, <code>default</code> otherwise.
+</p>
+<pre><code>     &gt;&gt;&gt; listget(['a'], 0)
+     'a'
+     &gt;&gt;&gt; listget(['a'], 1)
+     &gt;&gt;&gt; listget(['a'], 1, 'b')
+     'b'
+</code></pre><p><code>intget(integer, default=None)</code>
+      : Returns <code>integer</code> as an int or <code>default</code> if it can't.
+</p>
+<pre><code>     &gt;&gt;&gt; intget('3')
+     3
+     &gt;&gt;&gt; intget('3a')
+     &gt;&gt;&gt; intget('3a', 0)
+     0
+</code></pre><p><code>datestr(then, now=None)</code>
+      : Converts a (UTC) datetime object to a nice string representation.
+</p>
+<pre><code>     &gt;&gt;&gt; from datetime import datetime, timedelta
+     &gt;&gt;&gt; d = datetime(1970, 5, 1)
+     &gt;&gt;&gt; datestr(d, now=d)
+     '0 microseconds ago'
+     &gt;&gt;&gt; for t, v in {
+     ...   timedelta(microseconds=1): '1 microsecond ago',
+     ...   timedelta(microseconds=2): '2 microseconds ago',
+     ...   -timedelta(microseconds=1): '1 microsecond from now',
+     ...   -timedelta(microseconds=2): '2 microseconds from now',
+     ...   timedelta(microseconds=2000): '2 milliseconds ago',
+     ...   timedelta(seconds=2): '2 seconds ago',
+     ...   timedelta(seconds=2*60): '2 minutes ago',
+     ...   timedelta(seconds=2*60*60): '2 hours ago',
+     ...   timedelta(days=2): '2 days ago',
+     ... }.iteritems():
+     ...     assert datestr(d, now=d+t) == v
+     &gt;&gt;&gt; datestr(datetime(1970, 1, 1), now=d)
+     'January  1'
+     &gt;&gt;&gt; datestr(datetime(1969, 1, 1), now=d)
+     'January  1, 1969'
+     &gt;&gt;&gt; datestr(datetime(1970, 6, 1), now=d)
+     'June  1, 1970'
+</code></pre><p><code>numify(string)</code>
+      : Removes all non-digit characters from <code>string</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; numify('800-555-1212')
+     '8005551212'
+     &gt;&gt;&gt; numify('800.555.1212')
+     '8005551212'
+</code></pre><p><code>denumify(string, pattern)</code>
+      : Formats <code>string</code> according to <code>pattern</code>, where the letter X gets replaced
+        by characters from <code>string</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; denumify(&quot;8005551212&quot;, &quot;(XXX) XXX-XXXX&quot;)
+     '(800) 555-1212'
+</code></pre><p><code>dateify(datestring)</code>
+      : Formats a numified <code>datestring</code> properly.
+</p>
+<p><code>class CaptureStdout</code>
+      : Captures everything <code>func</code> prints to stdout and returns it instead.
+</p>
+<pre><code>     &gt;&gt;&gt; def idiot():
+     ...     print &quot;foo&quot;
+     &gt;&gt;&gt; capturestdout(idiot)()
+     'foo\\n'
+
+ **WARNING:** Not threadsafe!
+</code></pre><p><code>class Profile</code>
+      : Profiles <code>func</code> and returns a tuple containing its output
+        and a string with human-readable profiling information.
+</p>
+<pre><code>     &gt;&gt;&gt; import time
+     &gt;&gt;&gt; out, inf = profile(time.sleep)(.001)
+     &gt;&gt;&gt; out
+     &gt;&gt;&gt; inf[:10].strip()
+     'took 0.0'
+</code></pre><p><code>tryall(context, prefix=None)</code>
+      : Tries a series of functions and prints their results. 
+        <code>context</code> is a dictionary mapping names to values; 
+        the value will only be tried if it's callable.
+</p>
+<pre><code>     &gt;&gt;&gt; tryall(dict(j=lambda: True))
+     j: True
+     ----------------------------------------
+     results:
+        True: 1
+
+ For example, you might have a file `test/stuff.py` 
+ with a series of functions testing various things in it. 
+ At the bottom, have a line:
+
+     if __name__ == &quot;__main__&quot;: tryall(globals())
+
+ Then you can run `python test/stuff.py` and get the results of 
+ all the tests.
+</code></pre><p><code>class ThreadedDict</code>
+      : Takes a dictionary that maps threads to objects. 
+        When a thread tries to get or set an attribute or item 
+        of the threadeddict, it passes it on to the object 
+        for that thread in dictionary.
+</p>
+<p><code>autoassign(self, locals)</code>
+      : Automatically assigns local variables to <code>self</code>.
+</p>
+<pre><code>     &gt;&gt;&gt; self = storage()
+     &gt;&gt;&gt; autoassign(self, dict(a=1, b=2))
+     &gt;&gt;&gt; self
+     &lt;Storage {'a': 1, 'b': 2}&gt;
+
+ Generally used in `__init__` methods, as in:
+
+     def __init__(self, foo, bar, baz=1): autoassign(self, locals())
+</code></pre><p><code>to36(q)</code>
+      : Converts an integer to base 36 (a useful scheme for human-sayable IDs).
+</p>
+<pre><code>     &gt;&gt;&gt; to36(35)
+     'z'
+     &gt;&gt;&gt; to36(119292)
+     '2k1o'
+     &gt;&gt;&gt; int(to36(939387374), 36)
+     939387374
+     &gt;&gt;&gt; to36(0)
+     '0'
+     &gt;&gt;&gt; to36(-393)
+     Traceback (most recent call last):
+         ... 
+     ValueError: must supply a positive integer
+</code></pre><p><code>safemarkdown(text)</code>
+      : Converts text to HTML following the rules of Markdown, but blocking any
+        outside HTML input, so that only the things supported by Markdown
+        can be used. Also converts raw URLs to links.
+</p>
+<pre><code> (requires [markdown.py](http://webpy.org/markdown.py))
+</code></pre><p>`sendmail(from_address, to_address, subject, message, headers=None, <em></em>kw)<code>: Sends the email message</code>message<code>with mail and envelope headers
+     for from</code>from_address_<code>to</code>to_address<code>with</code>subject<code>. 
+     Additional email headers can be specified with the dictionary</code>headers.
+</p>
+<pre><code> If `web.config.smtp_server` is set, it will send the message
+ to that SMTP server. Otherwise it will look for 
+ `/usr/lib/sendmail`, the typical location for the sendmail-style
+ binary.
+</code></pre>
+<h2>webapi.py</h2>
+<p><code>badrequest()</code>
+      : Return a <code>400 Bad Request</code> error.
+</p>
+<p><code>notfound()</code>
+      : Returns a <code>404 Not Found</code> error.
+</p>
+<p><code>gone()</code>
+      : Returns a <code>410 Gone</code> error.
+</p>
+<p><code>internalerror()</code>
+      : Returns a <code>500 Internal Server</code> error.
+</p>
+<p><code>header(hdr, value, unique=False)</code>
+      : Adds the header <code>hdr: value</code> with the response.
+</p>
+<pre><code> If `unique` is True and a header with that name already exists,
+ it doesn't add a new one.
+</code></pre><p><code>output(string_)</code>
+      : Appends <code>string_</code> to the response.
+</p>
+<p><code>flush()</code>
+      : 
+</p>
+<p><code>input(*requireds, **defaults)</code>
+      : Returns a <code>storage</code> object with the GET and POST arguments. 
+        See <code>storify</code> for how <code>requireds</code> and <code>defaults</code> work.
+</p>
+<p><code>data()</code>
+      : Returns the data sent with the request.
+</p>
+<p><code>setcookie(name, value, expires=&quot;&quot;, domain=None, secure=False)</code>
+      : Sets a cookie.
+</p>
+<p><code>cookies(*requireds, **defaults)</code>
+      : Returns a <code>storage</code> object with all the cookies in it.
+        See <code>storify</code> for how <code>requireds</code> and <code>defaults</code> work.
+</p>
+<p><code>debug(*args)</code>
+      : Prints a prettyprinted version of <code>args</code> to stderr.
+</p>
+<p><code>load()</code>
+      : Loads a new context for the thread.
+</p>
+<pre><code> You can ask for a function to be run at loadtime by 
+ adding it to the dictionary `loadhooks`.
+</code></pre><p><code>unload()</code>
+      : Unloads the context for the thread.
+</p>
+<pre><code> You can ask for a function to be run at loadtime by
+ adding it ot the dictionary `unloadhooks`.
+</code></pre><p><code>wsgifunc(func, *middleware)</code>
+      : Returns a WSGI-compatible function from a webpy-function.
+</p>
+<p><code>ctx</code>
+      :     A <code>storage</code> object containing various information about the request:
+</p>
+<pre><code>`environ` (aka `env`)
+   : A dictionary containing the standard WSGI environment variables.
+
+`host`
+   : The domain (`Host` header) requested by the user.
+
+`home`
+   : The base path for the application.
+
+`ip`
+   : The IP address of the requester.
+
+`method`
+   : The HTTP method used.
+
+`path`
+   : The path request.
+
+`query`
+   : If there are no query arguments, the empty string. Otherwise, a `?` followed
+     by the query string.
+
+`fullpath`
+   : The full path requested, including query arguments (`== path + query`).
+
+### Response Data
+
+`status` (default: &quot;200 OK&quot;)
+   : The status code to be used in the response.
+
+`headers`
+   : A list of 2-tuples to be used in the response.
+
+`output`
+   : A string to be used as the response.
+</code></pre>
+<h2>wsgi.py</h2>
+<p><code>runfcgi(func, addr=('localhost', 8000))</code>
+      : Runs a WSGI function as a FastCGI server.
+</p>
+<p><code>runscgi(func, addr=('localhost', 4000))</code>
+      : Runs a WSGI function as an SCGI server.
+</p>
+<p><code>runwsgi(func)</code>
+      : Runs a WSGI-compatible <code>func</code> using FCGI, SCGI, or a simple web server,
+        as appropriate based on context and <code>sys.argv</code>.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

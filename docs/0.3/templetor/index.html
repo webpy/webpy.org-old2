@@ -1,0 +1,429 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Templetor: The web.py templating system (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Templetor: The web.py templating system
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Templetor: The web.py templating system</h1>
+<p>Other languages : <a href="/docs/0.3/templetor.fr" class="internal">français</a> | ...
+</p>
+
+<h2>Summary</h2>
+<ul>
+ <li>
+     <a href="#introduction">Introduction</a>
+ </li>
+
+ <li>
+     <a href="#using">Using the template system</a>
+ </li>
+
+ <li>
+     <a href="#syntax">Syntax</a><ul>
+ <li>
+     <a href="#expressionsubstitution">Expression Substitution</a>
+ </li>
+
+ <li>
+     <a href="#assignments">Assignments</a>
+ </li>
+
+ <li>
+     <a href="#filtering">Filtering</a>
+ </li>
+
+ <li>
+     <a href="#newlinesuppression">Newline suppression</a>
+ </li>
+
+ <li>
+     <a href="#escaping">Escaping '$'</a>
+ </li>
+
+ <li>
+     <a href="#comments">Comments</a>
+ </li>
+
+ <li>
+     <a href="#controlstructure">Control Structures</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li>
+     <a href="#otherstatements">Other Statements</a><ul>
+ <li>
+     <a href="#def">$def : define a new template function using $def</a>
+ </li>
+
+ <li>
+     <a href="#code">$code : arbitrary python code can be written</a>
+ </li>
+
+ <li>
+     <a href="#var">$var : can be used to define additional properties</a>
+ </li>
+</ul>
+
+ </li>
+
+ <li>
+     <a href="#builtins">Builtins and globals</a>
+ </li>
+
+ <li>
+     <a href="#security">Security</a>
+ </li>
+
+ <li>
+     <a href="#upgrading">Upgrading from web.py 0.2 templates</a>
+ </li>
+</ul>
+<p><a name="introduction"></a>
+</p>
+
+<h1>Introduction</h1>
+<p>The web.py template language, called <code>Templetor</code> is designed to bring the power of Python to templates.
+   Instead of inventing new syntax for templates, it re-uses python syntax. 
+   If you know Python programming language, you will be at home.
+</p>
+<p>Templetor intentionally limits variable access within a template. A user has access to the variables passed into the template and some builtin python functions.  This allows untrusted users to write templates, and not worry about them causing harm to the running system. You can, of course, increase the global variables available, but more on this later.
+</p>
+<p>Here is a simple template:
+</p>
+<pre><code>$def with (name)
+Hello $name!
+</code></pre><p>The first line says that the template is defined with one argument called <code>name</code>.
+   <code>$name</code> in the second line will be replaced with the value of name when the template is rendered.
+</p>
+<p><a name="using"></a>
+</p>
+
+<h1>Using the template system</h1>
+<p>The most common way of rendering templates is this:
+</p>
+<pre><code>render = web.template.render('templates')
+print render.hello('world')
+</code></pre><p>   <br />
+   The <code>render</code> function takes the template root as argument. <code>render.hello(..)</code> calls the template <code>hello.html</code> with the given arguments.
+   In fact, it looks for the files matching <code>hello.*</code> in the template root and picks the first matching file.
+</p>
+<p>However you can also create template from a file using <code>frender</code>.
+</p>
+<pre><code>hello = web.template.frender('templates/hello.html')
+print hello('world')
+</code></pre><p>And if you have the template as a string:
+</p>
+<pre><code>template = &quot;$def with (name)\nHello $name&quot;
+hello = web.template.Template(template)
+print hello('world')
+</code></pre><p><a name="syntax"></a>
+</p>
+
+<h1>Syntax</h1>
+<p><a name="expressionsubstitution"></a>
+</p>
+
+<h2>Expression Substitution</h2>
+<p>Special character <code>$</code> is used to specify python expressions. Expression can be enclosed in <code>()</code> or <code>{}</code> for explicit grouping.
+</p>
+<pre><code>Look, a $string. 
+Hark, an ${arbitrary + expression}. 
+Gawk, a $dictionary[key].function('argument'). 
+Cool, a $(limit)ing.
+</code></pre><p><a name="assignments"></a>
+</p>
+
+<h2>Assignments</h2>
+<p>Sometimes you may want to define new variables and re-assign some variables.
+</p>
+<pre><code>$ bug = get_bug(id)
+&lt;h1&gt;$bug.title&lt;/h1&gt;
+&lt;div&gt;
+    $bug.description
+&lt;div&gt;
+</code></pre><p>Notice the space after <code>$</code> in the assignment. It is required to differentiate assignment from expression substitution.
+</p>
+<p><a name="filtering"></a>
+</p>
+
+<h2>Filtering</h2>
+<p>By default, Templetor uses <code>web.websafe</code> filter to do HTML-encoding.
+</p>
+<pre><code>&gt;&gt;&gt; render.hello(&quot;1 &lt; 2&quot;)
+&quot;Hello 1 &amp;lt; 2&quot;
+</code></pre><p>To turnoff filter use <code>:</code> after <code>$</code>. For example:
+</p>
+<pre><code>The following will not be html escaped.
+$:form.render()
+</code></pre><p><a name="newlinesuppression"></a>   <br />
+</p>
+
+<h2>Newline suppression</h2>
+<p>Newline can be suppressed by adding <code>\</code> character at the end of line. 
+</p>
+<pre><code>If you put a backslash \ 
+at the end of a line \ 
+(like these) \ 
+then there will be no newline.
+</code></pre><p><a name="escaping"></a> 
+</p>
+
+<h2>Escaping $</h2>
+<p>Use <code>$$</code> to get <code>$</code> in the output.
+</p>
+<pre><code>Can you lend me $$50?
+</code></pre><p><a name="comments"></a> 
+</p>
+
+<h2>Comments</h2>
+<p><code>$#</code> is used as comment indicator. Anything starting with $# till end of the line is ignored.
+</p>
+<pre><code>$# this is a comment
+Hello $name.title()! $# display the name in title case
+</code></pre><p><a name="controlstructure"></a> 
+</p>
+
+<h2>Control Structures</h2>
+<p>The template system supports <code>for</code>, <code>while</code>, <code>if</code>, <code>elif</code> and <code>else</code>.
+   Just like in python, body of the statement is indented.
+</p>
+<pre><code>$for i in range(10): 
+    I like $i
+
+$for i in range(10): I like $i
+
+$while a:
+    hello $a.pop()
+
+$if times &gt; max: 
+    Stop! In the name of love. 
+$else: 
+    Keep on, you can do it.
+</code></pre><p>The for loop sets a number of variables available within the loop:
+</p>
+<pre><code>loop.index: the iteration of the loop (1-indexed)
+loop.index0: the iteration of the loop (0-indexed)
+loop.first: True if first iteration
+loop.last: True if last iteration
+loop.odd: True if an odd iteration
+loop.even: True if an even iteration
+loop.parity: &quot;odd&quot; or &quot;even&quot; depending on which is true
+loop.parent: the loop above this in nested loops
+</code></pre><p>Sometimes these can be very handy.
+</p>
+<pre><code>&lt;table&gt;
+$for c in [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]:
+    &lt;tr class=&quot;$loop.parity&quot;&gt;
+        &lt;td&gt;$loop.index&lt;/td&gt;
+        &lt;td&gt;$c&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre><p><a name="otherstatements"></a> 
+</p>
+
+<h2>Other Statements</h2>
+<p><a name="def"></a>
+</p>
+
+<h3>def</h3>
+<p>You can define a new template function using <code>$def</code>. Keyword arguments are also supported.
+</p>
+<pre><code>$def say_hello(name='world'):
+    Hello $name!
+
+$say_hello('web.py')
+$say_hello()
+</code></pre><p>Another example:
+</p>
+<pre><code>$def tr(values):
+    &lt;tr&gt;
+    $for v in values:
+        &lt;td&gt;$v&lt;/td&gt;
+    &lt;/tr&gt;
+
+$def table(rows):
+    &lt;table&gt;
+    $for row in rows:
+        $:row
+    &lt;/table&gt;
+
+$ data = [['a', 'b', 'c'], [1, 2, 3], [2, 4, 6], [3, 6, 9] ]
+$:table([tr(d) for d in data])
+</code></pre><p><a name="code"></a>
+</p>
+
+<h3>code</h3>
+<p>Arbitrary python code can be written using the <code>code</code> block.
+</p>
+<pre><code>$code:
+    x = &quot;you can write any python code here&quot;
+    y = x.title()
+    z = len(x + y)
+
+    def limit(s, width=10):
+        &quot;&quot;&quot;limits a string to the given width&quot;&quot;&quot;
+        if len(s) &gt;= width:
+            return s[:width] + &quot;...&quot;
+        else:
+            return s
+
+And we are back to template.
+The variables defined in the code block can be used here.
+For example, $limit(x)
+</code></pre><p><a name="var"></a>
+</p>
+
+<h3>var</h3>
+<p>The <code>var</code> block can be used to define additional properties in the template result.
+</p>
+<pre><code>$def with (title, body)
+
+$var title: $title
+$var content_type: text/html
+
+&lt;div id=&quot;body&quot;&gt;
+$body
+&lt;/div&gt;
+</code></pre><p>The result of the above template can be used as follows:
+</p>
+<pre><code>&gt;&gt;&gt; out = render.page('hello', 'hello world')
+&gt;&gt;&gt; out.title
+u'hello'
+&gt;&gt;&gt; out.content_type
+u'text/html'
+&gt;&gt;&gt; str(out)
+'\n\n&lt;div&gt;\nhello world\n&lt;/div&gt;\n'
+</code></pre><p><a name="builtins"></a>
+</p>
+
+<h1>builtins and globals</h1>
+<p>Just like any Python function, template can also access builtins along with its arguments and local variables.
+   Some common builtin functions like <code>range</code>, <code>min</code>, <code>max</code> etc. and boolean values <code>True</code> and <code>False</code> are made available to all the templates.
+   Apart from the builtins, application specific globals can be specified to make them accessible in all the templates.
+</p>
+<p>Globals can be specified as an argument to <code>web.template.render</code>.
+</p>
+<pre><code>import web
+import markdown
+
+globals = {'markdown': markdown.markdown}
+render = web.template.render('templates', globals=globals)
+</code></pre><p>Builtins that are exposed in the templates can be controlled too.
+</p>
+<pre><code># disable all builtins
+render = web.template.render('templates', builtins={})
+</code></pre><p><a name="security"></a>
+</p>
+
+<h1>Security</h1>
+<p>One of the design goals of Templetor is to allow untrusted users to write templates.
+</p>
+<p>To make the template execution safe, the following are not allowed in the templates.
+</p>
+<ul>
+ <li>
+     Unsafe statements like <code>import</code>, <code>exec</code> etc.
+ </li>
+
+ <li>
+     Accessing attributes starting with <code>_</code>
+ </li>
+
+ <li>
+     Unsafe builtins like <code>open</code>, <code>getattr</code>, <code>setattr</code> etc.
+ </li>
+</ul>
+<p><code>SecurityException</code> is raised if your template uses any of these.
+</p>
+<p><a name="upgrading"></a>
+</p>
+
+<h1>Upgrading from web.py 0.2 templates</h1>
+<p>The new implementation is mostly compatible with the earlier implementation. However some cases might not work because of the following reasons.
+</p>
+<ul>
+ <li><p>Template output is always storage like <code>TemplateResult</code> object, however converting it to <code>unicode</code> or <code>str</code> gives the result as unicode/string.
+</p>
+
+ </li>
+
+ <li><p>Reassigning a global value will not work. The following will not work if x is a global.
+</p>
+<pre><code>$ x = x + 1
+</code></pre>
+ </li>
+</ul>
+<p>The following are still supported but not preferred.
+</p>
+<ul>
+ <li>
+     Using <code>\$</code> for escaping dollar. Use <code>$$</code> instead.
+ </li>
+
+ <li>
+     Modifying <code>web.template.Template.globals</code>. pass globals to <code>web.template.render</code> as argument instead.
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

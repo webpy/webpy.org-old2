@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Using web.py on TextDrive (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Using web.py on TextDrive
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Using web.py on TextDrive</h1>
+<p><a href="http://textdrive.com/">TextDrive</a> graciously provided me with a free shared hosting account to try to get web.py running on their system. I'm keeping notes on what I did here.
+</p>
+<p>I got assigned <code>aaronsw.textdriven.com</code> on the server <code>cardero.textdrive.com</code> -- you should replace these in my instructions with whatever your server names are.
+</p>
+
+<h2>Getting it up</h2>
+<p>First, <a href="http://help.textdrive.com/index.php?pg=request">file a support ticket</a> requesting a port to run web.py on. Apparently filing such a ticket <a href="http://help.textdrive.com/index.php?pg=kb.page&amp;id=106">is standard practice</a> for running web apps on TextDrive. You'll get back a number, which we'll call <code>8048</code> (obviously you'll want to replace this with the actual number you get).
+   Second, SSH to <code>aaronsw.textdriven.com</code> and run:
+</p>
+<pre><code>cd web/public/
+mkdir work
+cd work
+wget http://webpy.org/web.py
+# copy my script to code.py in this directory
+python code.py 8048
+</code></pre><p>Now check <code>http://aaronsw.textdriven.com:8048/</code> -- you should see your script working.
+</p>
+<p>Now you can log into your webmin (<code>https://webmin.cardero.textdrive.com/</code>), click &quot;Apache Webserver&quot;, click &quot;Aliases and Redirects&quot;, and scroll down to &quot;Map local to remote URLs&quot;. Add a line with / in the first box, check the second radio button, and put <code>http://aaronsw.textdriven.com:8048/</code> (don't forget to include the n in textdriven!) in the second box. Click &quot;Save&quot;. Then click &quot;Apply Changes&quot; (in the upper right corner).
+</p>
+<p>Now check <code>http://aaronsw.textdriven.com/</code> -- you should see your script working again.
+</p>
+
+<h2>Install Cheetah</h2>
+<p>Installing Cheetah on TextDrive is quite straight forward. Check <a href="http://thetruedelight.blogspot.com/2006/12/how-to-install-cheetah-on-textdrive_19.html">here</a> to see the full installation script. 
+</p>
+
+<h2>Keeping it up</h2>
+<p>In your SSH window, type Ctrl-C to kill the Python script and run:
+</p>
+<pre><code>python ~aaronsw/web/public/work/code.py 8048 2&gt;/dev/null &amp;
+</code></pre><p>This will run your web.py app as a daemon, so you can log out and it will stay running.
+</p>
+<p>To make sure that the server starts your script back up when it reboots, go into webmin, click &quot;Scheduled Cron Jobs&quot;, click &quot;Create a new scheduled cron job&quot;, and add this as the command. Click the radio button next to &quot;Simple schedule...&quot; and select &quot;When system boots&quot; from the drop down menu. Then click &quot;Create&quot;.
+</p>
+<p>(Note: My server hasn't rebooted yet, so I haven't gotten a chance to test that this works.)
+</p>
+
+<h2>Making it fast</h2>
+<p>For reasons I don't quite understand lighttpd proxying to web.py is faster than running web.py directly. So if you want your server to support more serious loads, you should run a simple lighttpd instance on port 8048 and have it talk to web.py through FastCGI. TextDrive has a <a href="http://help.textdrive.com/index.php?pg=kb.page&amp;id=252">knowledge base article</a> on setting up lighttpd.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

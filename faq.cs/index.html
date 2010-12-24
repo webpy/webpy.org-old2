@@ -1,0 +1,154 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>ČKD (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; ČKD
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>ČKD</h1>
+<ol>
+ <li><p><strong>Jak použiji šablony template.py?</strong>
+</p>
+<p>Pro základní dokumentaci a nějaké ukázky kódu, se podívej na <a href="/templetor" class="internal">template.py dokumentaci</a>.
+</p>
+<p>Chcete-li zobrazit stránku z web.py aplikace, stačí
+</p>
+<pre><code>    homepage = template.Template(open(&quot;homepage.tmpl&quot;).read())
+    print homepage()
+</code></pre>
+ </li>
+
+ <li><p><strong>Proč jsou adresy URL pouze jeden dlouhý seznam?</strong>
+</p>
+<p>Pokud by byly ve slovníku, nebylo by je možné řadit. Pokud by byly v seznamu n-tic (tuple), bylo by s nima mnohem více psaní.
+</p>
+
+ </li>
+
+ <li><p><strong>How do I serve static files such as JavaScripts or images like PNG and JPG with the web.py server?</strong>
+</p>
+<p>Create a directory (also known as a folder) called <code>static</code> in the location of the script that runs the web.py server. Then place the static files you wish to server in the <code>static</code> folder. For example, the URL <code>http://localhost/static/logo.png</code> will send the image <code>./static/logo.png</code> to the client.
+</p>
+
+ </li>
+
+ <li><p><strong>Kam se mohu obrátit pro další pomoc?</strong>
+</p>
+<p>Google Groups má <a href="http://groups.google.com/group/webpy">skupinu web.py</a> která je docela užitečná.
+</p>
+
+ </li>
+
+ <li><p><strong>Jak můžu změnit výchozí &quot;not found&quot; stránku?</strong>
+</p>
+<p>Můžete napsat svůj vlastní notfound handler a připojit ho k  web.webapi.notfound
+</p>
+<pre><code>    def my_notfound(): 
+        print &quot;MUJ VLASTNI NOT FOUND&quot; 
+    web.webapi.notfound = my_notfound
+</code></pre>
+ </li>
+
+ <li><p><strong>How can i get auto completion in python after loading the webpy module?</strong>
+</p>
+<p>In IPython, after importing webpy auto completion may no longer work. You can still use 'python' with auto completion feature. Try it out directly. Fire up 'python':
+</p>
+<pre><code>    import readline, rlcompleter; readline.parse_and_bind(&quot;tab: complete&quot;)
+</code></pre><p>and tab it! :-)
+</p>
+<p>To make in sort that this will be run default when you fire up 'python'. Make a file called '~/.pythonstartup.py' and put the import line in it. Then set the 'PYTHONSTARTUP' environment variable to point to that file.
+</p>
+<p>With my bash, i do it like following; edit ~/.bashrc and add:
+</p>
+<pre><code>    export PYTHONSTARTUP=~/.pythonstartup.py
+</code></pre>
+ </li>
+
+ <li><p><strong>Why can't I access the database?</strong>
+</p>
+<p>If you're trying to access the database from a non-web-serving thread (e.g. you created a new thread or you never started serving web pages) then you need to run <code>web.load()</code>. Sorry, this will be fixed in web.py 0.3.
+</p>
+
+ </li>
+
+ <li><p><strong>Mohu vícekrát iterovat IterBetter?</strong>
+</p>
+<p>Ne. Nejdřív převeď IterBetter na seznam pomocí <code>ib = list(ib)</code>.
+</p>
+
+ </li>
+
+ <li><p><strong>Jak vytisknu debug do konsole?</strong>
+</p>
+<p>web.debug(&quot;Budu vytištěn do konsole a ne do těla stránky&quot;)
+</p>
+
+ </li>
+
+ <li><p><strong>Narazil jsem na chybu ve web.py. Kam ji můžu nahlásit?</strong>
+</p>
+<p>Jdi na <a href="https://launchpad.net/webpy">webpy launchpad</a>, přihlaš se (nebo se zaregistruj) a klikni na &quot;report a bug&quot;.
+</p>
+
+ </li>
+</ol>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

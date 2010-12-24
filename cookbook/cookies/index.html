@@ -1,0 +1,160 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>cookies (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; cookies
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>cookies</h1>
+<p>Other languages: <a href="/../cookbook/cookies/fr" class="internal">français</a> | ...
+</p>
+
+<h2>Problem</h2>
+<p>You want to set and retrieve cookies for a user browsing the site.
+</p>
+
+<h2>Solution</h2>
+<p>Web.py <em>comes</em> with an easy to use method for setting/getting cookies.
+</p>
+
+<h3>Setting Cookies</h3>
+
+<h4>Overview</h4>
+<pre><code>setcookie(name, value, expires=&quot;&quot;, domain=None, secure=False):
+</code></pre><ul>
+ <li>
+     <em>name</em> <code>(string)</code> - The actual name of the cookie, as stored by the browser, and returned to the server.
+ </li>
+
+ <li>
+     <em>value</em> <code>(string)</code> - The value you want stored under that name.
+ </li>
+
+ <li>
+     <em>expires</em> <code>(int)</code> - Optionally, is the time in seconds until the browser should expire the cookie.  Note: this must be an integer, not a string.
+ </li>
+
+ <li>
+     <em>domain</em> <code>(string)</code> - The domain the cookie is valid for. By default, set to the host accessed, this allows you to set the domain, rather than just a host (such as <code>.webpy.org</code>).
+ </li>
+
+ <li>
+     <em>secure</em> <code>(bool)</code>- If True, require that the cookie only be sent over HTTP/S.
+ </li>
+</ul>
+
+<h4>Example</h4>
+<p><code>web.setcookie()</code> can be used to set the cookie for a user, like this:
+</p>
+<pre><code>class CookieSet:
+    def GET(self):
+        i = web.input(age='25')
+        web.setcookie('age', i.age, 3600)
+        return &quot;Age set in your cookie&quot;
+</code></pre><p>Calling the above class with GET will set a cookie named &quot;age&quot; with a default value equal to &quot;25&quot; (this default value actually comes from the web.input processing, NOT the setcookie function), which expires in 1 hour (3600 seconds).
+</p>
+<p>The third (and optional) argument to <code>web.setcookie()</code>, &quot;expires&quot;, allows you to set when you want your cookie to expire.  Any negative number will expire the cookie immediately.  Any positive number is the number of seconds that the cookie will last (3600 would result in an hour long cookie).  Leaving this argument empty results in a session cookie, which expires when your browser shuts down.  To make the cookie &quot;permanent&quot;, simply update cookie expiration time at regular interval (e.g. when user logged in).
+</p>
+
+<h3>Retrieving Cookies</h3>
+
+<h4>Overview</h4>
+<p>There are many methods to retrieve cookies, depending on the desired reaction to a missing cookie.
+</p>
+<h5>Way 1 (return None if cookie is not found):</h5><pre><code>web.cookies().get(cookieName)  
+    #cookieName is the name of the cookie submitted by the browser
+</code></pre><h5>Way 2 (raises exception AttributeError if cookie is not found):</h5><pre><code>foo = web.cookies()
+foo.cookieName
+</code></pre><h5>Way 3 (avoids exception by setting default value for cookie if not found):</h5><pre><code>foo = web.cookies(cookieName=defaultValue)
+foo.cookieName   # return the value (which could be default)
+    #cookieName is the name of the cookie submitted by the browser
+</code></pre>
+<h4>Example</h4>
+<p><code>web.cookies()</code> can be used to access an already set cookie.  If a cookie is set using the <code>web.setcookie()</code> code from above, it can be retrieved like this:
+</p>
+<pre><code>class CookieGet:
+    def GET(self):
+        c = web.cookies(age=&quot;25&quot;)
+        return &quot;Your age is: &quot; + c.age
+</code></pre><p>The example sets a default value for the cookie if it does not exist.  The reason for setting a default value is that if the cookie is attempted to be accessed, but does not exist, <code>web.cookies()</code> raises an exception.  <br />
+</p>
+<p>Sometimes, you want to know specifically if something doesn't exist, in which case you can use something like the following:
+</p>
+<pre><code>class CookieGet:
+    def GET(self):
+        try: 
+             return &quot;Your age is: &quot; + web.cookies().age
+        except:
+             # Do whatever handling you need to, etc. here.
+             return &quot;Cookie does not exist.&quot;
+</code></pre><p>This code attempts to use the cookie submitted by the browser, but does not give it a default value.  If the cookie doesn't exist, an exception is raised, and the <code>except</code> clause is executed, giving the server an opportunity to handle the lack of cookie.
+</p>
+<p>or
+</p>
+<pre><code>class CookieGet:
+    def GET(self):
+        age=web.cookies().get('age')
+        if age:
+            return &quot;Your age is: %s&quot; % age
+        else:
+            return &quot;Cookie does not exist.&quot;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

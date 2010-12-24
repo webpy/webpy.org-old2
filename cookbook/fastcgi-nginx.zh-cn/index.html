@@ -1,0 +1,199 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Webpy + Nginx with FastCGI搭建Web.py (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Webpy + Nginx with FastCGI搭建Web.py
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Webpy + Nginx with FastCGI搭建Web.py</h1>
+<p>这一节讲解的是如何使用Nginx和FastCGI搭建Web.py应用
+</p>
+
+<h3>环境依赖的软件包</h3>
+<ul>
+ <li>
+     Nginx 0.8.* or 0.7.* (需要包含fastcgi和rewrite模块)。
+ </li>
+
+ <li>
+     Webpy 0.32
+ </li>
+
+ <li>
+     Spawn-fcgi 1.6.2
+ </li>
+
+ <li>
+     Flup
+ </li>
+</ul>
+<p>注意：Flup是最常见的忘记装的软件，需要安装
+</p>
+<p>更老的版本应该也可以工作，但是没有测试过，最新的是可以工作的
+</p>
+
+<h3>一些资源</h3>
+<ul>
+ <li>
+     <a href="http://wiki.nginx.org/NginxInstall">Nginx wiki</a>
+ </li>
+
+ <li>
+     <a href="http://redmine.lighttpd.net/projects/spawn-fcgi/news">Spawn-fcgi</a>
+ </li>
+
+ <li>
+     <a href="http://trac.saddi.com/flup">Flup</a>
+ </li>
+</ul>
+
+<h3>Notes</h3>
+<ul>
+ <li>
+     你可以重命名<code>index.py</code>为任何你想要的文件名。
+ </li>
+
+ <li>
+     <code>/path/to/www</code> 为代码路径。
+ </li>
+
+ <li>
+     <code>/path/to/www/index.py</code>为python代码的完整路径。
+ </li>
+</ul>
+
+<h2>Nginx 配置文件</h2>
+<pre><code>location / {
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $fastcgi_script_name;  # [1]
+    fastcgi_param PATH_INFO $fastcgi_script_name;        # [2]
+    fastcgi_pass 127.0.0.1:9002;
+}
+</code></pre><p>对于静态文件可以添加如下配置:
+</p>
+<pre><code>location /static/ {
+    if (-f $request_filename) {
+    rewrite ^/static/(.*)$  /static/$1 break;
+    }
+}
+</code></pre><p><strong>注意:</strong> 地址和端口号可能会是不同的。
+</p>
+
+<h2>Spawn-fcgi</h2>
+<p>可以通过一下命令启动一个Spawn-fcgi进程:
+</p>
+<pre><code>spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002
+</code></pre>
+<h3>启动和关闭的命令</h3>
+<p>启动:
+</p>
+<pre><code>#!/bin/sh
+spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002
+</code></pre><p>关闭:
+</p>
+<pre><code>#!/bin/sh
+kill `pgrep -f &quot;python /path/to/www/index.py&quot;`
+</code></pre><p><strong>Note:</strong> 你可以随意填写地址和端口信息，但是一定需要和Nginx配置文件相匹配。
+</p>
+
+<h2>Hello world!</h2>
+<p>讲下面的代码保存为index.py（或者任何你喜欢的），注意，使用Nginx配置的话，<code>web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)</code>这一行代码是必须的。
+</p>
+<pre><code>#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import web
+
+urls = (&quot;/.*&quot;, &quot;hello&quot;)
+app = web.application(urls, globals())
+
+class hello:
+    def GET(self):
+        return 'Hello, world!'
+
+if __name__ == &quot;__main__&quot;:
+    web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
+    app.run()
+</code></pre><p>注意: 同样需要给代码设置权限，代码如下chmod +x index.py。
+</p>
+
+<h2>运行</h2>
+<ol>
+ <li>
+     打开一个 <code>spawn-fcgi</code> 进程.
+ </li>
+
+ <li>
+     打开 Nginx.
+ </li>
+</ol>
+<p>如果需要检查应用程序是否运行，使用<code>ps aux|grep index.py</code>可以很容易的查看。
+</p>
+<p>重启nginx配置:
+</p>
+<pre><code>/path/to/nginx/sbin/nginx -s reload
+</code></pre><p>停止nginx:
+</p>
+<pre><code>/path/to/nginx/sbin/nginx -s stop
+</code></pre><p>注意：运行后可访问http://localhost访问网站，更多信息可以去参考nginx官方文档。
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

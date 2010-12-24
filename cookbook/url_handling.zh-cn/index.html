@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>理解URL控制 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; 理解URL控制
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>理解URL控制</h1>
+<p><code>问题</code>: 如何为整个网站设计一个URL控制方案 / 调度模式
+</p>
+<p><code>解决</code>:
+</p>
+<p>web.py的URL控制模式是简单的、强大的、灵活的。在每个应用的最顶部，你通常会看到整个URL调度模式被定义在元组中:
+</p>
+<pre><code>urls = (
+    &quot;/tasks/?&quot;, &quot;signin&quot;,
+    &quot;/tasks/list&quot;, &quot;listing&quot;,
+    &quot;/tasks/post&quot;, &quot;post&quot;,
+    &quot;/tasks/chgpass&quot;, &quot;chgpass&quot;,
+    &quot;/tasks/act&quot;, &quot;actions&quot;,
+    &quot;/tasks/logout&quot;, &quot;logout&quot;,
+    &quot;/tasks/signup&quot;, &quot;signup&quot;
+)
+</code></pre><p>这些元组的格式是: <em>URL路径</em>, <em>处理类</em> 这组定义有多少可以定义多少。如果你并不知道URL路径和处理类之间的关系，请在阅读cookbook之前先阅读<a href="/helloworld" class="internal">Hello World example</a>，或者<a href="/tutorial3.zh-cn" class="internal">快速入门</a>。
+</p>
+<p><code>路径匹配</code>
+</p>
+<p>你可以利用强大的正则表达式去设计更灵活的URL路径。比如 /(test1|test2) 可以捕捉 /test1 或 /test2。要理解这里的关键，匹配是依据URL路径的。比如下面的URL:
+</p>
+<pre><code>http://localhost/myapp/greetings/hello?name=Joe
+</code></pre><p>这个URL的路径是 <em>/myapp/greetings/hello</em>。web.py会在内部给URL路径加上^和$ ，这样 <em>/tasks/</em> 不会匹配 <em>/tasks/addnew</em>。URL匹配依赖于“路径”，所以不能这样使用，如： <em>/tasks/delete?name=(.+)</em> ,?之后部分表示是“查询”，并不会被匹配。阅读URL组件的更多细节，请访问<a href="/cookbook/ctx/zh-cn" class="internal">web.ctx</a>。
+</p>
+<p><code>捕捉参数</code>
+</p>
+<p>你可以捕捉URL的参数，然后用在处理类中:
+</p>
+<pre><code>/users/list/(.+), &quot;list_users&quot;
+</code></pre><p>在 <em>list/</em>后面的这块会被捕捉，然后作为参数被用在GET或POST:
+</p>
+<pre><code>class list_users:
+    def GET(self, name):
+        return &quot;Listing info about user: {0}&quot;.format(name)
+</code></pre><p>你可以根据需要定义更多参数。同时要注意URL查询的参数(?后面的内容)也可以用<a href="/cookbook/input/zh-cn" class="internal">web.input()</a>取得。
+</p>
+<p><code>开发子程序的时候注意</code>
+</p>
+<p>为了更好的控制大型web应用，web.py支持<a href="/cookbook/subapp/zh-cn" class="internal">子程序</a>。在为子程序设计URL模式的时候，记住取到的路径(web.ctx.path)是父应用剥离后的。比如，你在主程序定义了URL&quot;/blog&quot;跳转到'blog'子程序，那没在你blog子程序中所有URL都是以&quot;/&quot;开头的，而不是&quot;/blog&quot;。查看<a href="/cookbook/ctx/zh-cn" class="internal">web.ctx</a>取得更多信息。
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

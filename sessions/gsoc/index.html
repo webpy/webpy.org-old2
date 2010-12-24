@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Google Summer of Code: web.py - Session management (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Google Summer of Code: web.py - Session management
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Google Summer of Code: web.py - Session management</h1>
+<p><a href="http://planet-soc.com/blog/77">project blog</a> at <a href="http://planet-soc.com/">planet-soc.com</a>
+</p>
+
+<h2>Post GSoC work</h2>
+<ul>
+ <li>
+     WSGI
+ </li>
+
+ <li>
+     online migration between handlers?
+ </li>
+</ul>
+
+<h2>End of GSoC</h2>
+<ul>
+ <li>
+     FileHandler
+ </li>
+
+ <li>
+     CookieHandler - see project blog <a href="http://planet-soc.com/node/2158">first</a> and <a href="http://planet-soc.com/node/2477">second</a> post
+ </li>
+</ul>
+
+<h2>OLD Schedule - <a href="https://bugs.launchpad.net/~karol.tarcak/">DONE</a></h2>
+<ul>
+ <li>
+     May 28 - June 9 (1st &amp; 2nd week): getting familiar with SVN/Bazaar, internals of web.py, flup and jonpy's sessions; creating a DDL for storing sessions
+ </li>
+
+ <li>
+     June 10 - June 17 (3rd): creating DBHandler class
+ </li>
+
+ <li>
+     June 18 - July 8 (4th - 6th): creating Session class's identify/verify methods
+ </li>
+
+ <li>
+     July 9 - mid-term evulation deadline
+ </li>
+
+ <li>
+     July 10 - August 19 (7th - ...): finishing the Session class
+ </li>
+
+ <li>
+     August 20 - final evaluation deadline
+ </li>
+</ul>
+
+<h2>Tasks</h2>
+
+<h3>Administrative</h3>
+<ul>
+ <li>
+     Bazaar/SVN
+ </li>
+
+ <li>
+     blog
+ </li>
+</ul>
+
+<h3>DBHandler</h3>
+<ul>
+ <li>
+     create table DDL
+ </li>
+
+ <li>
+     write store(), retrieve(), remove()
+ </li>
+
+ <li>
+     test (&amp; some docs)
+ </li>
+</ul>
+
+<h3>Session</h3>
+<ul>
+ <li>
+     write default session id generator(s)
+ </li>
+
+ <li>
+     write &amp; test session cookie creation, identification, verification
+ </li>
+
+ <li>
+     write &amp; test session id regeneration (mainly cookies &amp; session identification)
+ </li>
+
+ <li>
+     write start()
+ </li>
+
+ <li>
+     write save()
+ </li>
+
+ <li>
+     write destroy(), cleanup()
+ </li>
+
+ <li>
+     test &amp; docs
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

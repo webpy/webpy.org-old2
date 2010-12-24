@@ -1,0 +1,280 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>User Authentication with PostgreSQL database (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; User Authentication with PostgreSQL database
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>User Authentication with PostgreSQL database</h1>
+
+<h2>Problem</h2>
+<ul>
+ <li>
+     You want a system to authenticate users, with a postgresql database.
+ </li>
+</ul>
+
+<h2>Solution</h2>
+<ul>
+ <li>
+     A user authentication system could have a lot of functions. For this example, we're only going to manage the authentication process, through a postgresql database.
+ </li>
+</ul>
+
+<h2>Needed</h2>
+<ul>
+ <li>
+     I use mako templates, and pg. So, you have to import all of that:
+     import web
+     from web.contrib.template import render_mako
+     import pg
+ </li>
+</ul>
+
+<h2>1st: The database</h2>
+<p>First of all, we need a table for the users. This scheme is very simple, but is enough for a lot of projects.
+</p>
+
+<h2></h2>
+<pre><code>CREATE TABLE example_users
+(
+  id serial NOT NULL,
+  user character varying(80) NOT NULL,
+  pass character varying(80) NOT NULL,
+  email character varying(100) NOT NULL,
+  privilege integer NOT NULL DEFAULT 0,
+  CONSTRAINT utilisateur_pkey PRIMARY KEY (id)
+)
+</code></pre>
+<h2>2nd: the urls</h2>
+<p>There will be 2 states during the login/logout session:
+</p>
+<ul>
+ <li><p>&quot;Login&quot; is for the login page
+</p>
+
+ </li>
+
+ <li><p>&quot;Reset&quot; for the logout page.
+</p>
+
+ </li>
+</ul>
+
+<h2></h2>
+<pre><code>urls = (
+    '/login', 'login',
+    '/reset', 'reset',
+     )
+</code></pre>
+<h2>3rd: Logged or not logged ?</h2>
+<p>To manage the access for people who are logged or not, it's very easy. Just define the logged expression like this, and use it for your login/reset classes:
+</p>
+
+<h2></h2>
+<pre><code>def logged():
+    if session.login==1:
+        return True
+    else:
+        return False
+</code></pre>
+<h2>4th: Easy Privleges Management</h2>
+<p>I manage my users, in 4 categories: admin+user+reader (logged), and visitors (not logged). The directory template is choosing according to the privilege specified in the table example_users.
+</p>
+
+<h2></h2>
+<pre><code>def create_render(privilege):
+    if logged():
+        if privilege==0:
+            render = render_mako(
+                directories=['templates/reader'],
+                input_encoding='utf-8',
+                output_encoding='utf-8',
+                )
+        elif privilege==1:
+            render = render_mako(
+                directories=['templates/user'],
+                input_encoding='utf-8',
+                output_encoding='utf-8',
+                )
+        elif privilege==2:
+            render = render_mako(
+                directories=['templates/admin'],
+                input_encoding='utf-8',
+                output_encoding='utf-8',
+                )
+    else:
+        render = render_mako(
+            directories=['templates/communs'],
+            input_encoding='utf-8',
+            output_encoding='utf-8',
+            )
+    return render
+</code></pre>
+<h2>5th: Login and Reset Python Classes</h2>
+<p>Now, let's have fun:
+   - If you are already logged, you are redirecting to the login_double.html template file
+   - Else, to the login.html.
+</p>
+
+<h2></h2>
+<pre><code>class login:
+    def GET(self):
+        if logged():
+            render = create_render(session.privilege)
+            return &quot;%s&quot; % (
+                render.login_double()               )
+        else:
+            render = create_render(session.privilege)
+            return &quot;%s&quot; % (
+                render.login()
+                )
+</code></pre><ul>
+ <li>
+     Ok, ok. Now, for the POST(). According to the .html file, we recover the variables posted in the form (see the login.html), and we compare it to the example_users.user row.
+ </li>
+
+ <li>
+     If the login/pass is ok, redirect to the login_ok.html.
+ </li>
+
+ <li>
+     If not, redirect to the login_error.html.
+ </li>
+</ul>
+
+<h2><br /></h2>
+<pre><code>    def POST(self):
+        user, passwd = web.input().user, web.input().passwd
+        ident = db.query(&quot;select * from example_users where user = '%s'&quot; % (user)).getresult()
+        try:
+            if passwd==ident[0][2]:
+                session.login=1
+                session.privilege=ident[0][4]
+                render = create_render(session.privilege)
+                return &quot;%s&quot; % (
+                        render.login_ok()
+                        )
+            else:
+                session.login=0
+                session.privilege=0
+                render = create_render(session.privilege)
+                return &quot;%s&quot; % (
+                    render.login_error()
+                    )
+        except:
+            session.login=0
+            session.privilege=0
+            render = create_render(session.privilege)
+            return &quot;%s&quot; % (
+                render.login_error()
+                )
+</code></pre><p>For the reset function, we just kill the session, and redirect to the logout.html template file.
+</p>
+
+<h2></h2>
+<pre><code>class reset:
+    def GET(self):
+        session.login=0
+        session.kill()
+        render = create_render(session.privilege)
+        return &quot;%s&quot; % (
+            render.logout()
+            )
+</code></pre>
+<h2>6th: HTML templates help</h2>
+<p>Well, I think that nobody will need this, but, I prefer to give all the informations. The most important is the login.html.
+</p>
+
+<h2></h2>
+<pre><code>&lt;FORM action=/login method=POST&gt;
+    &lt;table id=&quot;login&quot;&gt;
+        &lt;tr&gt;
+            &lt;td&gt;User: &lt;/td&gt;
+            &lt;td&gt;&lt;input type=text name='user'&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Password: &lt;/td&gt;
+            &lt;td&gt;&lt;input type=&quot;password&quot; name=passwd&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;input type=submit value=LOGIN&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/form&gt;
+</code></pre>
+<h2>7th: Some problems or questions ?</h2>
+<ul>
+ <li>
+     Mail: you can contact me at guillaume(at)process-evolution(dot)fr
+ </li>
+
+ <li>
+     IRC: #webpy on irc.freenode.net (pseudo: Ephedrax)
+ </li>
+
+ <li>
+     Translations: I'm french, and my english is bad...you can edit my work
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

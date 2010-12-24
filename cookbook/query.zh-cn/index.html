@@ -1,0 +1,94 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>使用db.query进行高级数据库查询 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; 使用db.query进行高级数据库查询
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>使用db.query进行高级数据库查询</h1>
+
+<h3>问题：</h3>
+<p>您要执行的SQL语句如：高级的联接或计数。
+</p>
+
+<h3>解决：</h3>
+<p>webpy不会尝试为您和您的数据库建立层。相反，它试图以方便的通用任务，走出自己的方式，当您需要做的更高级的主题。执行高级的数据库查询是没有什么不同。例如：
+</p>
+<pre><code>import web
+
+db = web.database(dbn='postgres', db='mydata', user='dbuser', pw='')
+
+results = db.query(&quot;SELECT COUNT(*) AS total_users FROM users&quot;)
+print results[0].total_users # -&gt; prints number of entries in 'users' table
+</code></pre><p>或者是，使用一个JOIN示例:
+</p>
+<pre><code>import web
+
+db = web.database(dbn='postgres', db='mydata', user='dbuser', pw='')
+
+results = db.query(&quot;SELECT * FROM entries JOIN users WHERE entries.author_id = users.id&quot;)
+</code></pre><p>为了防止SQL注入攻击，db.query还接受了“vars”语法如下描述<a href="/cookbook/select" class="internal">db.select</a>:
+</p>
+<pre><code>results = db.query(&quot;SELECT * FROM users WHERE id=$id&quot;, vars={'id':10})
+</code></pre><p>这将避免用户输入，如果你信任这个“id”变量。
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

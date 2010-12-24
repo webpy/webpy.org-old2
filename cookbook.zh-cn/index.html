@@ -1,0 +1,364 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Web.py Cookbook 简体中文版 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Web.py Cookbook 简体中文版
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Web.py Cookbook 简体中文版</h1>
+<p>欢迎来到web.py 0.3的Cookbook。提醒您注意：某些特性在之前的版本中并不可用。当前开发版本是0.3。
+</p>
+
+<h1>格式</h1>
+<ol>
+ <li><p>在编排内容时，请尽量使用cookbook格式...如：
+</p>
+
+<h3>问题：如何访问数据库中的数据？</h3>
+
+<h3>解法：使用如下代码...</h3>
+
+ </li>
+
+ <li><p>请注意，网址中不必含有&quot;web&quot;。如&quot;/cookbook/select&quot;，而非&quot;/cookbook/web.select&quot;。
+</p>
+
+ </li>
+
+ <li><p>该手册适用于0.3版本，所以您在添加代码时，请确认代码能在新版本中工作。
+</p>
+
+ </li>
+</ol>
+<hr />
+
+
+<h2>基本应用:</h2>
+<ul>
+ <li>
+     <a href="/helloworld/zh-cn" class="internal">Hello World</a>
+ </li>
+
+ <li>
+     <a href="/staticfiles/zh-cn" class="internal">提供静态文件访问</a>
+ </li>
+
+ <li>
+     <a href="/url_handling/zh-cn" class="internal">理解URL控制</a>
+ </li>
+
+ <li>
+     <a href="/redirect+seeother/zh-cn" class="internal">跳转与重定向</a>
+ </li>
+
+ <li>
+     <a href="/subapp/zh-cn" class="internal">使用子应用</a>
+ </li>
+
+ <li>
+     <a href="/xmlfiles/zh-cn" class="internal">提供XML访问</a>
+ </li>
+
+ <li>
+     <a href="/postbasic/zh-cn" class="internal">从post读取原始数据</a>
+ </li>
+</ul>
+
+<h2>高级应用</h2>
+<ul>
+ <li>
+     <a href="/ctx/zh-cn" class="internal">用web.ctx获得客户端信息</a>
+ </li>
+
+ <li>
+     <a href="/application_processors/zh-cn" class="internal">应用处理器，添加钩子和卸载钩子</a>
+ </li>
+
+ <li>
+     <a href="/background/zh-cn" class="internal">如何使用web.background</a>
+ </li>
+
+ <li>
+     <a href="/custom_notfound/zh-cn" class="internal">自定义NotFound信息</a>
+ </li>
+
+ <li>
+     <a href="/streaming_large_files/zh-cn" class="internal">如何流传输大文件</a>
+ </li>
+
+ <li>
+     <a href="/logging/zh-cn" class="internal">对自带的webserver日志进行操作</a>
+ </li>
+
+ <li>
+     <a href="/ssl/zh-cn" class="internal">用cherrypy提供SSL支持</a>
+ </li>
+
+ <li>
+     <a href="/runtime-language-switch/zh-cn" class="internal">实时语言切换</a>
+ </li>
+</ul>
+
+<h2>Sessions and user state 会话和用户状态:</h2>
+<ul>
+ <li>
+     <a href="/sessions/zh-cn" class="internal">如何使用Session</a>
+ </li>
+
+ <li>
+     <a href="/session_with_reloader/zh-cn" class="internal">如何在调试模式下使用Session</a>
+ </li>
+
+ <li>
+     <a href="/session_in_template/zh-cn" class="internal">在template中使用session</a>
+ </li>
+
+ <li>
+     <a href="/cookies/zh-cn" class="internal">如何操作Cookie</a>
+ </li>
+
+ <li>
+     <a href="/userauth/zh-cn" class="internal">用户认证</a>
+ </li>
+
+ <li>
+     <a href="/userauthpgsql/zh-cn" class="internal">一个在postgreSQL数据库环境下的用户认证的例子</a>
+ </li>
+
+ <li>
+     <a href="/sessions_with_subapp/zh-cn" class="internal">如何在子应用中操作Session</a>
+ </li>
+</ul>
+
+<h2>Utils 实用工具:</h2>
+<ul>
+ <li>
+     <a href="/sendmail/zh-cn" class="internal">如何发送邮件</a>
+ </li>
+
+ <li>
+     <a href="/sendmail_using_gmail/zh-cn" class="internal">如何利用Gmail发送邮件</a>
+ </li>
+
+ <li>
+     <a href="/webservice/zh-cn" class="internal">使用soaplib实现webservice</a>
+ </li>
+</ul>
+
+<h2>Templates 模板</h2>
+<ul>
+ <li>
+     <a href="http://webpy.org/docs/0.3/templetor/zh-cn" class="internal">Templetor: web.py 模板系统</a>
+ </li>
+
+ <li>
+     <a href="/layout_template/zh-cn" class="internal">使用站点布局模板</a>
+ </li>
+
+ <li>
+     <a href="/alternating_style/zh-cn" class="internal">交替式风格 (未译)</a>
+ </li>
+
+ <li>
+     <a href="/template_import/zh-cn" class="internal">导入函数到模板中 (未译)</a>
+ </li>
+
+ <li>
+     <a href="/i18n_support_in_template_file/zh-cn" class="internal">模板文件中的i18n支持</a>
+ </li>
+
+ <li>
+     <a href="/template_mako/zh-cn" class="internal">在web.py中使用Mako模板引擎 </a>
+ </li>
+
+ <li>
+     <a href="/template_cheetah/zh-cn" class="internal">在web.py中使用Cheetah模板引擎</a>
+ </li>
+
+ <li>
+     <a href="/template_jinja/zh-cn" class="internal">在web.py中使用Jinja2模板引擎</a>
+ </li>
+
+ <li>
+     <a href="/templates_on_gae/zh-cn" class="internal">如何在谷歌应用程序引擎使用模板</a>
+ </li>
+</ul>
+
+<h2>Testing 测试:</h2>
+<ul>
+ <li>
+     <a href="/testing_with_paste_and_nose/zh-cn" class="internal">Testing with Paste and Nose (未译)</a>
+ </li>
+
+ <li>
+     <a href="/restful_doctesting_using_request/zh-cn" class="internal">RESTful doctesting using an application's request method (未译)</a>
+ </li>
+</ul>
+
+<h2>User input 用户输入:</h2>
+<ul>
+ <li>
+     <a href="/fileupload/zh-cn" class="internal">文件上传</a>
+ </li>
+
+ <li>
+     <a href="/storeupload/zh-cn" class="internal">保存上传的文件</a>
+ </li>
+
+ <li>
+     <a href="/limiting_upload_size/zh-cn" class="internal">上传文件大小限定</a>
+ </li>
+
+ <li>
+     <a href="/input/zh-cn" class="internal">通过 web.input 接受用户输入</a>
+ </li>
+
+ <li>
+     <a href="/forms/zh-cn" class="internal">怎样使用表单</a>
+ </li>
+
+ <li>
+     <a href="/form_fields/zh-cn" class="internal">显示个别表单字段</a>
+ </li>
+</ul>
+
+<h2>Database 数据库</h2>
+<ul>
+ <li>
+     <a href="/multidbs/zh-cn" class="internal">使用多数据库</a>
+ </li>
+
+ <li>
+     <a href="/select/zh-cn" class="internal">Select: 查询数据</a>
+ </li>
+
+ <li>
+     <a href="/update/zh-cn" class="internal">Update: 更新数据 </a>
+ </li>
+
+ <li>
+     <a href="/delete/zh-cn" class="internal">Delete: 删除数据</a>
+ </li>
+
+ <li>
+     <a href="/Insert/zh-cn" class="internal">Insert: 新增数据</a>
+ </li>
+
+ <li>
+     <a href="/query/zh-cn" class="internal">Query: 高级数据库查询</a>
+ </li>
+
+ <li>
+     <a href="/transactions/zh-cn" class="internal">怎样使用数据库事务</a>
+ </li>
+
+ <li>
+     <a href="/sqlalchemy/zh-cn" class="internal">使用 sqlalchemy</a>
+ </li>
+
+ <li>
+     <a href="/sqlite-udf/zh-cn" class="internal">整合 SQLite UDF (用户定义函数) 到 webpy 数据库层</a>
+ </li>
+
+ <li>
+     <a href="/where_dict/zh-cn" class="internal">使用字典动态构造where子句</a>
+ </li>
+</ul>
+
+<h2>Deployment 部署:</h2>
+<ul>
+ <li>
+     <a href="/fastcgi-lighttpd/zh-cn" class="internal">通过Fastcgi和lighttpd部署</a>
+ </li>
+
+ <li>
+     <a href="/fastcgi-nginx/zh-cn" class="internal">通过Webpy和Nginx with FastCGI搭建Web.py</a> 
+ </li>
+
+ <li>
+     <a href="/cgi-apache/zh-cn" class="internal">CGI deployment through Apache (未译)</a>
+ </li>
+
+ <li>
+     mod_python deployment through Apache (requested)
+ </li>
+
+ <li>
+     <a href="/mod_wsgi-apache/zh-cn" class="internal">通过Apache和mod_wsgi部署</a>
+ </li>
+
+ <li>
+     <a href="/mod_wsgi-nginx/zh-cn" class="internal">mod_wsgi deployment through Nginx (未译)</a>
+ </li>
+
+ <li>
+     <a href="/fastcgi-nginx/zh-cn" class="internal">Fastcgi deployment through Nginx (未译)</a>
+ </li>
+</ul>
+
+<h2>Subdomains 子域名:</h2>
+<ul>
+ <li>
+     Subdomains and how to access the username (requested)
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

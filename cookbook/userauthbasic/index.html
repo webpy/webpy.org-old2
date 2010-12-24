@@ -1,0 +1,135 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Basic authentication (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Basic authentication
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Basic authentication</h1>
+
+<h2>Problem</h2>
+<p>This is a proof of concept implementation of doing basic authentication
+   with web.py.
+   You may want to read <a href="http://www.ietf.org/rfc/rfc2617.txt" class="internal">RFC 2617</a> or
+   <a href="http://en.wikipedia.org/wiki/Basic_access_authentication" class="internal">http://en.wikipedia.org/wiki/Basic_access_authentication</a> for reference.
+</p>
+
+<h2>Solution</h2>
+<p>Create a python file containing the code below and start the script.
+   When you enter the url <a href="http://localhost:8080/" class="internal">http://localhost:8080/</a> you will be redirected
+   to the url <a href="http://localhost:8080/login" class="internal">http://localhost:8080/login</a>.
+   When you are successfully authenticated, you will be redirected to the
+   index page.
+</p>
+
+<h2></h2>
+<pre><code>import web
+import re
+import base64
+
+urls = (
+    '/','Index',
+    '/login','Login'
+)
+
+app = web.application(urls,globals())
+
+allowed = (
+    ('jon','pass1'),
+    ('tom','pass2')
+)
+
+
+class Index:
+    def GET(self):
+        if web.ctx.env.get('HTTP_AUTHORIZATION') is not None:
+            return 'This is the index page'
+        else:
+            raise web.seeother('/login')
+
+class Login:
+    def GET(self):
+        auth = web.ctx.env.get('HTTP_AUTHORIZATION')
+        authreq = False
+        if auth is None:
+            authreq = True
+        else:
+            auth = re.sub('^Basic ','',auth)
+            username,password = base64.decodestring(auth).split(':')
+            if (username,password) in allowed:
+                raise web.seeother('/')
+            else:
+                authreq = True
+        if authreq:
+            web.header('WWW-Authenticate','Basic realm=&quot;Auth example&quot;')
+            web.ctx.status = '401 Unauthorized'
+            return
+
+if __name__=='__main__':
+    app.run()
+</code></pre><p>  <br />
+</p>
+
+<h2>Notes</h2>
+<p>Do not use this code on real site - this is only for illustration.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

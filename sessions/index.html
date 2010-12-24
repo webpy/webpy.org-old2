@@ -1,0 +1,283 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Session (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Session
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Session</h1>
+
+<h1>Usage</h1>
+<p><a href="/sessions/example">example</a>
+</p>
+<p><a href="/sessions/simpleexample">simple example, a counter</a>
+</p>
+
+<h1>Specification</h1>
+
+<h2>Summary</h2>
+<p>The main session object will be created depending on the configuration. However the user/developer will choose it's usage. If needed the user will call start() method and there by inicializing handlers, variables from db-config like variables. The session will be implemented as storage object. Session identification will mostly rely on client cookies (optionally also on client IP address). All data will be stored/retrieved through handler object (DB-, file-, cookie?- based). Save/commit &amp; destroy methods will be created. The user will have the option to set various settings including expiration timeout, handler, session id generator (a default will be provided).
+</p>
+
+<h2>Design</h2>
+<p>The session functionality will rely on a two-layer implementation: Session -&gt; Handler. The Session class will provide identification &amp; verification of the client request while the Handler-like classes will guarante data persistence.
+</p>
+
+<h2>Implementation details</h2>
+
+<h3>Session class</h3>
+<p>The Session class is a derivate of Storage. It will store as a dict anyhow called variable, but through the Storage interface only variables not named as internal private variables.
+</p>
+
+<h4>Private variables</h4>
+<ul>
+ <li>
+     _handler - reference to user-choosen Handler
+ </li>
+
+ <li>
+     _id - current session id
+ </li>
+
+ <li>
+     _old_id - used if the session regenerates id
+ </li>
+
+ <li>
+     _data - internal Storage object for session data
+ </li>
+</ul>
+
+<h4>Public methods</h4>
+<ul>
+ <li>
+     start() - it will start the session, regenerate id, set cookies, retreive data if the session isn't new; it will call _identity(), _verify(), _generate_id(), _retreive()
+ </li>
+
+ <li>
+     get_id() - it will return current session id
+ </li>
+
+ <li>
+     cleanup() - it will clean expired sessions depending on the provided interface by choosen Handler object (cookie based will do nothing); it will call Handler.clean() with the user preset timeout
+ </li>
+
+ <li>
+     save() - it will save session data using the _store()
+ </li>
+
+ <li>
+     destroy() - it will remove the session (cookies &amp; data); it will call _remove()
+ </li>
+</ul>
+
+<h4>Private methods</h4>
+<ul>
+ <li>
+     _generate_id() - it will <em>only</em> make a hash of ip, time, seed or it will call user supplied generator
+ </li>
+
+ <li>
+     _identify() - it will identify the session id (through client cookie                s)
+ </li>
+
+ <li>
+     _verify() - it will verify the session id with retreived data from handler object i.e. check for expiration, IP change (headers change?)
+ </li>
+
+ <li>
+     _store() - a simple wrapper around Handler.store(); data will be passed <strong>unpickled</strong>
+ </li>
+
+ <li>
+     _retreive() - a simple wrapper around Handler.retreive(); data will be awaited <strong>unpickled</strong>
+ </li>
+
+ <li>
+     _remove() - a simple wrapper around Handler.remove()
+ </li>
+</ul>
+
+<h4>Main session parameters</h4>
+<p>web.config.session_parameters - Storage object:
+</p>
+<ul>
+ <li>
+     cookie_name - name of the cookie which will transfer the session id; default value: 'webpy'
+ </li>
+
+ <li>
+     cookie_domain - cookie domain for the setcookie() when setting session id cookie; default value: None
+ </li>
+
+ <li>
+     timeout - number of second after a not-updated session will be considered expired; default value: 600
+ </li>
+
+ <li>
+     max_age - the maximum age a session can reach; default value: 24 * 60 * 60 (1day)
+ </li>
+
+ <li>
+     id_seed - a seed-string that will be used in the default Session._generator(); default value: 'web.py'
+ </li>
+
+ <li>
+     regenerate_id - should the session id be regenerated and set again with a cookie on every request?; default value: True
+ </li>
+
+ <li>
+     generator - a function to generate <em>random</em> session ids, if False, the implicit generator (Session._generate_id()) will be used; default value: False
+ </li>
+
+ <li>
+     ignore_change_ip - if the pair ( <em>id</em>, <em>ip</em>) doesn't match the retreived data from Handler objcet, then fail/raise exception/...; default value: False
+ </li>
+
+ <li>
+     ignore_expiration - should the session expiration be ignored?; default value: False
+ </li>
+
+ <li>
+     ignore_old_age - should the session be checked for max_age?; default value: True
+ </li>
+
+ <li>
+     handler - a Handler-like object to provide persistence for Session class; default value: 'db'
+ </li>
+</ul>
+
+<h3>Handler class</h3>
+<p>An abstract class which defines a interface to store/retreive/remove session data.
+</p>
+
+<h4>Public methods</h4>
+<ul>
+ <li>
+     store() - it will store the session data (&amp; pickle them before that); if the argument _old_id_ is set, it will look for an already storaged session data and if they are present overwrite them or else store as new
+ </li>
+
+ <li>
+     retreive() - it will retreive storaged data <em>unpickled</em> in a Storage object ( <em>id</em>, <em>ip</em>, <em>time</em>, <em>data</em>), if there aren't any for given <em>id</em>, it will return empty Storage object
+ </li>
+
+ <li>
+     remove() - it will remove storaged data for given <em>id</em>
+ </li>
+
+ <li>
+     clean() - optional function (may not be available for any Handler implementation [CookieHandler]), it will remove all session data, which been updated longer then before given <em>timeout</em>
+ </li>
+</ul>
+
+<h3>Handler parameters</h3>
+<p>web.config.handler_parameters as Storage object will include additional parameters that are necessary for various Handlers
+</p>
+
+<h4>DBHandler</h4>
+<ul>
+ <li>
+     db_table - table storing session data; default value: 'session_data'
+ </li>
+</ul>
+
+<h4>FileHandler</h4>
+<ul>
+ <li>
+     file_dir - directory used to store session data; default value: '/tmp'
+ </li>
+
+ <li>
+     file_prefix - prefix to session data files; default value: 'sess'
+ </li>
+</ul>
+
+<h3>*Handler specs</h3>
+<ul>
+ <li>
+     <a href="/sessions/dbhandler">DBHandler</a>
+ </li>
+
+ <li>
+     <a href="/sessions/filehandler">FileHandler</a>
+ </li>
+
+ <li>
+     <a href="/sessions/cookiehandler">CookieHandler</a> - <strong>DANGEROUS, UNSECURE, EXPERIMENTAL</strong>
+ </li>
+</ul>
+
+<h2>Notes</h2>
+<ul>
+ <li>
+     <a href="/sessions/gsoc">Google Summer of Code project</a>
+ </li>
+
+ <li>
+     <a href="/sessions/install">installation instructions</a>
+ </li>
+
+ <li>
+     <a href="http://bazaar-vcs.org/">bazaar</a> branch: http://bazaar.launchpad.net/~karol.tarcak/webpy/webpy.sessions.branch
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

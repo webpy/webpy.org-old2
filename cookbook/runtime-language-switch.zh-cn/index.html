@@ -1,0 +1,197 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>实时语言切换 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; 实时语言切换
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>实时语言切换</h1>
+
+<h2>问题:</h2>
+<p>如何实现实时语言切换？
+</p>
+
+<h2>解法:</h2>
+<ul>
+ <li>
+     首先你必须阅读 <a href="/cookbook/i18n_support_in_template_file" class="internal">模板语言中的i18n支持</a>, 然后尝试下面的代码。
+ </li>
+</ul>
+<p>文件: code.py
+</p>
+<pre><code>import os
+import sys
+import gettext
+import web
+
+# File location directory.
+rootdir = os.path.abspath(os.path.dirname(__file__))
+
+# i18n directory.
+localedir = rootdir + '/i18n'
+
+# Object used to store all translations.
+allTranslations = web.storage()
+
+def get_translations(lang='en_US'):
+    # Init translation.
+    if allTranslations.has_key(lang):
+        translation = allTranslations[lang]
+    elif lang is None:
+        translation = gettext.NullTranslations()
+    else:
+        try:
+            translation = gettext.translation(
+                    'messages',
+                    localedir,
+                    languages=[lang],
+                    )
+        except IOError:
+            translation = gettext.NullTranslations()
+    return translation
+
+def load_translations(lang):
+    &quot;&quot;&quot;Return the translations for the locale.&quot;&quot;&quot;
+    lang = str(lang)
+    translation  = allTranslations.get(lang)
+    if translation is None:
+        translation = get_translations(lang)
+        allTranslations[lang] = translation
+
+        # Delete unused translations.
+        for lk in allTranslations.keys():
+            if lk != lang:
+                del allTranslations[lk]
+    return translation
+
+def custom_gettext(string):
+    &quot;&quot;&quot;Translate a given string to the language of the application.&quot;&quot;&quot;
+    translation = load_translations(session.get('lang'))
+    if translation is None:
+        return unicode(string)
+    return translation.ugettext(string)
+
+urls = (
+'/', 'index'
+)
+
+render = web.template.render('templates/',
+        globals={
+            '_': custom_gettext,
+            }
+        )
+
+app = web.application(urls, globals())
+
+# Init session.
+session = web.session.Session(app,
+        web.session.DiskStore('sessions'),
+        initializer={
+            'lang': 'en_US',
+            }
+        )
+
+class index:
+    def GET(self):
+        i = web.input()
+        lang = i.get('lang', 'en_US')
+
+        # Debug.
+        print &gt;&gt; sys.stderr, 'Language:', lang
+
+        session['lang'] = lang
+        return render.index()
+
+if __name__ == &quot;__main__&quot;: app.run()
+</code></pre><p>模板文件: templates/index.html.
+</p>
+<pre><code>$_('Hello')
+</code></pre><p>不要忘记生成必要的po&amp;mo语言文件。参考: <a href="/i18n_support_in_template_file" class="internal">模板语言中的i18n支持</a>
+</p>
+<p>现在运行code.py:
+</p>
+<pre><code>$ python code.py
+http://0.0.0.0:8080/
+</code></pre><p>然后用你喜欢的浏览器访问下面的地址，检查语言是否改变:
+</p>
+<pre><code>http://your_server:8080/
+http://your_server:8080/?lang=en_US
+http://your_server:8080/?lang=zh_CN
+</code></pre><p>你必须:
+</p>
+<ul>
+ <li>
+     确保语言文件(en_US、zh_CN等)可以动态改变。
+ </li>
+
+ <li>
+     确保custom_gettext()调用越省资源约好。
+ </li>
+</ul>
+<p>参考:
+</p>
+<ul>
+ <li>
+     这里有使用app.app_processor()的 <a href="http://groups.google.com/group/webpy/browse_thread/thread/a215837aa30e8f80 " class="internal">另一个方案</a>。
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

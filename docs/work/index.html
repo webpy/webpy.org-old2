@@ -1,0 +1,183 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>webpy docs that need fixing, and how! (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; webpy docs that need fixing, and how!
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>webpy docs that need fixing, and how!</h1>
+<p>This is a list of work needed for the documentation cleanup.  Please add pages, separated by horizontal rules (three asterisks in markdown).
+</p>
+<p>We need both reporters (tell us what's wrong!) and fixers (write code, make content consistent, etc).
+</p>
+<p>When adding work to be done, please place it in a section devoted to the page and/or parent page, and a link to that page. For example:
+</p>
+<hr />
+
+
+<h1>Cookbook: <a href="/cookbook">Cookbook</a></h1>
+<ul>
+ <li>
+     database select example code is incorrect
+ </li>
+</ul>
+<hr />
+
+<p>When finishing working on something, delete it from the list. If a code block refers to old (version 0.2 for example) code, please add it to a separate url.  Also, add new content at new url (and delete old link when done) For instance:
+</p>
+<ol>
+ <li>
+     /foo is out of date with version 0.2 code
+ </li>
+
+ <li>
+     move /foo to /foo/0.2
+ </li>
+
+ <li>
+     put new code at /foo/0.3
+ </li>
+
+ <li>
+     delete content at /foo, and update any urls that link to it
+ </li>
+</ol>
+<hr />
+
+
+<h1>Code samples: <a href="/src">Code samples</a></h1>
+<ul>
+ <li>
+     Move url to /samples
+ </li>
+</ul>
+
+<h2>Samples</h2>
+<ul>
+ <li>
+     simple-wiki: 0.2, external
+ </li>
+
+ <li>
+     simple-wiki num 2: 0.2, external
+ </li>
+
+ <li>
+     simple delicious: 0.2
+ </li>
+
+ <li>
+     alternate tutorial SQLite &amp; SQLObject: 0.2
+ </li>
+
+ <li>
+     templating with genshi: should be part of larger 'templating' section
+ </li>
+</ul>
+
+<h2>tips &amp; tricks</h2>
+<ul>
+ <li>
+     Possibly move entirely to cookbook?
+ </li>
+</ul>
+<p>vhost, metaclass and multiple apps should have separate section, but this setup isn't the way to do things in 0.3
+</p>
+<ul>
+ <li>
+     simple sessions: no longer with flup, better docs elsewhere
+ </li>
+
+ <li>
+     template tricks: with template code
+ </li>
+
+ <li>
+     vhost: no longer needed with subdomain apps
+ </li>
+
+ <li>
+     metaclass: also no longer need (auto app)
+ </li>
+
+ <li>
+     test web app: need separate testing section
+ </li>
+
+ <li>
+     serving images: 0.2, should use mimetypes module?
+ </li>
+
+ <li>
+     multiple apps: not needed
+ </li>
+</ul>
+
+<h2>Real web apps</h2>
+<ul>
+ <li>
+     Leave them external, but annotate which version of webpy they use.
+ </li>
+</ul>
+<hr />
+
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

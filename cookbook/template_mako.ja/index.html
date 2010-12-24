@@ -1,0 +1,131 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>makoテンプレートエンジンの使用について (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; makoテンプレートエンジンの使用について
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>makoテンプレートエンジンの使用について</h1>
+
+<h3>問題点</h3>
+<p>webpyでMakoテンプレートエンジンを使用するにはどうすればいいですか？
+</p>
+
+<h3>解決手段</h3>
+<p>まず、<a href="http://www.makotemplates.org/">Mako</a> と webpy(0.3)をインストールする必要があります。その後以下のコードを実行してみてください。
+</p>
+<pre><code># encoding: utf-8
+# ファイル code.py
+
+import web
+
+from web.contrib.template import render_mako
+
+urls = (
+        '/(.*)', 'hello'
+        )
+
+app = web.application(urls, globals(), autoreload=True)
+
+# input_encoding and output_encoding is important for unicode
+# template file.
+# Reference:
+# http://www.makotemplates.org/docs/documentation.html#unicode
+render = render_mako(
+        directories=['templates'],
+        input_encoding='utf-8',
+        output_encoding='utf-8',
+        )
+
+class hello:
+    def GET(self, name):
+        return render.hello(name=name)
+        # Another way:
+        #return render.hello(**locals())
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre><p>テンプレートファイル:
+</p>
+<pre><code>## ファイル: templates/hello.html
+
+您好：${name}
+</code></pre>
+<h3>ノート:</h3>
+<p>webpyアプリケーションを Apache + mod_wsgi で稼動させた場合、テンプレート(Mako)のエラーは Apacheのエラーログに出力されます。
+</p>
+<pre><code>[Sat Jun 21 21:56:22 2008] [error] [client 192.168.122.1] TopLevelLookupException: Cant locate template for uri 'index.html'
+</code></pre><p>テンプレートディレクトリが相対パスで指定できないもしくはわからない場合は、絶対パスで指定してください。
+</p>
+<p>アプリケーションの作業ディレクトリについてはこちらを参照してください。
+</p>
+<pre><code>http://code.google.com/p/modwsgi/wiki/ApplicationIssues
+</code></pre><p>たとえば以下のような書き方で、絶対パスをより簡単にする書くことができます。
+</p>
+<pre><code>import os
+
+render = render_mako(
+        directories=[os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),],
+        input_encoding='utf-8',
+        output_encoding='utf-8',
+        )
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

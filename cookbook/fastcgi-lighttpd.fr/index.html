@@ -1,0 +1,203 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Webpy + LightTTPD avec FastCGi (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Webpy + LightTTPD avec FastCGi
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Webpy + LightTTPD avec FastCGi</h1>
+<p>Autre langages: <a href="/../fastcgi-lighttpd" class="internal">english</a> | ...
+</p>
+
+<h2>Problème:</h2>
+<p>Comment configurer <a href="http://www.lighttpd.net/" class="internal">lighttpd</a> sous Debian GNU/Linux ?
+</p>
+
+<h2>Solution:</h2>
+<p><em>Si vous avez des problèmes avec cette astuce, veuillez lire ce <a href="http://www.mail-archive.com/webpy@googlegroups.com/msg02800.html" class="internal">fil</a>.
+Ce qui suit s'applique à la version 1.4.18 de lighttpd.</em>
+</p>
+
+<h3>Note:  <br /></h3>
+<ul>
+ <li>
+     Vous devez remplacer <code>code.py</code> par le nom de votre propre fichier.
+ </li>
+
+ <li>
+     <code>/path-to/webpy-app</code> que vous trouverez ci-dessous, concerne le chemin vers le répertoire contenant votre <code>code.py</code>
+ </li>
+
+ <li>
+     <code>/path-to/webpy-app/code.py</code> est le chemin complet de votre <strong>fichier python</strong>
+ </li>
+</ul>
+<p>Si vous n'êtes pas certain de savoir quelle version de <a href="http://www.lighttpd.net/" class="internal">lighttpd</a> s'execute, tapez : <code>lighttpd -v</code> dans la console.
+</p>
+<p><em>Note: La version précédente de lighttpd organise les fichiers .conf différemment. Cependant, les mêmes principes s'appliquent aussi bien sur eux.</em>
+</p>
+
+<h2>Configuration de lighttpd sous Debian GNU/Linux</h2>
+<pre>
+Fichiers er répertoires de /etc/lighttpd:
+---------------------------------------
+
+lighttpd.conf:
+         fichier de configuration principal
+
+conf-available/
+        
+    Ce répertoire contient une série de fichiers .conf. Ces fichiers contiennent
+    les directives de configuration nécesssaire pour charger et executer les modules
+    du serveur web. Si vous voulez créer vos propres fichiers, leurs noms doivent être
+    construits ainsi : nn-name.conf. "nn" est un nombre à deux chiffres (ce nombre est 
+    utilisé pour déterminer l'ordre de chargement des fichiers)
+
+conf-enabled/
+        
+    Afin d'activer effectivement un module pour lighttpd, il est nécessaire
+    de créer dans ce répertoire un lien symbolique vers le fichier .conf concerné 
+    du répertoire conf-available/.
+
+l'Activation et désactivation des modules peut se faire en lançant:
+    /usr/sbin/lighty-enable-mod 
+    /usr/sbin/lighty-disable-mod scripts.
+</pre>
+
+<strong>
+
+<p>Pour web.py vous devrez activer mod_fastcgi et mod_rewrite en executant:
+   <code>/usr/sbin/lighty-enable-mod</code> et en fournissant <code>fastcgi</code>
+   (mod_rewrite sera activé dans le fichier <code>10-fastcgi.conf</code>, comme vous pourrez le voir dans un instant.)
+</p>
+
+<h2>Voici les instructions pour les fichiers suivants:</h2>
+<ul>
+ <li>
+     <code>/etc/lighttpd/lighttpd.conf</code>
+ </li>
+
+ <li>
+     <code>/etc/lighttpd/conf-available/10-fastcgi.conf</code>
+ </li>
+
+ <li>
+     <code>code.py</code>
+ </li>
+</ul>
+
+<h3><code>/etc/lighttpd/lighttpd.conf</code></h3>
+<pre>
+server.modules              = (
+            "mod_access",
+            "mod_alias",
+            "mod_accesslog",
+            "mod_compress",
+)
+server.document-root       = "/path-to/webpy-app"
+</pre>
+
+<p><em>Dans mon cas, j'ai utilisé <a href="http://doc.ubuntu-fr.org/postgresql" class="internal">postgreSQL</a>. Pour executer lighttpd avec postgres et afin d'accorder des autorisations à la base de donnée, j'ai ajouté la ligne:</em>
+</p>
+<pre>
+server.username = "postgres"
+</pre>
+
+
+<h3><code>/etc/lighttpd/conf-available/10-fastcgi.conf</code></h3>
+<pre>
+server.modules   += ( "mod_fastcgi" )
+server.modules   += ( "mod_rewrite" )
+
+fastcgi.server = ( "/code.py" =>
+ (( "socket" => "/tmp/fastcgi.socket",
+    "bin-path" => "/path-to/webpy-app/code.py",
+    "max-procs" => 1,
+   "bin-environment" => (
+     "REAL_SCRIPT_NAME" => ""
+   ),
+   "check-local" => "disable"
+ ))
+ )
+
+url.rewrite-once = (
+   "^/favicon.ico$" => "/static/favicon.ico",
+   "^/static/(.*)$" => "/static/$1",
+   "^/(.*)$" => "/code.py/$1",
+ )
+</pre>
+
+
+<h3><code>code.py</code>  <br /></h3>
+<p>En haut du fichier, ajoutez:
+</p>
+<pre>
+#!/usr/bin/env python
+</pre>
+
+<p>.. et n'oubliez pas de le rendre executable (Autrement, vous aurez une erreur &quot;permission denied&quot;):
+</p>
+<pre>
+$ chmod 755 /path-to/webpy-app/code.py
+</pre>
+
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

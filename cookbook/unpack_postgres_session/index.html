@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Exploit sessions stored in a postgresql database. (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Exploit sessions stored in a postgresql database.
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Exploit sessions stored in a postgresql database.</h1>
+
+<h2>Problem:</h2>
+<p>When using session and storing some ids or any kind of stuff referencing a database, you'll do a lot of queries like this one:
+   &quot;select foo, bar from foobar_table where id=%s and id_foor=%s&quot; % (session.id, session.id_foo)
+</p>
+<p>That's not a real problem, but if your session is stored in a postgresql database, this is wierd to take these fields in your database to unpack them in web.py and then re-use them in your queries. 
+</p>
+<p>At the other end, this is also weird to take data in your database to bring them in web.py and then repack them in your database.
+</p>
+<p>A cleaner approach would be to access directly these informations in postgresql to read and/or write them.
+</p>
+
+<h2>Solution:</h2>
+<p>To apply this recipe, you'll need to use postgresql DBStore for your sessions. 
+   You'll also need to install the plpythonu in your database.
+   Web.py installed as a system python library is also needed, session objects are defined in web.utils and pickle asks for these classes to work.
+</p>
+<p>First, take a quick look to postgresql storage of sessions with some obvious code: :
+</p>
+
+<h2></h2>
+<pre><code>db = web.database(dbn='postgres', db='db_name', user='db_user', pw='db_pw')
+
+store = web.session.DBStore(db, 'sessions')
+
+session = web.session.Session(app, store, initializer={'uid': 0,
+                                              'username': '',
+                                              'current_page': 'index',
+                                              'user_role': 'invited'
+                                              })
+</code></pre>
+<h2></h2>
+<p>You'll also need a table to handle this, here's a reminder:
+</p>
+
+<h2></h2>
+<pre><code>CREATE TABLE sessions
+            (
+             session_id CHARACTER(40) PRIMARY KEY,
+             atime TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+             data TEXT
+            );
+</code></pre>
+<h2></h2>
+<p>With that, you should be able to have working sessions stored in postgresql.
+   When a client connects to web.py, sessions are automatically started and stored in the sessions table. A quick look into it will show something like this:
+</p>
+<pre><code>session_id        |atime                      | data
+8982d61dblabla... |2010-08-04 15:13:34.889288 | KGRwMQpTJ3VzZblablabla...
+</code></pre><p>The session_id is quite obvious to understand, atime is the timestamp of last access and data is a base64 packed version of the pickled session instance.
+</p>
+<p>With a plpythonu function, we are able to unpack these informations and use them. Here's an example of function:
+</p>
+<pre><code>We need this to make a function return a set of fields instead of a single value, execute once:
+create type read_session_type as (uid integer, current_page varchar(20), user_role varchar(20));
+
+create function unpack_this_session(session_id varchar(128)) returns read_session_type as
+$$
+import base64, pickle, sys
+sys.argv=[] # pickle needs sys.argv... workaround !
+data = plpy.execute(&quot;select data from sessions where session_id='%s'&quot; % (session_id))[0]['data']
+
+pickled = base64.decodestring(data)
+session_instance = pickle.loads(pickled)
+
+uid = session_instance['uid']
+current_page = session_instance['current_page']
+user_role = session_instance['user_role']
+
+return (uid, current_page, user_role)
+$$
+language plpythonu;
+</code></pre><p>This function should be as simple as this to use:
+</p>
+<pre><code>select * from unpack_this_session('8982d61db185462b983242beb7009ad12a716aef')
+</code></pre><p>now, if you didn't already managed to understand what that mean:
+</p>
+<pre><code>&quot;select * from unpack_this_session('%s') ss \
+  inner join users u on u.id=ss.uid \
+  inner join user_rules ur on ur.role = ss.user_role&quot; % (session.id)
+</code></pre><p>You also can imagine modifying session information and repack it within a python function, taking informations directly in the database and making them accessible in web.py session object without any code in your web.py classes.
+</p>
+<p>Exciting, isn't it ?
+</p>
+<p>Technically, as it uses the primary key indexes to match the session_id, seeking data should not be a problem, but postgresql won't be able to use indexes with unpacked data as it comes from a procedure. 
+</p>
+<p>But, we can easily consider using general functions which unpack every session at once, making all of them readable in a view. The temptation is huge, but this is overkill because you shouldn't have to use every sessions data for one client handling only one session, and, more important, this would be an awful CPU and Memory killer. Don't do it ! 
+</p>
+<p>If you think of doing a lot of these operations, consider using triggers to unpack these fields when they're updated or inserted, this is quite better for database performance, opening the window to indexes and foreign keys... 
+   Can you imagine the simplicity, and performance, you gain with a session instance raising a database exception when you try to set a value in your sessions that violates a database foreign key, with a synchronous and transactional behavior, and no more SQL to verify them ?
+</p>
+<p>This function is quite obvious, to demonstrate how to access session data, but it doesn't handle any kind of exceptions. So, don't use it as this for production matters, it needs enlightenment to be as stable and functionnal as needed ;)
+</p>
+<p>I didn't managed to test this procedure with exact keywords, so If you encounter problems, feel free to mention it !
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Form Library (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Form Library
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Form Library</h1>
+<p>Other languages : <a href="/docs/0.3/form.fr" class="internal">français</a> | ...
+</p>
+
+<h1>Summary</h1>
+<ul>
+ <li>
+     <a href="#introduction">Introduction</a>
+ </li>
+
+ <li>
+     <a href="#inputfeatures">Input Features</a>
+ </li>
+
+ <li>
+     <a href="#dropdown">Dropdown</a>
+ </li>
+
+ <li>
+     <a href="#formfeatures">Form Features</a>
+ </li>
+
+ <li>
+     <a href="#example">Example</a>
+ </li>
+</ul>
+<p><a name="introduction"></a>
+</p>
+
+<h2>Introduction</h2>
+<p>The form module of web.py allows the ability to generate html forms, get user input, and validate it before processing it or adding it to a database.
+</p>
+<p>The form module defines 2 primary classes: the Form class, and the Input class.  Forms are instantiated with one or more inputs, and optional validators.  Inputs are instantiated with a name variable, and optional arguments and validators. The Input class is subclassed into the following html inputs (html type in parens):
+</p>
+<ul>
+ <li>
+     Textbox - free form single line input (input type=&quot;text&quot;)
+ </li>
+
+ <li>
+     Password - free form single line that hides input (input type=&quot;password&quot;)
+ </li>
+
+ <li>
+     Textarea - free form multi line input (textarea)
+ </li>
+
+ <li>
+     Dropdown - mutually exclusive input for lists (select and options)
+ </li>
+
+ <li>
+     Radio - mutually exclusive input for a few options (input type=&quot;radio&quot;)
+ </li>
+
+ <li>
+     Checkbox - binary input (input type=&quot;checkbox&quot;)
+ </li>
+
+ <li>
+     Button - submit the form (button)
+ </li>
+</ul>
+<p>A basic login form would look like this:
+</p>
+<pre><code>login = form.Form(
+    form.Textbox('username'),
+    form.Password('password'),
+    form.Button('Login'),
+)
+</code></pre><p>This defines a basic form. Once defined, you should call it again to get an copied instance, and then you can call the render method on it, like so:
+</p>
+<pre><code>f = login()
+print f.render()
+</code></pre><p>This outputs the following HTML:
+</p>
+<pre><code>&lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;&lt;label for=&quot;username&quot;&gt;username&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;input type=&quot;text&quot; id=&quot;username&quot; name=&quot;username&quot;/&gt;&lt;div class=&quot;post&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;&lt;label for=&quot;password&quot;&gt;password&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;input type=&quot;password&quot; id=&quot;password&quot; name=&quot;password&quot;/&gt;&lt;div class=&quot;post&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;&lt;label for=&quot;Login&quot;&gt;&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;button id=&quot;Login&quot; name=&quot;Login&quot;&gt;Login&lt;/button&gt;&lt;div class=&quot;post&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+</code></pre><p>Which looks like:
+</p>
+<table>
+    <tr><th><label for="username">username</label></th><td><input type="text" id="username" name="username"/><div class="post" style="display: none;"></div></td></tr>
+    <tr><th><label for="password">password</label></th><td><input type="password" id="password" name="password"/><div class="post" style="display: none;"></div></td></tr>
+    <tr><th><label for="Login"></label></th><td><button id="Login" name="Login">Login</button><div class="post" style="display: none;"></div></td></tr>
+</table>
+
+<p><a name="inputfeatures"></a>
+</p>
+
+<h2>Input Features</h2>
+<p>The form inputs support several additional attributes.  For example:
+</p>
+<pre><code>form.textbox(&quot;firstname&quot;,
+    form.notnull, #put validators first followed by optional attributes
+    class_=&quot;textEntry&quot;, #gives a class name to the text box -- note the underscore
+    pre=&quot;pre&quot;, #directly before the text box
+    post=&quot;post&quot;, #directly after the text box
+    description=&quot;please enter your name&quot;, #describes field, defaults to form name (&quot;firstname&quot;)
+    value=&quot;bob&quot;, #default value
+    id=&quot;nameid&quot;, #specify the id
+)
+</code></pre><p>In addition to the attributes above, any html attributes can be entered in the same manner.  For example:
+</p>
+<pre><code>myform2 = form.Form(
+    form.textbox('phonenumber',
+        size=&quot;12&quot;,
+        maxlength=&quot;12&quot;        )
+)
+</code></pre><p><a name="dropdown"></a>
+</p>
+
+<h2>Dropdown</h2>
+<p>Dropdown inputs allow a unique description and value for each item in the dropdown list.  To do this, create the dropdown list with tuples like this:
+</p>
+<pre><code>form.Dropdown('mydrop', [('value1', 'description1'), ('value2', 'description2')])
+</code></pre><p><a name="formfeatures"></a>
+</p>
+
+<h2>Form Features</h2>
+<p>In addition individual input validators, form.py supports entire form validation which allows comparisons of fields.  The validators get passed as a list as the variable 'validators'.  For example:
+</p>
+<pre><code>signup = form.Form(
+    form.Textbox('username'),
+    form.Password('password'),
+    form.Password('password_again'),
+    validators = [form.Validator(&quot;Passwords didn't match.&quot;, lambda i: i.password == i.password_again)]
+)
+</code></pre><p>Once the form data has been posted, it can easily be put into a database (if the database scheme has names consistent with your webpy form).  For example:
+</p>
+<pre><code>def POST(self):
+    f = myform()
+    if f.validates():
+        web.insert('data_table', **f.d)
+    #don't do web.insert('data_table', **web.input()) because malicious data could be submitted too
+    else:
+        render.foo(f)
+</code></pre><p><a name="example"></a>
+</p>
+
+<h2>Example</h2>
+<pre><code>import web
+from web import form
+
+render = web.template.render('templates/')
+
+urls = ('/', 'index')
+app = web.application(urls, globals())
+
+myform = form.Form( 
+    form.Textbox(&quot;boe&quot;), 
+    form.Textbox(&quot;bax&quot;, 
+        form.notnull,
+        form.regexp('\d+', 'Must be a digit'),
+        form.Validator('Must be more than 5', lambda x:int(x)&gt;5)),
+    form.Textarea('moe'),
+    form.Checkbox('curly'), 
+    form.Dropdown('french', ['mustard', 'fries', 'wine'])) 
+
+class index: 
+    def GET(self): 
+        form = myform()
+        # make sure you create a copy of the form by calling it (line above)
+        # Otherwise changes will appear globally
+        return render.formtest(form)
+
+    def POST(self): 
+        form = myform() 
+        if not form.validates(): 
+            return render.formtest(form)
+        else:
+            # form.d.boe and form['boe'].value are equivalent ways of
+            # extracting the validated arguments from the form.
+            return &quot;Grrreat success! boe: %s, bax: %s&quot; % (form.d.boe, form['bax'].value)
+
+if __name__==&quot;__main__&quot;:
+    web.internalerror = web.debugerror
+    app.run()
+</code></pre><p>And sample formtest.html (place this in the <em>templates</em> subdirectory): 
+</p>
+<pre><code>$def with (form)
+
+&lt;form name=&quot;main&quot; method=&quot;post&quot;&gt; 
+$if not form.valid: &lt;p class=&quot;error&quot;&gt;Try again, AmeriCAN:&lt;/p&gt;
+$:form.render()
+&lt;input type=&quot;submit&quot; /&gt;    &lt;/form&gt;
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

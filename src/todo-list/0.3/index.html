@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Basic Todo List in 0.3 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Basic Todo List in 0.3
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Basic Todo List in 0.3</h1>
+
+<h1>Todo list</h1>
+<p>Very basic todo list in 0.3 webpy. Probably the most trivial database-backed app possible.
+</p>
+
+<h2>Files</h2>
+<pre><code>/schema.sql
+/templates:
+    /templates/base.html
+    /templates/index.html
+/model.py
+/todo.py
+</code></pre>
+<h3>/schema.sql</h3>
+<pre><code>CREATE TABLE todo (
+    id INT AUTO_INCREMENT,
+    title TEXT,
+    primary key (id)
+);
+</code></pre>
+<h3>/templates/base.html</h3>
+<pre><code>$def with (page)
+
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Todo list&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+$:page
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>/templates/index.html</h3>
+<pre><code>$def with (todos, form)
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;What to do ?&lt;/th&gt;
+        &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+$for todo in todos:
+    &lt;tr&gt;
+        &lt;td&gt;$todo.title&lt;/td&gt;
+        &lt;td&gt;
+            &lt;form action=&quot;/del/$todo.id&quot; method=&quot;post&quot;&gt;
+                &lt;input type=&quot;submit&quot; value=&quot;Delete&quot;/&gt;
+            &lt;/form&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;    
+&lt;/table&gt;  
+
+&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+$:form.render()
+&lt;/form&gt;
+</code></pre>
+<h3>/model.py</h3>
+<pre><code>import web
+
+db = web.database(dbn='mysql', db='todo', user='justin')
+
+def get_todos():
+    return db.select('todo', order='id')
+
+def new_todo(text):
+    db.insert('todo', title=text)
+
+def del_todo(id):
+    db.delete('todo', where=&quot;id=$id&quot;, vars=locals())
+</code></pre>
+<h3>/todo.py</h3>
+<pre><code>&quot;&quot;&quot; Basic todo list using webpy 0.3 &quot;&quot;&quot;
+import web
+import model
+
+### Url mappings
+
+urls = (
+    '/', 'Index',
+    '/del/(\d+)', 'Delete'
+)
+
+
+### Templates
+render = web.template.render('templates', base='base')
+
+
+class Index:
+
+    form = web.form.Form(
+        web.form.Textbox('title', web.form.notnull, 
+            description=&quot;I need to:&quot;),
+        web.form.Button('Add todo'),
+    )
+
+    def GET(self):
+        &quot;&quot;&quot; Show page &quot;&quot;&quot;
+        todos = model.get_todos()
+        form = self.form()
+        return render.index(todos, form)
+
+    def POST(self):
+        &quot;&quot;&quot; Add new entry &quot;&quot;&quot;
+        form = self.form()
+        if not form.validates():
+            todos = model.get_todos()
+            return render.index(todos, form)
+        model.new_todo(form.d.title)
+        raise web.seeother('/')
+
+
+
+class Delete:
+
+    def POST(self, id):
+        &quot;&quot;&quot; Delete based on ID &quot;&quot;&quot;
+        id = int(id)
+        model.del_todo(id)
+        raise web.seeother('/')
+
+app = web.application(urls, globals())
+
+if __name__ == '__main__':
+    app.run()
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

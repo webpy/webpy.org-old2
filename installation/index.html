@@ -1,0 +1,172 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Installation (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Installation
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Installation</h1>
+<p><code>web.py</code> supports Python 2.4 – 2.6 and has no immediate prerequisites.
+</p>
+<ol>
+ <li>
+     <a href="#stable">Stable Version</a><ol>
+ <li>
+     <a href="#source">From Source</a><ol>
+ <li>
+     <a href="#system">System-wide</a>
+ </li>
+
+ <li>
+     <a href="#local">Local</a>
+ </li>
+</ol>
+
+ </li>
+
+ <li>
+     <a href="#distribution">Via Distribution</a><ol>
+ <li>
+     <a href="#debian">Debian-based</a>
+ </li>
+
+ <li>
+     <a href="#red-hat">Red Hat-based</a>
+ </li>
+</ol>
+
+ </li>
+</ol>
+
+ </li>
+
+ <li>
+     <a href="#development">Development Version</a>
+ </li>
+
+ <li>
+     <a href="#verify">Verify Install</a>
+ </li>
+</ol>
+<h2 id=stable>Stable Version</h2>
+
+<p>The easiest way to install <code>web.py</code> is using
+   <code><a href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a></code>.  <br />
+   <em><small><strong>Note</strong> that you will install the version specified in the <a href="http://pypi.python.org/pypi/web.py">Python Package Index</a>.</small></em>
+</p>
+<pre><code><kbd>easy_install web.py</kbd>
+<kbd></kbd></code></pre>
+
+<h3 id=source>From Source</h3>
+
+<pre><code><kbd>wget http://webpy.org/static/web.py-0.33.tar.gz</kbd>
+<kbd>tar xvzf web.py-0.33.tar.gz</kbd>
+<kbd></kbd></code></pre>
+
+<h4 id=system>System-wide</h4>
+
+<pre><code><kbd>cd web.py-0.33</kbd>
+<kbd>sudo python setup.py install</kbd>
+<kbd></kbd></code></pre>
+
+<h4 id=local>Local</h4>
+
+<p>If you need to bundle <code>web.py</code> with your application extract the source to a <code>vendor</code> folder and create a symlink, normally within your package's root.
+</p>
+<pre><code><kbd>ln -s vendor/web.py-0.33/web web</kbd>
+<kbd></kbd></code></pre>
+
+<h3 id=distribution>Via GNU/Linux Distribution</h3>
+
+<h4 id=debian>Debian <small>or Ubuntu</small></h4>
+
+<p>If you are on a Debian-based system you can install <code>web.py</code> using <code>apt-get</code>.  <br />
+   <em><small><strong>Note</strong> that you may not get the latest version as the Ubuntu/Debian release cycles are different from <code>web.py</code>. See <a href=http://packages.debian.org/search?searchon=names&keywords=python-webpy>Debian</a> and <a href=https://launchpad.net/ubuntu/+source/webpy>Ubuntu</a> package profiles for more information.</small></em>
+</p>
+<pre><code><kbd>sudo apt-get install python-webpy</kbd>
+<kbd></kbd></code></pre>
+
+<h4 id=red-hat>Red Hat <small>or Fedora, RHEL, CentOS</small></h4>
+
+<p>If you are on a Red Hat-based system you can install <code>web.py</code> using <code>yum</code> or <code>up2date</code>.  <br />
+   <em><small><strong>Note</strong> that CentOS requires the <a href="https://fedoraproject.org/wiki/EPEL"><abbr title="Extra Packages for Enterprise Linux">EPEL</abbr></a> repository.</small></em>
+</p>
+<pre><code><kbd class=su>yum install python-webpy</kbd>
+<kbd class=su></kbd></code></pre>
+<pre><code><kbd class=su>up2date -i python-webpy</kbd>
+<kbd class=su></kbd></code></pre>
+
+<h2 id=development>Development Branch</h2>
+
+<p>To follow the bleeding edge clone the master branch.
+</p>
+<pre><code><kbd>git clone git://github.com/webpy/webpy.git</kbd>
+<kbd></kbd></code></pre>
+
+<h2 id=verify>Verify Install</h2>
+
+<pre><code><kbd>python -c "import web; web.application(('/', lambda: 'success')).run()"</kbd>
+<samp>http://0.0.0.0:8080/</samp></code></pre>
+
+<p>Point a browser to your host at port <code>8080</code> and expect a response of <code>success</code>.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

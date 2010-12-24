@@ -1,0 +1,315 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Basic wiki in 0.3 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Basic wiki in 0.3
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Basic wiki in 0.3</h1>
+<p>Basic wiki in Webpy 0.3.  Demonstrates basic idea behind wiki.  Lacks revisions.
+</p>
+
+<h2>Files</h2>
+<pre><code>/schema.sql
+/wiki.py
+/templates:
+    /templates/view.html
+    /templates/new.html
+    /templates/base.html
+    /templates/index.html
+    /templates/edit.html
+/model.py
+</code></pre>
+<h3>/schema.sql</h3>
+<pre><code>
+CREATE TABLE pages (
+    id INT AUTO_INCREMENT,
+    url TEXT,
+    title TEXT,
+    content TEXT,
+    primary key (id)
+);
+</code></pre>
+<h3>/wiki.py</h3>
+<pre><code>&quot;&quot;&quot; Basic wiki using webpy 0.3 &quot;&quot;&quot;
+import web
+import model
+import markdown
+
+### Url mappings
+
+urls = (
+    '/', 'Index',
+    '/new', 'New',
+    '/edit/(\d+)', 'Edit',
+    '/delete/(\d+)', 'Delete',
+    '/(.*)', 'Page',
+)
+
+
+### Templates
+t_globals = {
+    'datestr': web.datestr,
+    'markdown': markdown.markdown,
+}
+render = web.template.render('templates', base='base', globals=t_globals)
+
+
+class Index:
+
+    def GET(self):
+        &quot;&quot;&quot; Show page &quot;&quot;&quot;
+        pages = model.get_pages()
+        return render.index(pages)
+
+
+class Page:
+
+    def GET(self, url):
+        &quot;&quot;&quot; View single page &quot;&quot;&quot;
+        page = model.get_page_by_url(url)
+        if not page:
+            raise web.seeother('/new?url=%s' % web.websafe(url))
+        return render.view(page)
+
+
+class New:
+
+    def not_page_exists(url):
+        return not bool(model.get_page_by_url(url))
+
+    page_exists_validator = web.form.Validator('Page already exists', 
+                                not_page_exists)
+
+    form = web.form.Form(
+        web.form.Textbox('url', web.form.notnull, page_exists_validator,
+            size=30,
+            description=&quot;Location:&quot;),
+        web.form.Textbox('title', web.form.notnull, 
+            size=30,
+            description=&quot;Page title:&quot;),
+        web.form.Textarea('content', web.form.notnull, 
+            rows=30, cols=80,
+            description=&quot;Page content:&quot;, post=&quot;Use markdown syntax&quot;),
+        web.form.Button('Create page'),
+    )
+
+    def GET(self):
+        url = web.input(url='').url
+        form = self.form()
+        form.fill({'url':url})
+        return render.new(form)
+
+    def POST(self):
+        form = self.form()
+        if not form.validates():
+            return render.new(form)
+        model.new_page(form.d.url, form.d.title, form.d.content)
+        raise web.seeother('/' + form.d.url)
+
+
+class Delete:
+
+    def POST(self, id):
+        model.del_page(int(id))
+        raise web.seeother('/')
+
+
+class Edit:
+
+    form = web.form.Form(
+        web.form.Textbox('url', web.form.notnull, 
+            size=30,
+            description=&quot;Location:&quot;),
+        web.form.Textbox('title', web.form.notnull, 
+            size=30,
+            description=&quot;Page title:&quot;),
+        web.form.Textarea('content', web.form.notnull, 
+            rows=30, cols=80,
+            description=&quot;Page content:&quot;, post=&quot;Use markdown syntax&quot;),
+        web.form.Button('Update page'),
+    )
+
+    def GET(self, id):
+        page = model.get_page_by_id(int(id))
+        form = self.form()
+        form.fill(page)
+        return render.edit(page, form)
+
+
+    def POST(self, id):
+        form = self.form()
+        page = model.get_page_by_id(int(id))
+        if not form.validates():
+            return render.edit(page, form)
+        model.update_page(int(id), form.d.url, form.d.title, form.d.content)
+        raise web.seeother('/')
+
+
+app = web.application(urls, globals())
+
+if __name__ == '__main__':
+    app.run()
+</code></pre>
+<h3>/templates/view.html</h3>
+<pre><code>$def with (page)
+
+$var title: $page.title
+
+&lt;h1&gt;$page.title&lt;/h1&gt;
+
+$:markdown(page.content)
+
+
+&lt;a href=&quot;/edit/$page.id&quot;&gt;Edit&lt;/a&gt;
+</code></pre>
+<h3>/templates/new.html</h3>
+<pre><code>$def with (form)
+
+
+&lt;h1&gt;New Wiki Page&lt;/h1&gt;
+&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+$:form.render()
+&lt;/form&gt;
+</code></pre>
+<h3>/templates/base.html</h3>
+<pre><code>$def with (page)
+
+&lt;html&gt;
+&lt;head&gt;
+    $if page.has_key('title'):
+        &lt;title&gt;$page.title&lt;/title&gt;
+    $else:
+        &lt;title&gt;My Wiki&lt;/title&gt;
+    &lt;style&gt;
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;/new&quot;&gt;New Page&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+$:page
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>/templates/index.html</h3>
+<pre><code>$def with (pages)
+
+&lt;h1&gt;Webpy Wiki&lt;/h1&gt;
+
+&lt;h2&gt;Pages:&lt;/h2&gt;
+
+&lt;ul&gt;
+$for page in pages:
+    &lt;li&gt;&lt;a href=&quot;/$page.url&quot;&gt;$page.url&lt;/a&gt;&lt;/li&gt;
+
+&lt;/ul&gt;
+</code></pre>
+<h3>/templates/edit.html</h3>
+<pre><code>$def with (page, form)
+
+&lt;h1&gt;Edit $form.d.title&lt;/h1&gt;
+
+&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+$:form.render()
+&lt;/form&gt;
+
+
+&lt;h2&gt;Delete page?&lt;/h2&gt;
+&lt;form action=&quot;/delete/$page.id&quot; method=&quot;post&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;Delete page&quot;/&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>/model.py</h3>
+<pre><code>import web
+
+db = web.database(dbn='mysql', db='wiki', user='justin')
+
+def get_pages():
+    return db.select('pages', order='id DESC')
+
+def get_page_by_url(url):
+    try:
+        return db.select('pages', where='url=$url', vars=locals())[0]
+    except IndexError:
+        return None
+
+def get_page_by_id(id):
+    try:
+        return db.select('pages', where='id=$id', vars=locals())[0]
+    except IndexError:
+        return None
+
+def new_page(url, title, text):
+    db.insert('pages', url=url, title=title, content=text)
+
+def del_page(id):
+    db.delete('pages', where=&quot;id=$id&quot;, vars=locals())
+
+def update_page(id, url, title, text):
+    db.update('pages', where=&quot;id=$id&quot;, vars=locals(),
+        url=url, title=title, content=text)
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

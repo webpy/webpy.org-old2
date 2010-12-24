@@ -1,0 +1,162 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Recommended Setup (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Recommended Setup
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Recommended Setup</h1>
+<p>Other languages : <a href="/recommended_setup/fr" class="internal">français</a> | ...
+</p>
+
+<h3>Summary</h3>
+<ul>
+ <li>
+     <a href="#webserver">Web Server</a>
+ </li>
+
+ <li>
+     <a href="#database">Databases</a>
+ </li>
+
+ <li>
+     <a href="#pool">Connection Pooling</a>
+ </li>
+
+ <li>
+     <a href="#template">Templates</a>
+ </li>
+
+ <li>
+     <a href="#userinput">User Input</a>
+ </li>
+</ul>
+<p>web.py recommends the following software for production servers:
+</p>
+<p><a name="webserver"></a>
+</p>
+
+<h2>Web Server:</h2>
+<p>Webpy has an internal web server, but it should be used for development only. For deployment, a more robust server should be used, such as one of these:
+</p>
+<ul>
+ <li>
+     <a href="http://www.lighttpd.net/download/">lighttpd</a> [BSD] <a href="http://trac.lighttpd.net/trac/wiki/#ReferenceDocumentation">(doc)</a> through <a href="http://trac.saddi.com/flup">flup's fastcgi</a> [BSD] (<code>easy_install flup</code>)
+ </li>
+
+ <li>
+     <a href="http://www.apache.org/">Apache</a> [Apache] through <a href="http://code.google.com/p/modwsgi/">(mod_wsgi)</a> [Apache]
+ </li>
+</ul>
+<p><a name="database"></a>
+</p>
+
+<h2>Databases:</h2>
+<p>Webpy does not require a database to run. It does, however, support using the following databases:
+</p>
+<ul>
+ <li>
+     <a href="http://www.postgresql.org/download/">postgresql</a> [BSD] <a href="http://www.postgresql.org/docs/">(doc)</a> with <a href="http://initd.org/pub/software/psycopg/">psycopg2</a> [BSD] <a href="http://www.initd.org/tracker/psycopg/wiki/PsycopgTwo">(doc)</a> as the python client. (<code>easy_install psycopg2</code>)
+ </li>
+
+ <li>
+     <a href="http://dev.mysql.com/downloads/mysql/5.0.html">mysql</a> [GPL] <a href="http://www.mysql.org/doc/">(doc)</a> with <a href="http://sourceforge.net/project/showfiles.php?group_id=22307">MySQLdb</a> [CNRI] <a href="http://mysql-python.sourceforge.net/MySQLdb.html">(doc)</a> as the python client (<code>easy_install MySQL-python</code>)
+ </li>
+
+ <li>
+     <a href="http://www.sqlite.org/">sqlite</a> [Public domain] <a href="http://www.sqlite.org/docs.html">(doc)</a> with <a href="http://code.google.com/p/pysqlite/">pysqlite</a> as python client (<code>easy_install pysqlite</code>).
+ </li>
+</ul>
+<p><a name="pool"></a>
+</p>
+
+<h2>Connection Pooling:</h2>
+<p>For high traffic sites, connection pooling allows Webpy to keep multiple database connections open, typically allowing faster access from the database. This is optional, but available as a scaling tactic.
+</p>
+<ul>
+ <li>
+     <a href="http://www.w4py.org/downloads/DBUtils/">DBUtils</a> [CNRI] <a href="http://www.webwareforpython.org/DBUtils/Docs/UsersGuide.html">(doc)</a> (<code>easy_install DBUtils</code>)
+ </li>
+</ul>
+<p><a name="template"></a>
+</p>
+
+<h2>Templates:</h2>
+<p>Webpy has its own template system which allows users to let untrusted users write templates using this, and use python-like syntax within templates.
+</p>
+<ul>
+ <li>
+     template.py [built-in] <a href="/docs/0.3/templetor">(doc)</a>
+ </li>
+</ul>
+<p><a name="userinput"></a>
+</p>
+
+<h2>User Input:</h2>
+<p>Markdown allows Webpy users to write text which gets converted to HTML on page display.  It isn't necessary, but is the recommended way to generate formatted HTML from user input.
+</p>
+<ul>
+ <li>
+     <a href="http://sourceforge.net/project/showfiles.php?group_id=153041">python-markdown</a> [BSD] <a href="http://www.freewisdom.org/projects/python-markdown/">(doc)</a>
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

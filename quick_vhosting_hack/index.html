@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>quick vhosting hack (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; quick vhosting hack
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>quick vhosting hack</h1>
+<p>Here is a 10 minute hack with lots of room for improvement but I think its
+   pretty useful. I made this to allow the serving of multiple
+   sites from a single webpy app.
+</p>
+<p>I created this because I would like to run a few small sites but my cheep
+   account at my hosting provider:
+</p>
+<ul>
+ <li>
+     Only allows 40MB to be used by persistant processes. 
+ </li>
+
+ <li>
+     Only allows <em>one</em> persistant process.
+ </li>
+
+ <li>
+     Multiple instances of webpy would require multiple ports to be proxied with apache's mod_proxy
+        and this configuration can only be done by the server admin.
+ </li>
+</ul>
+<p>So, I just made a quick decorator for <code>web.handler</code>.
+</p>
+
+<h3>Stuff to Note:</h3>
+<p>This expects to be working behind a proxy but that can easily be corrected.
+</p>
+<p>More work could be done on <code>web.render</code> and the page class names so
+   the code you create for sites in this setup can be more easily made into
+   standalone sites later on.
+</p>
+<p>The /static directory is currently still shared between all sites.
+</p>
+
+<h3>The Code</h3>
+<pre><code> #
+ ## URL MAPPING
+ #
+ urls_1 = (
+     '/','index_1',
+ )
+
+ urls_2 =(
+     '/','index_2',
+ )
+
+ urls_3=(
+     '/','index_3',
+ )
+
+ #vhost mapping: {domain:url_mapping}
+
+ vhosts={'test.org':urls_1,
+         'www.test.org':urls_2,
+         'another-url.org':urls_3
+         }
+
+ #
+ ## VHOSTING DECORATOR
+ #     
+ def vhostrr(vhosts=vhosts):
+     def decorator(func): 
+         def proxyfunc(*args, **kw):
+             if 'HTTP_X_FORWARDED_HOST' in web.ctx.environ:
+                 rd=web.ctx.environ['HTTP_X_FORWARDED_HOST']
+                 mapping=None
+                 for d in vhosts.keys():
+                     if d==rd:
+                         mapping=vhosts[d]
+                 if mapping==None:
+                     print 'Error, Not configured for vhost: '+rd
+                     return
+             else:
+                 print 'Direct access not allowed. Use proxy.'                     return
+             return func(mapping=mapping, *args, **kw)
+         return proxyfunc
+     return decorator
+
+ ########################################################################
+ # Site 1:
+ ########################################################################
+ class index_1:
+     def GET(self):
+         web.render('../templates_1/main.html')
+
+ ########################################################################
+ # Site 2:
+ ########################################################################
+ class index_2:
+     def GET(self):
+         web.render('../templates_2/main.html')
+
+ ########################################################################
+ # Site 3:
+ ########################################################################
+ class index_3:
+     def GET(self):
+         web.render('../templates_3/main.html')
+
+ #
+ ## RUN APPLICATION
+ #
+
+ if __name__ == &quot;__main__&quot;:
+
+     import sys
+     sys.argv.append('2345') #Set the port I want. A better way to do this?
+
+     #instead of:
+     #web.run(urls, web.reloader, session_mw)
+
+     #apply the vhostrr &quot;decorator&quot; remotely
+     web.run(vhostrr()(web.handle), web.reloader)
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

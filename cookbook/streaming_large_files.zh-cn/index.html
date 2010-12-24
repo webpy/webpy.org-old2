@@ -1,0 +1,123 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>如何流传输大文件 (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; 如何流传输大文件
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>如何流传输大文件</h1>
+
+<h3>问题</h3>
+<p>如何流传输大文件？
+</p>
+
+<h3>解法</h3>
+<p>要流传输大文件，需要添加传输译码(Transfer-Encoding)区块头，这样才能一边下载一边显示。否则，浏览器将缓冲所有数据直到下载完毕才显示。
+</p>
+<p>如果这样写：直接修改基础字符串(例中就是j)，然后用Yield返回－－是没有效果的。如果要使用Yield,就要向对所有内容使用yield。因为这个函式此时是一个产生器。(注：请处请详看Yield文档，在此不做过多论述。)
+</p>
+<p>例子
+</p>
+<pre><code># Simple streaming server demonstration
+# Uses time.sleep to emulate a large file read
+import web
+import time
+
+urls = (
+    &quot;/&quot;,    &quot;count_holder&quot;,
+    &quot;/(.*)&quot;,  &quot;count_down&quot;,
+    )
+app = web.application(urls, globals())
+
+
+class count_down:
+    def GET(self,count):
+        # These headers make it work in browsers
+        web.header('Content-type','text/html')
+        web.header('Transfer-Encoding','chunked')        
+        yield '&lt;h2&gt;Prepare for Launch!&lt;/h2&gt;'
+        j = '&lt;li&gt;Liftoff in %s...&lt;/li&gt;'
+        yield '&lt;ul&gt;'
+        count = int(count)
+        for i in range(count,0,-1):
+            out = j % i
+            time.sleep(1)
+            yield out
+        yield '&lt;/ul&gt;'
+        time.sleep(1)
+        yield '&lt;h1&gt;Lift off&lt;/h1&gt;'
+
+class count_holder:
+    def GET(self):
+        web.header('Content-type','text/html')
+        web.header('Transfer-Encoding','chunked')        
+        boxes = 4
+        delay = 3
+        countdown = 10
+        for i in range(boxes):
+            output = '&lt;iframe src=&quot;/%d&quot; width=&quot;200&quot; height=&quot;500&quot;&gt;&lt;/iframe&gt;' % (countdown - i)
+            yield output
+            time.sleep(delay)
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

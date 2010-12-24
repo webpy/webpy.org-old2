@@ -1,0 +1,88 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Using a dictionary as where clause (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Using a dictionary as where clause
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Using a dictionary as where clause</h1>
+
+<h2>Problem</h2>
+<p>You want to create a dictionary of where clauses dynamically and use it in a query.
+</p>
+
+<h2>Solution</h2>
+<pre><code>&gt;&gt;&gt; import web
+&gt;&gt;&gt; db = web.database(dbn='postgres', db='mydb', user='postgres')
+&gt;&gt;&gt; where_dict = {'col1': 1, col2: 'sometext'}
+&gt;&gt;&gt; db.delete('mytable', where=web.db.sqlwhere(where_dict), _test=True)
+&lt;sql: &quot;DELETE FROM mytable WHERE col1 = 1 AND col2 = 'sometext'&quot;&gt;
+</code></pre>
+<h2>Explanation</h2>
+<p><code>web.db.sqlwhere</code> takes a Python dictionary as an argument and converts it into a string useful for where clause in different queries. You can also use an optional <code>grouping</code> argument to define the exact gouping of the individual keys. For instance:
+</p>
+<pre><code>&gt;&gt;&gt; import web
+&gt;&gt;&gt; web.db.sqlwhere({'a': 1, 'b': 2}, grouping=' OR ')
+'a = 1 OR b = 2'
+</code></pre><p>Default for <code>grouping</code> is <code>' AND '</code>.
+</p>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

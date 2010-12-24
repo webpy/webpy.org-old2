@@ -1,0 +1,135 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Les sessions web.py (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Les sessions web.py
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Les sessions web.py</h1>
+<p>Autres langages : <a href="/../sessions" class="internal">english</a> | ...
+</p>
+<p>Les sessions sont un moyen de stocker des informations entre les requêtes, faisant ainsi du http un protocole avec état. Elles fonctionnent en envoyant à l'utilisateur un cookie, qui mappe vers un objet de stockage de session sur le serveur. Lorsque l'utilisateur fait une requête vers une page, le client renvoie le cookie avec la requête, web.py charge la session basée sur sa clef, et le code peut demander et stocker des informations dedans.
+</p>
+<p>Les sessions sont pratiques car elles permettent à un programmeur de stocker l'état des utilisateurs dans des objets natifs Python.
+</p>
+
+<h2>Types de stockage</h2>
+<p>Les sessions de web.py permettent différents procédés de stockage des données sessions. Ces méthodes comprennent:
+</p>
+<ul>
+ <li><p>DiskStore: Les données sessions sont sérialisées dans un repertoire désigné. Lors de l'instanciation, le premier et le seul argument est le dossier dans lequel les informations de session doivent être stockées sur le disque.
+</p>
+
+ </li>
+
+ <li><p>DBStore: Les données sessions sont sérialisées et sotckées dans une base de donnée. Cela peut être très utile si vous souhaitez stocker les données sessions sur un système séparé. Pendant la création, DBStore prend deux arguments: une instance web.py de base de donnée, et le nom de la table (string). La table qui stocke la session doit avoir la structure suivante:
+</p>
+<pre><code>session_id CHAR(128) UNIQUE NOT NULL,
+atime DATETIME NOT NULL default current_timestamp,
+data TEXT
+</code></pre>
+ </li>
+
+ <li><p>ShelfStore: Les données sont stockées en utilisant le module <a href="http://docs.python.org/library/shelve.html">shelve</a> de python.
+</p>
+
+ </li>
+</ul>
+<p>Les méthodes de stockage ont des performances variées et des ajustement d'installation, donc les options vous permettent de choisir ce qui convient le mieux pour votre appplication.
+</p>
+
+<h2>Exemple</h2>
+<p>Le code suivant montre comment utiliser une session de base DiskStore.
+</p>
+<pre><code>import web
+
+
+urls = (
+    '/', 'Index',
+    '/login', 'Login',
+    '/logout', 'Logout',
+)
+
+web.config.debug = False
+app = web.application(urls, locals())
+session = web.session.Session(app, web.session.DiskStore('sessions'))      
+
+class Index:
+    def GET(self):
+        if session.get('logged_in', False):
+            return '&lt;h1&gt;You are logged in&lt;/h1&gt;&lt;a href=&quot;/logout&quot;&gt;Logout&lt;/a&gt;'
+        return '&lt;h1&gt;You are not logged in.&lt;/h1&gt;&lt;a href=&quot;/login&quot;&gt;Login now&lt;/a&gt;'
+
+class Login:
+    def GET(self):
+        session.logged_in = True
+        raise web.seeother('/')
+
+class Logout:
+    def GET(self):
+        session.logged_in = False
+        raise web.seeother('/')
+
+
+if __name__ == '__main__':
+    app.run()
+</code></pre>
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

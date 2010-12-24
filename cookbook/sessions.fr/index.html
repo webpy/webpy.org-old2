@@ -1,0 +1,155 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>Travailler avec les sessions (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; Travailler avec les sessions
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>Travailler avec les sessions</h1>
+<p>Autre langages: <a href="/../sessions" class="internal">english</a> | ...
+</p>
+
+<h3>Problème</h3>
+<p>Comment utiliser les sessions dans web.py.
+</p>
+
+<h3>Solution</h3>
+<p><em>Les sessions ne fonctionnent pas en mode <a href="/tutorial3.fr#debug" class="internal">debug</a> parce qu'elles interfèrent avec reloading. Veuillez lire <a href="/session_with_reloader" class="internal">session_with_reloader</a> pour plus de détail.</em>
+</p>
+<p>Le module <code>web.session</code> fournit un support session. Voici une application simple de compteur utilisant les sessions.
+</p>
+<pre><code>import web
+web.config.debug = False
+urls = (
+    &quot;/count&quot;, &quot;count&quot;,
+    &quot;/reset&quot;, &quot;reset&quot;
+)
+app = web.application(urls, locals())
+session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'count': 0})
+
+class count:
+    def GET(self):
+        session.count += 1
+        return str(session.count)
+
+class reset:
+    def GET(self):
+        session.kill()
+        return &quot;&quot;
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre><p>L'objet session est chargé avec des données session avant le traitement de la requête et sauve des données session après avoir traité la requête, si il est modifié. Notez que dans la version du 22-11-2008 de web.py, il faut désactiver le <a href="/tutorial3.fr#debug" class="internal">débogage</a> pour utiliser le serveur de développement avec les sessions.
+</p>
+<p>L'argument optionnel <code>initializer</code> de Session spécifie la session initiale.
+</p>
+<p>Vous pouvez utiliser <code>DBStore</code> à la place de <code>DiskStore</code> si vous préférez stocker les sessions dans une base de donnée au lieu du disque. Pour utiliser DBStore, vous avez besoin d'une table avec la structure suivante:
+</p>
+<pre><code> create table sessions (
+    session_id char(128) UNIQUE NOT NULL,
+    atime timestamp NOT NULL default current_timestamp,
+    data text
+);
+</code></pre><p>Puis vous devez passer l'objet <code>db</code> et le nom de la table de session au constucteur de <code>DBStore</code>.
+</p>
+<pre><code>db = web.database(dbn='postgres', db='mydatabase', user='myname', pw='')
+store = web.session.DBStore(db, 'sessions')
+session = web.session.Session(app, store, initializer={'count': 0})
+</code></pre><p>Des options relatives aux sessions peuvent être modifiées en utilisant le dictionnaire <code>sessions_parameters</code> dans <code>web.config</code>. Les valeurs par défaut sont montrées ci-dessous:
+</p>
+<pre><code>web.config.session_parameters['cookie_name'] = 'webpy_session_id'
+web.config.session_parameters['cookie_domain'] = None
+web.config.session_parameters['timeout'] = 86400, #24 * 60 * 60, # 24 heures en secondes
+web.config.session_parameters['ignore_expiry'] = True
+web.config.session_parameters['ignore_change_ip'] = True
+web.config.session_parameters['secret_key'] = 'fLjUfxqXtfNoIldA0A0J'
+web.config.session_parameters['expired_message'] = 'La session expire.'
+</code></pre><ul>
+ <li>
+     <code>cookie_name</code> - nom du cookie utilisé pour stocker la session id
+ </li>
+
+ <li>
+     <code>cookie_domain</code> - domaine du cookie utilisé pour stocker l'ID de session
+ </li>
+
+ <li>
+     <code>timeout</code> - nombre de secondes d'inactivité autorisées avant que la session expire
+ </li>
+
+ <li>
+     <code>ignore_expiry</code> - si <code>True</code>, l'expiration de la session est ignoré
+ </li>
+
+ <li>
+     <code>ignore_change_ip</code> - si <code>False</code>, la session est valide uniquement quand elle est accessible à partir de la même adresse IP qui l'a créé
+ </li>
+
+ <li>
+     <code>secret_key</code>       - clef utilisée dans la génération du hachage session id (demande d'explications plus détaillées))
+ </li>
+
+ <li>
+     <code>expired_message</code>  - message affiché lorsque la session a expiré
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>

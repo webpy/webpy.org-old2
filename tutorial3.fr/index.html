@@ -1,0 +1,395 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+                <title>web.py 0.3 tutorial (web.py)</title>
+                <link rel="stylesheet" type="text/css" href="/static/webpy-new.css"/>
+                <link rel="SHORTCUT ICON" href="/static/favicon.ico"/>
+        </head>
+<body>
+
+        <div id="header">
+                <span class="logo"><a href="/" title="Home"><img src="/static/webpy.gif" alt="" /></a></span>
+                <span class="blurb">&quot;Think about the ideal way to write a web app.<br />Write the code to make it happen.&quot; <a href="http://groups.google.com/group/webpy/msg/f266701d97e7ceb1">(More...)</a></span>
+        </div>
+
+        <div id="location">
+                <a href="/">home</a> &gt; web.py 0.3 tutorial
+        </div>
+
+<div id="container">
+        <div id="sidebar">
+                  <strong>Get It:</strong><br />
+                  &nbsp;<a href="/download">download</a><br />
+                  &nbsp;<a href="/changes">change log</a><br />
+                  <br />
+                  
+                  <strong>Learn It:</strong><br />
+                  &nbsp;<a href="/install">install</a><br />
+                  &nbsp;<a href="/tutorial3.en">tutorial</a><br />
+
+                  &nbsp;<a href="/faq">faq</a><br />
+                  &nbsp;<a href="/docs/0.3">docs</a><br />
+                  &nbsp;<a href="/recommended_setup">setup</a><br />
+          &nbsp;<a href="/cookbook">cookbook</a><br/>
+                  <br />
+                  
+                  <strong>Discuss It:</strong><br />
+                  &nbsp;<a href="http://groups.google.com/group/webpy/">mailing list</a><br />
+                  &nbsp;<a href="irc://irc.freenode.net/webpy">irc</a><br />
+                  <br />
+        
+                  <strong>Follow It:</strong><br />
+                  &nbsp;<a href="http://github.com/webpy/webpy">code</a><br />
+          &nbsp;<a href="http://launchpad.net/webpy">launchpad</a><br />
+</div>
+
+<div id="main">
+<div id="content">
+
+
+<h1>web.py 0.3 tutorial</h1>
+<p>Autre langages : <a href="/tutorial3.en" class="internal">english</a> | <a href="/tutorial3.zh-cn" class="internal">chinese</a> | <a href="/tutorial2.ja" class="internal">japan</a> | ...
+</p>
+
+<h1>Sommaire</h1>
+<ul>
+ <li>
+     <a href="#introduction">Prérequis</a>
+ </li>
+
+ <li>
+     <a href="#manipurl">Manipuler les URLs</a>
+ </li>
+
+ <li>
+     <a href="#gereurl">Gérer les URLs</a>
+ </li>
+
+ <li>
+     <a href="#getpost">GET et POST : la différence</a>
+ </li>
+
+ <li>
+     <a href="#index">Page index - ma première classe</a>
+ </li>
+
+ <li>
+     <a href="#lance">Lancer le serveur</a>
+ </li>
+
+ <li>
+     <a href="#template">Modèles, gabarits</a>
+ </li>
+
+ <li>
+     <a href="#formulaires">Formulaires</a>
+ </li>
+
+ <li>
+     <a href="#bd">Base de données</a>
+ </li>
+
+ <li>
+     <a href="#affbd">Afficher le contenu d'une base de données</a>
+ </li>
+
+ <li>
+     <a href="#ecrbd">Ecrire dans une base de données</a>
+ </li>
+
+ <li>
+     <a href="#debug">Debugger</a>
+ </li>
+
+ <li>
+     <a href="#apres">Et Après ?</a>
+ </li>
+</ul>
+<p><a name="introduction"></a>
+</p>
+
+<h1>Prérequis</h1>
+<p>Vous connaissez Python et vous désirez construire un site web. Webpy vous permettra de le faire facilement.
+</p>
+<p>Si vous décidez de suivre l'ensemble de ce tutorial, vous aurez besoin d'installer Python, <a href="/install/fr">web.py</a> , flup, psycopg2 et Postgres (ou une base de donnée equivalente et les pilotes python). Pour plus de détails, veuillez consulter <a href="http://webpy.org/">webpy.org</a>
+</p>
+<p>Si vous possédez déjà un projet web.py existant, jetez un oeil à la page de <a href="http://webpy.org/docs/0.3/upgrade">mise à jour</a> pour plus d'informations sur la migration.
+</p>
+
+<h1>Commençons</h1>
+<p><a name="manipurl"></a>
+</p>
+
+<h2>Manipuler les URLs</h2>
+<p>La partie la plus importante de n'importe quel site web est la structure des URLs. Les URLs ne sont pas que des liens que vos visiteurs voient et envoient par mails à leurs amis, elles fournissent aussi un modèle mental sur la façon avec laquel un site web fonctionne. Sur des sites populaires tels que del.icio.us, les URLs font partie même de l'interface utilisateur. Web.py rend la création d'URLs facile.
+</p>
+<p>Pour commencer avec votre application web.py, ouvrez un nouveau fichier texte (que nous appelerons &quot;code.py&quot;) et tapez:
+</p>
+<pre><code> import web
+</code></pre><p>Cela importera le module web.py.
+</p>
+<p>Maintenant, Nous devons donner à web.py notre structure URL. Commençons avec quelque chose de simple:
+</p>
+<pre><code> urls = (
+        '/', 'index'
+        )
+</code></pre><p>La première partie est une expression régulière que l'on applique à une chaîne de caractère (l'URL), telle que /, /help/faq, /item/(d+), etc.. (Note: d+ n'admettra qu'une séquence de chiffre). Les parenthèses signifient qu'il faut capturer la séquence pour s'en servir plus tard. La seconde partie est le nom d'une Classe vers laquelle la requête sera envoyée, comme 'index', 'view', 'welcome.hello' (qui recherchera la Classe hello du module welcome.), ou get_1.
+   /1 est remplacé par la première capture de l'expression régulière; toutes les captures restantes seront passées à votre fonction. [Note traducteur : A préciser]
+</p>
+<p>Cette ligne signifie que nous souhaitons l'URL / (Note: la page d'accueil) qui doit être traitée par la classe nommée 'index'.
+</p>
+<p><a name="gereurl"></a>
+</p>
+
+<h2>Gérer les URLs</h2>
+<p>Maintenant, nous avons besoin de créer une application spécifiant les URLs.
+</p>
+<pre><code> app = web.application(urls, globals())
+</code></pre><p>Cela explique à web.py qu'il faut créer une application avec les URLs qui sont listées ci-dessus, en appelant les Classes dans l'espace de noms global de ce fichier.
+</p>
+<p><a name="getpost"></a>
+</p>
+
+<h2>GET et POST: la différence</h2>
+<p>Alors que la plupart des gens ne le remarquent pas en naviguant simplement, votre navigateur utilise un protocole connu appelé HTTP pour communiquer avec le World Wide Web. Les détails ne sont pas importants, mais l'idée de base est que les visiteurs de sites web demandent aux serveurs de sites web de remplir certaines fonctions (telles que GET ou POST) sur les URLs (comme / ou /foo?f=1).
+</p>
+<p>GET est celle que nous connaissons tous, celle qui sert à demander le texte d'une page web. Lorsque vous tapez 'harvard.edu' dans votre navigateur, cela demande littéralement au serveur web de Harvard de fournir /. La seconde fonction très célèbre, POST, est souvent utilisée lorsque vous utilisez certains types de formulaires, comme une demande d'achat d'un produit. Vous utilisez POST chaque fois que vous soumettez une demande (comme le débit de votre carte de crédit et le traitement d'une commande). Cela est essentiel, parce que GET URLs peut être transmis et indexé par les moteurs de recherche, que vous voulez certainement pour la plupart de vos pages, mais ne désirez certainement pas pour des choses comme le traitement des ordres (imaginez si Google essaye de tout acheter sur votre site!)
+</p>
+<p><a name="index"></a>
+</p>
+
+<h2>Page index - ma première classe</h2>
+<p>Dans notre code web.py, nous faisons la distinction entre les deux clairement. Maintenant, il est nécessaire d'écrire la Classe 'index'.
+</p>
+<pre><code> class index:
+    def GET(self):
+       return &quot;Hello, world!&quot;
+</code></pre><p>Cette fonction GET sera maintenant appelée par web.py chaque fois qu'il y aura une requête GET pour /.
+</p>
+<p>Très bien, maintenant nous avons juste besoin d'en finir avec une ligne finale disant à web.py de commencer à fournir des pages web:
+</p>
+<pre><code> if __name__ == &quot;__main__&quot;: app.run()
+</code></pre><p>Cela explique à web.py qu'il faut lancer l'application que nous avons créé ci-dessus.
+</p>
+<p>Maintenant notez que, bien que j'ai beaucoup parlé ici, nous avons seulement cinq ou six lignes de code tout au plus. C'est tout ce dont nous avons besoin pour créer une application web.py complète. 
+</p>
+<p><a name="lance"></a>
+</p>
+
+<h2>Lancer le serveur</h2>
+<p>Si vous allez dans votre terminal et que vous tapez les lignes de commande suivantes :
+</p>
+<pre><code> $ python code.py
+</code></pre><p>Vous verrez s'afficher : http://0.0.0.0:8080/
+</p>
+<p>Vous avez maintenant votre application web.py qui tourne comme un vrai serveur web sur votre ordinateur!
+</p>
+<p>En visitant cette URL, vous devriez voir &quot;Hello, world!&quot; dans votre navigateur. (Vous pouvez ajouter une adresse IP/Port après la partie &quot;code.py&quot; pour contrôler où web.py lancera le serveur. Vous pouvez aussi lui dire de faire fonctionner un serveur fastcgi ou scgi.)
+</p>
+<p>[Note traducteur : A PRECISER]
+</p>
+<p>Note: Vous pouvez spécifier le numéro de port à utiliser dans la ligne de commande, si vous ne souhaitez pas utiliser le port par défaut :
+</p>
+<pre><code> $ python code.py 1234
+</code></pre><p><a name="template"></a>
+</p>
+
+<h1>Modèles, gabarits</h1>
+<p>Ecrire du HTML à l'intérieur de python peut être lourd et pesant. C'est bien plus amusant d'écrire du Python à l'intérieur du HTML. Par bonheur, web.py le fait très facilement.
+</p>
+<p>Note: Les anciennes versions de web.py utilisent le système de gabarit de <a href="http://www.cheetahtemplate.org/">Cheetah</a>. Vous êtes, evidemment, libres d'utiliser celui-ci ou n'importe quel autre logiciel de template avec web.py, mais il n'est plus officiellement supporté.
+</p>
+<p>Créons un nouveau répertoire pour nos gabarits (nous l'appellerons templates). A l'intérieur, créons un nouveau fichier dont l'extension sera HTML (appelons-le index.html). Dans ce fichier, vous pouvez juste écrire du HTML classique:
+</p>
+<pre><code> &lt;em&gt;Hello&lt;/em&gt;, world!
+</code></pre><p>Ou utiliser le langage de template de web.py ( <a href="http://webpy.org/docs/0.3/templetor.fr">Templator</a> ) pour ajouter du code dans votre HTML:
+</p>
+<pre><code> $def with (name)
+
+    $if name:
+       I just wanted to say &lt;em&gt;hello&lt;/em&gt; to $name.
+    $else:
+       &lt;em&gt;Hello&lt;/em&gt;, world!
+</code></pre><p>Comme vous pouvez le voir, les gabarits ressemblent beaucoup à des fichiers Python, excepté la déclaration 'def' tout en haut (qui explique avec quoi le modèle est appelé) ainsi que les $s placés devant chaque code. 
+   Actuellement, template.py exige que la déclaration $def soit la première ligne du gabarit. Notez également que web.py encode automatiquement les variables utilisées ici, de sorte que si, pour une raison un nom est défini dans une valeur contenant du HTML, il sera proprement encodé et apparaitra comme un texte plein. 
+   Si vous souhaitez désactiver cette fonction, écrivez $:name à la place de $name.
+</p>
+<p>Maintenant, retournons à notre &quot;code.py&quot;. Sous la première ligne ajoutez:
+</p>
+<pre><code> render = web.template.render('templates/')
+</code></pre><p>Cela indique à web.py qu'il faut rechercher le gabarit dans le repertoire 'templates'. Maintenant modifiez le contenu de la fonction GET dans index en:
+</p>
+<pre><code> name = 'Bob'    
+ return render.index(name)
+</code></pre><p>(Ici, 'index' est le nom du gabarit et 'name' est un argument qui lui est transmis)
+</p>
+<p>Visitez votre site, il devrait vous afficher &quot;I just wanted to say hello to Bob.&quot;
+</p>
+<p>Mais imaginons que nous souhaitions que les gens entrent leur propre nom. Dans ce cas, remplacez les deux lignes que nous avons ajouté par:
+</p>
+<pre><code> i = web.input(name=None)
+ return render.index(i.name)
+</code></pre><p>En visitant / il devrait vous afficher &quot;Hello, world!&quot;. Mais en visitant /?name=Joe il vous affichera &quot;I just wanted to say hello to Joe.&quot;
+   Naturellement, en voyant ceci, on constate que l'URL n'est pas très claire. Pour l'améliorer, modifiez votre ligne URL en haut en:
+</p>
+<pre><code> '/(.*)', 'index'
+</code></pre><p>Et modifiez la définition de la fonction GET de la classe index en:
+</p>
+<pre><code> def GET(self, name):
+    return render.index(name)
+</code></pre><p>puis effaçez la ligne qui définit le nom. Maintenant, visitez /joe et il devrait vous afficher hello to Joe.
+</p>
+<p>Si vous désirez en apprendre davantage sur les gabarits de web.py, visitez la page <a href="http://webpy.org/templetor">Templetor</a>
+</p>
+<p><a name="formulaires"></a>
+</p>
+
+<h1>Formulaires</h1>
+<p>Le module de formulaire de web.py permet de générer des formulaires HTML, de récuperer les entrées des utilisateurs, et les valider avant de les traiter ou les ajouter à une base de donnée.
+   Si vous souhaitez en apprendre plus sur l'utilisation du module de formulaires de web.py, consultez la <a href="http://webpy.org/docs/0.3.fr">Documentation</a> ou la traduction française du module <a href="http://webpy.org/docs/0.3/form.fr">Formulaires</a>
+</p>
+<p><a name="bd"></a>
+</p>
+
+<h1>Base de données</h1>
+<p>Note: Avant de pouvoir utiliser une base de données, soyez certains d'avoir la librairie de la base de données appropriée déjà installée. Pour la base de donnée MySQL, utilisez MySQLdb et pour Postgres, utilisez psycopg2.
+</p>
+<p>Premièrement, vous devez créer un objet database.
+</p>
+<pre><code> db = web.database(dbn='postgres', user='username', pw='password', db='dbname')
+</code></pre><p>(Adaptez ici -- particulièrement pour <code>username</code>, <code>password</code>, and <code>dbname</code> -- vos paramètres de connexion. les utilisateurs de MySQL devront modifier la définition <code>dbn</code> en <code>mysql</code>.)
+</p>
+<p>C'est tout ce dont vous avez besoin -- web.py gèrera automatiquement la connexion et la déconnexion à la base de données.
+</p>
+<p><a name="affbd"></a>
+</p>
+
+<h2>Afficher le contenu d'une base de données</h2>
+<p>Utilisez votre interface d'administration de la base de données, et créez une simple table dans la base de données:
+</p>
+<pre><code> CREATE TABLE todo (
+    id serial primary key,
+    title text,
+    created timestamp default now(),
+    done boolean default 'f'    
+    );
+</code></pre><p>Ainsi qu'une ligne initiale:
+</p>
+<pre><code> INSERT INTO todo (title) VALUES ('Learn web.py');
+</code></pre><p>Revenez à &quot;code.py&quot; et modifiez la fonction 'GET' de la Classe 'index' de la façon suivante en remplaçant la fonction entièrement:
+</p>
+<pre><code> def GET(self):
+    todos = db.select('todo')
+    return render.index(todos)
+</code></pre><p>puis remodifiez le gestionnaire d'URLs pour qu'il ne prenne en compte que /:
+</p>
+<pre><code> '/', 'index'
+</code></pre><p>Editez et remplaçez le contenu entier du gabarit <code>index.html</code> de cette façon:
+</p>
+<pre><code> $def with (todos)
+    &lt;ul&gt;
+       $for todo in todos:
+          &lt;li id=&quot;t$todo.id&quot;&gt;$todo.title&lt;/li&gt;
+    &lt;/ul&gt;
+</code></pre><p>En visitant à nouveau votre site, vous devriez voir: &quot;Learn web.py&quot;. 
+</p>
+<p>Félicitations ! Vous venez de créer une application complète qui lit une base de données. 
+</p>
+<p><a name="ecrbd"></a>
+</p>
+
+<h2>Ecrire dans une base données</h2>
+<p>Maintenant, nous allons écrire dans la base de données.
+</p>
+<p>A la fin du gabarit <code>index.html</code>, ajoutez:
+</p>
+<pre><code> &lt;form method=&quot;post&quot; action=&quot;add&quot;&gt;
+    &lt;p&gt;&lt;input type=&quot;text&quot; name=&quot;title&quot; /&gt; &lt;input type=&quot;submit&quot; value=&quot;Add&quot; /&gt;&lt;/p&gt;
+ &lt;/form&gt;
+</code></pre><p>puis modifiez la liste de vos URLs pour qu'elle ressemble à:
+</p>
+<pre><code> '/', 'index',
+ '/add', 'add'
+</code></pre><p>(Vous devez être très prudents avec les virgules. Si vous en oubliez, Python joint les chaînes ensembles, et verra <code>/index/addadd</code> à la place de votre liste d'URLs!)
+</p>
+<p>Maintenant, ajoutons une nouvelle Classe:
+</p>
+<pre><code> class add:
+    def POST(self):
+       i = web.input()
+       n = db.insert('todo', title = i.title)
+       raise web.seeother('/')
+</code></pre><p>(Avez-vous noté que nous utilisons la fonction <code>POST</code> pour celle-ci?)
+</p>
+<p><code>web.input</code> vous donne accès à toutes les variables de l'utilisateur soumises via un formulaire.
+</p>
+<p>Note: Afin d'accéder aux données à partir de plusieurs éléments identiquement nommé, dans un format de liste (Une série de cases à cocher qui ont toutes l'attribut name=&quot;name&quot;), utilisez:
+</p>
+<pre><code> post_data=web.input(name=[])
+</code></pre><p><code>db.insert</code> insère les valeurs dans la table <code>todo</code> de la base de données et renvoie l'ID de la ligne créée.  <br />
+   <code>seeother</code> redirige les utilisateurs vers cette URL.
+</p>
+<p>Quelques notes additionnelles: 
+</p>
+<p><code>db.update</code> fonctionne comme <code>db.insert</code> excepté qu'au lieu de renvoyer l'ID, il doit recevoir en argument, après le nom de la table, soit l'ID soit une clause <code>WHERE</code> permettant d'identifier la ligne à modifier.
+</p>
+<pre><code>
+db.update('todo', where=&quot;id = 10&quot;, title = &quot;web.py pour les nuls&quot;)
+</code></pre><p><code>web.input</code>, <code>db.query</code>, et d'autres fonctions dans web.py renvoient des Objets de Stockage (Storage objects), qui sont comme des dictionnaires mis à part que vous pouvez écrire <code>d.foo</code> en plus de <code>d['foo']</code>. Cela rend le code plus clair.
+</p>
+<p><a name="debug"></a>
+</p>
+
+<h1>Debugger</h1>
+<p>web.py possède aussi des outils de debugging pour nous aider. Quand nous le faisons tourner avec le server web intégré, il commence l'application en mode debuggage. Dans ce mode, toutes les modifications du code et des gabarits sont automatiquement rechargées et les messages d'erreur contiennent de précieuses informations.
+</p>
+<p>Le debuggage n'est pas actif lorsque l'application tourne comme un vrai serveur. Si vous souhaitez désactiver ce mode, vous pouvez le faire en ajoutant la ligne suivante avant de créer votre application/gabarit:
+</p>
+<pre><code> web.config.debug = False
+</code></pre><p>C'est la fin du tutorial maintenant. Jetez un oeil à la <a href="http://webpy.org/docs/0.3.fr">Documentation</a> pour voir ce que vous pouvez utiliser avec web.py.
+</p>
+<p>Vous pourrez trouver pleins de détails de tout ceci ainsi que de toutes les fonctions web.py dans la <a href="http://webpy.org/docs/0.3.fr">Documentation</a>.
+</p>
+<p><a name="apres"></a>
+</p>
+
+<h2>Et après ?</h2>
+<ul>
+ <li>
+     <a href="/docs/0.3.fr" class="internal">Plus de documentation</a> 
+ </li>
+
+ <li>
+     <a href="/docs/0.3/form.fr" class="internal">Formulaires</a> 
+ </li>
+
+ <li>
+     <a href="/docs/0.3/templetor.fr" class="internal">Templator: le modèle de gabarit de web.py</a>
+ </li>
+
+ <li>
+     <a href="/cookbook/fr" class="internal">Cookbook</a>
+ </li>
+
+ <li>
+     <a href="/src" class="internal">Exemples de codes</a>
+ </li>
+</ul>
+
+
+
+
+<div style="clear: both;"></div>
+
+</div>
+
+</div>
+
+        <div id="footer">
+    <p>started by <a style="color: gray;" href="http://www.aaronsw.com/">Aaron Swartz</a> (<a style="color: black;" href="mailto:webpy@aaronsw.com">webpy@aaronsw.com</a>)</p>
+</div>
+
+</body>
+</html>
