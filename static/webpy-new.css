@@ -3,9 +3,10 @@ body {
      padding: 0;
      background-color: #eee;
      color: #;
-     font-family: "Franklin Gothic Medium", Arial, Helvetica, sans-serif;
+     font-family: "Franklin Gothic Medium", Helvetica, Arial, sans-serif;
      font-size: 110%;
 }
+.body { font-family: Helvetica, Arial, sans-serif; }
 
 a {
   color: #32a81e;
@@ -14,7 +15,8 @@ a {
 
 h1,h2,h3,h4 {
             color: #505050;
-            /*font-weight: normal;*/
+	    font-family: "Franklin Gothic Medium", Helvetica, Arial, sans-serif;
+            font-weight: normal;
 }
 
 h1 { font-size: 120%; }
@@ -26,8 +28,8 @@ img { border: none; }
 
 pre {
     padding: 10px 25px;
-    background-color: #cecece;
-    border: 1px solid #7e7e7e;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
     color: #272727;
     font-size: 80%;
 }
@@ -77,7 +79,7 @@ strong {
 #sidebar {
          float: left;
          width: 121px;
-         padding: 20px 0 20px 20px;
+         padding: 20px 0 20px 30px;
 }
 
 #sidebar, #sidebar a {
@@ -93,7 +95,9 @@ strong {
 }
 
 #sidebar li {
-         list-style: none;
+/*         list-style: none;*/
+list-style-type: circle;
+
 }
 
 #sidebar li.selected a {
@@ -102,7 +106,7 @@ strong {
 
 #sidebar ul {
          margin: 0 0 15px;
-         padding: 5px;
+         padding: 0px;
 }
 
 /* Content */
